@@ -1,0 +1,29 @@
+# ละเว้นโฟลเดอร์ node_modules
+node_modules/
+
+# ละเว้นไฟล์ environment
+.env
+.vs/
+*.suo
+*.user
+*.cache
+# ละเว้นไฟล์ log
+*.log
+
+# ละเว้นโฟลเดอร์ build
+build/
+*.csproj.user
+# ละเว้นโฟลเดอร์ bin และ obj
+bin/
+obj/
+
+# ละเว้นไฟล์อื่น ๆ ที่เกี่ยวข้องกับการ build
+*.log
+*.user
+*.suo
+*.cache
+*.pdb
+*.exe
+*.dll
+appsettings.json
+/workshop2/appsettings.json
