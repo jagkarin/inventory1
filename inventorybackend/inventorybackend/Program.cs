@@ -1,3 +1,12 @@
+using Microsoft.EntityFrameworkCore;
+using inventorybackend.src.Core.Interface;
+using inventorybackend.src.Core.Service;
+using inventorybackend.src.Infrastructure.Interface;
+using inventorybackend.src.Infrastructure.Repositories;
+using inventorybackend.src.Interface;
+using inventorybackend.src.Repositories;
+using inventorybackend;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +15,18 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+//WareHouse
+builder.Services.AddScoped<IWarehouseRepo, WarehouseRepo>();
+builder.Services.AddScoped<IWarehouseService, WarehouseService>();
+
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IProductRepo, ProductRepo>();
+
+builder.Services.AddDbContext<DataContext>(options =>
+    options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
+    ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))));
+
 
 var app = builder.Build();
 

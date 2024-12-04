@@ -1,0 +1,18 @@
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+using System;
+
+namespace inventorybackend.src.Entities
+{
+    [Table("CategoryEQM")]
+    public class CategoryEQMDbo
+    {
+        [Key]
+        [Required]
+        [Column("Category_ID", TypeName = "int")]
+        public int CategoryID { get; set; }
+
+        [Column("Category_Name", TypeName = "varchar(45)")]
+        public string? CategoryName { get; set; }
+    }
+}
