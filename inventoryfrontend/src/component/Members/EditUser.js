@@ -93,7 +93,7 @@ function EditUser({ user, onUpdate, onClose }) {
                             onChange={(e) => setPosition(e.target.value)}
                         >
                             <option value="">เลือกตำแหน่ง...</option>
-                            <option value="admin">admin</option>
+                            <option value="Admin">Admin</option>
                             <option value="Developer">Developer</option>
                             <option value="ติดตั้ง">ติดตั้ง</option>
                         </select>
