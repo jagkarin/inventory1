@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './styles.css';
+import './Members.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import UserDetails from './UserDetails';
 import EditUser from './EditUser';
@@ -21,6 +21,7 @@ function MembersComponent() {
     const [statusFilter, setStatusFilter] = useState('All');
     const [showViewHistoryModal, setShowViewHistoryModal] = useState(false);
     const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
+    const [searchTerm, setSearchTerm] = useState(''); // State สำหรับเก็บคำค้นหา
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -39,12 +40,11 @@ function MembersComponent() {
     }, []);
 
     const filteredUserList = userList.filter(user => {
-        if (statusFilter === 'Active') {
-            return user.Status === 'Active';
-        } else if (statusFilter === 'Inactive') {
-            return user.Status === 'Inactive';
-        }
-        return true;
+        const isStatusMatching = (statusFilter === 'All' || user.Status === statusFilter);
+        const isSearchMatching = user.Username.toLowerCase().includes(searchTerm.toLowerCase())
+            || user['Employee ID'].toString().includes(searchTerm);
+
+        return isStatusMatching && isSearchMatching;
     });
 
     const handleOpenModal = (user) => {
@@ -61,11 +61,6 @@ function MembersComponent() {
         setShowAddModal(true);
     };
 
-    const handleViewHistory = (employeeId) => {
-        setSelectedEmployeeId(employeeId);
-        setShowViewHistoryModal(true);
-    };
-
     const handleCloseModal = () => {
         setShowModal(false);
         setSelectedUser(null);
@@ -78,11 +73,6 @@ function MembersComponent() {
 
     const handleCloseAddModal = () => {
         setShowAddModal(false);
-    };
-
-    const handleCloseViewHistory = () => {
-        setShowViewHistoryModal(false);
-        setSelectedEmployeeId(null);
     };
 
     const handleUpdateUser = (updatedUser) => {
@@ -140,15 +130,27 @@ function MembersComponent() {
                 <div className="card">
                     <div className="card-header">
                         <h3 className="card-title">Member List</h3>
-                        <div className="float-right">
-                            <button className="btn btn-primary" onClick={handleOpenAddModal}>
-                                Add User
-                            </button>
-                            <select className="form-select d-inline-block mx-2" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-                                <option value="All">All</option>
-                                <option value="Active">Active</option>
-                                <option value="Inactive">Inactive</option>
-                            </select>
+                        <div className="d-flex justify-content-between align-items-center">
+                            <div>
+                                <button className="btn btn-primary" onClick={handleOpenAddModal}>
+                                    Add User
+                                </button>
+                            </div>
+                            <div className="d-flex align-items-center">
+                                <select className="form-select mx-2" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+                                    <option value="All">All</option>
+                                    <option value="Active">Active</option>
+                                    <option value="Inactive">Inactive</option>
+                                </select>
+                                <input
+                                    type="text"
+                                    className="form-control mx-2"
+                                    placeholder="Search by Username or Employee ID"
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    style={{ width: '250px' }} // จัดช่องค้นหาให้สวยงาม
+                                />
+                            </div>
                         </div>
                     </div>
                     <div className="card-body">
@@ -166,12 +168,7 @@ function MembersComponent() {
                                 <tbody>
                                     {filteredUserList.map(user => (
                                         <tr key={user['Employee ID']}>
-                                            <td 
-                                                onMouseEnter={() => handleViewHistory(user['Employee ID'])} 
-                                                onMouseLeave={handleCloseViewHistory}
-                                            >
-                                                {user['Employee ID']}
-                                            </td>
+                                            <td>{user['Employee ID']}</td>
                                             <td>{user.Username}</td>
                                             <td className="project-state text-center">
                                                 <button

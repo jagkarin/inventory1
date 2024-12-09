@@ -1,0 +1,46 @@
+.user-details-modal {
+    background-color: #e9f5ff; /* สีฟ้านุ่มนวล */
+    border-radius: 10px; /* ทำให้มุมเรียบ */
+}
+
+.modal-header {
+    background-color: #6ab04c; /* สีเขียวสด */
+    color: white;
+    border-bottom: 2px solid #badc58; /* เส้นขอบด้านล่าง */
+}
+
+.modal-body {
+    color: #2f3640; /* สีข้อความที่อ่านง่าย */
+    font-family: 'Comic Sans MS', sans-serif; /* ฟอนต์ที่ดูทันสมัย */
+}
+
+h5 {
+    font-weight: bold;
+    color: #ff7f50; /* สีสัมผัส */
+}
+
+.mb-3 strong {
+    color: #3742fa; /* สีเข้มของข้อความสำคัญ */
+}
+
+.toggle-password {
+    color: #ff6f61; /* สีสำหรับปุ่มซ่อน/แสดง */
+}
+
+.toggle-password:hover {
+    text-decoration: underline;
+}
+
+.btn-primary {
+    background-color: #6ab04c; /* สีปุ่มหลัก */
+    border: none;
+}
+
+.btn-secondary {
+    background-color: #ff9f40; /* สีปุ่มรอง */
+    border: none;
+}
+
+.btn-secondary:hover {
+    background-color: #e74c3c; /* สีเวลากด */
+}

@@ -106,7 +106,7 @@ const BorrowedItems = () => {
             <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
                 <thead>
                     <tr>
-                        <th style={{ border: '1px solid #dddddd', padding: '8px' }}>Employee ID</th>
+
                         <th style={{ border: '1px solid #dddddd', padding: '8px' }}>Username</th>
                         <th style={{ border: '1px solid #dddddd', padding: '8px' }}>Things</th>
                         <th style={{ border: '1px solid #dddddd', padding: '8px' }}>Quantity</th>
@@ -115,7 +115,7 @@ const BorrowedItems = () => {
                 <tbody>
                     {borrowedItems.map((item, index) => (
                         <tr key={index}>
-                            <td style={{ border: '1px solid #dddddd', padding: '8px' }}>{item["Employee ID"] || 'N/A'}</td>
+
                             <td style={{ border: '1px solid #dddddd', padding: '8px' }}>{item.Username || 'N/A'}</td>
                             <td style={{ border: '1px solid #dddddd', padding: '8px' }}>{item.things || 'N/A'}</td>
                             <td style={{ border: '1px solid #dddddd', padding: '8px' }}>{item.quantity || 'N/A'}</td>

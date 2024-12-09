@@ -5,24 +5,24 @@ const cors = require('cors');
 const app = express();
 const port = 2000;
 
-// ตั้งค่า CORS และ JSON body parsing
+// Set CORS and JSON body parsing
 app.use(cors());
 app.use(express.json());
 
-// เชื่อมต่อกับ MySQL
+// MySQL connection configuration
 const dbConfig = {
     host: 'localhost',
-    user: 'root', // ปรับข้อมูลการเชื่อมต่อของคุณ
-    password: '1234', // ปรับข้อมูลการเชื่อมต่อของคุณ
-    database: 'Inventory', // ชื่อฐานข้อมูล
+    user: 'root', // Adjust with your database user
+    password: '1234', // Adjust with your database password
+    database: 'Inventory', // Database name
 };
 
-// ฟังก์ชันช่วยเชื่อมต่อกับฐานข้อมูล
+// Helper function to connect to the database
 async function connectDB() {
     return await mysql.createConnection(dbConfig);
 }
 
-// ฟังก์ชันเพื่อดึงข้อมูล withdraw ทั้งหมด พร้อมกับ Username
+// Function to fetch all withdraws with associated usernames
 async function getAllWithdraws() {
     const connection = await connectDB();
     try {
@@ -45,7 +45,7 @@ async function getAllWithdraws() {
     }
 }
 
-// API สำหรับดึงข้อมูล withdraw ทั้งหมด พร้อมกับ Username
+// API to fetch all withdraws with usernames
 app.get('/api/withdraw', async (req, res) => {
     try {
         const combinedResults = await getAllWithdraws();
@@ -56,7 +56,22 @@ app.get('/api/withdraw', async (req, res) => {
     }
 });
 
-// API สำหรับดึงข้อมูลผู้ใช้ทั้งหมด
+// New API to fetch withdraws by Employee ID
+app.get('/api/withdraw/:employeeId', async (req, res) => {
+    const employeeId = req.params.employeeId;
+    const connection = await connectDB();
+    try {
+        const [withdrawResults] = await connection.execute('SELECT * FROM withdraw WHERE `Employee ID` = ?', [employeeId]);
+        res.json(withdrawResults);
+    } catch (error) {
+        console.error('Error fetching withdrawal records:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    } finally {
+        await connection.end();
+    }
+});
+
+// API to fetch all users
 app.get('/api/users', async (req, res) => {
     const connection = await connectDB();
     try {
@@ -70,7 +85,7 @@ app.get('/api/users', async (req, res) => {
     }
 });
 
-// API สำหรับดึงข้อมูลผู้ใช้ตาม Employee ID
+// API to fetch user by Employee ID
 app.get('/api/users/:employeeId', async (req, res) => {
     const connection = await connectDB();
     const employeeId = req.params.employeeId;
@@ -91,16 +106,28 @@ app.get('/api/users/:employeeId', async (req, res) => {
     }
 });
 
-// API สำหรับเพิ่มผู้ใช้
+// API to add a user
 app.post('/api/users', async (req, res) => {
     const connection = await connectDB();
     const { 'Employee ID': employeeId, Username, Password, Status, Position } = req.body;
 
     try {
+        // Check if data is complete
         if (!employeeId || !Username || !Password || !Position) {
             return res.status(400).json({ error: 'กรุณากรอกข้อมูลให้ครบถ้วน!' });
         }
 
+        // Check for duplicate "Employee ID" or "Username"
+        const [existingUser] = await connection.execute(
+            'SELECT * FROM user WHERE `Employee ID` = ? OR Username = ?',
+            [employeeId, Username]
+        );
+
+        if (existingUser.length > 0) {
+            return res.status(400).json({ error: 'Employee ID หรือ Username นี้มีอยู่แล้วในระบบ!' });
+        }
+
+        // Insert a new user
         const [result] = await connection.execute(
             'INSERT INTO user (`Employee ID`, Username, Password, Status, Position) VALUES (?, ?, ?, ?, ?)',
             [employeeId, Username, Password, Status, Position]
@@ -124,7 +151,7 @@ app.post('/api/users', async (req, res) => {
     }
 });
 
-// API สำหรับแก้ไขข้อมูลผู้ใช้
+// API to update a user
 app.put('/api/users/:employeeId', async (req, res) => {
     const connection = await connectDB();
     const { Username, Password, Status, Position } = req.body;
@@ -159,7 +186,7 @@ app.put('/api/users/:employeeId', async (req, res) => {
     }
 });
 
-// API สำหรับดึงข้อมูล product
+// API to fetch products
 app.get('/api/products', async (req, res) => {
     const connection = await connectDB();
     try {
@@ -173,7 +200,7 @@ app.get('/api/products', async (req, res) => {
     }
 });
 
-// API สำหรับดึงข้อมูล repair
+// API to fetch repair records
 app.get('/api/repair', async (req, res) => {
     const connection = await connectDB();
     try {
@@ -187,7 +214,7 @@ app.get('/api/repair', async (req, res) => {
     }
 });
 
-// เริ่มต้นเซิร์ฟเวอร์
+// Start server
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
 });

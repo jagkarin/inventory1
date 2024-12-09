@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import ViewHistory from './ViewHistory'; // Import modal ที่ใช้ดูประวัติการเบิก
+import './UserDetails.css'; // Import CSS file for additional styling
 
 function UserDetails({ user, onClose }) {
     const [showPassword, setShowPassword] = useState(false);
@@ -16,12 +17,12 @@ function UserDetails({ user, onClose }) {
 
     return (
         <>
-            <Modal show={true} onHide={onClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>รายละเอียดพนักงาน</Modal.Title>
+            <Modal show={true} onHide={onClose} centered className="user-details-modal">
+                <Modal.Header closeButton className="modal-header">
+                    <Modal.Title>📦 รายละเอียดพนักงาน 📦</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
-                    <h5>ข้อมูลพนักงาน</h5>
+                <Modal.Body className="modal-body">
+                    <h5 className="text-center mb-4">ข้อมูลพนักงาน</h5>
                     <div className="mb-3">
                         <strong>หมายเลขพนักงาน:</strong>
                         <span className="ms-2">{user['Employee ID']}</span>
@@ -35,7 +36,7 @@ function UserDetails({ user, onClose }) {
                         <span className="ms-2">{showPassword ? user.Password : '******'}</span>
                         <Button 
                             variant="link" 
-                            className="ms-2" 
+                            className="ms-2 toggle-password"
                             onClick={() => setShowPassword(!showPassword)}
                         >
                             {showPassword ? '🙈 ซ่อน' : '👁️ แสดง'}
@@ -52,10 +53,10 @@ function UserDetails({ user, onClose }) {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={onClose}>
-                        ปิด
+                        ✖️ ปิด
                     </Button>
                     <Button variant="primary" onClick={handleShowHistory}>
-                        ดูประวัติการเบิก
+                        📜 ดูประวัติการเบิก
                     </Button>
                 </Modal.Footer>
             </Modal>

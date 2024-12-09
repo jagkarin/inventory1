@@ -9,9 +9,9 @@ const WithdrawalHistoryModal = ({ userId, show, onClose }) => {
 
     useEffect(() => {
         const fetchHistoryData = async () => {
-            setLoading(true); // เริ่มต้นการโหลด
+            setLoading(true); // Start loading
             try {
-                const response = await axios.get(`http://localhost:2000/api/withdraw?employeeId=${userId}`);
+                const response = await axios.get(`http://localhost:2000/api/withdraw/${userId}`); // Adjusted endpoint
                 setHistoryData(response.data);
                 setLoading(false);
             } catch (err) {
@@ -48,7 +48,7 @@ const WithdrawalHistoryModal = ({ userId, show, onClose }) => {
                         <tbody>
                             {historyData.length > 0 ? (
                                 historyData.map((entry) => (
-                                    <tr key={entry.id}> {/* ใช้ id ของ entry หากมี */}
+                                    <tr key={entry.id || entry['Withdraw ID']}> {/* Use appropriate unique ID */}
                                         <td>{entry.things}</td>
                                         <td>{entry.quantity}</td>
                                     </tr>
