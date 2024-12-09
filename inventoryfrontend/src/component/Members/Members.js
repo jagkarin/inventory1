@@ -41,8 +41,10 @@ function MembersComponent() {
 
     const filteredUserList = userList.filter(user => {
         const isStatusMatching = (statusFilter === 'All' || user.Status === statusFilter);
-        const isSearchMatching = user.Username.toLowerCase().includes(searchTerm.toLowerCase())
-            || user['Employee ID'].toString().includes(searchTerm);
+        const isSearchMatching = user.Username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            user['Employee ID'].toString().includes(searchTerm) ||
+            user.Status.toLowerCase().includes(searchTerm.toLowerCase()) || // ค้นหาใน Status
+            user.Position.toLowerCase().includes(searchTerm.toLowerCase()); // ค้นหาใน Position
 
         return isStatusMatching && isSearchMatching;
     });
@@ -166,32 +168,40 @@ function MembersComponent() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {filteredUserList.map(user => (
-                                        <tr key={user['Employee ID']}>
-                                            <td>{user['Employee ID']}</td>
-                                            <td>{user.Username}</td>
-                                            <td className="project-state text-center">
-                                                <button
-                                                    className={`btn btn-sm ${user.Status === 'Active' ? 'btn-success' : 'btn-danger'}`}
-                                                    onClick={() => handleToggle(user)}
-                                                >
-                                                    {user.Status === 'Active' ? <FaUserCheck /> : <FaUserSlash />}
-                                                    {user.Status}
-                                                </button>
-                                            </td>
-                                            <td>{user.Position}</td>
-                                            <td className="project-actions text-right">
-                                                <div className="btn-group" role="group" aria-label="Basic example">
-                                                    <button className="btn btn-outline-primary btn-sm" onClick={() => handleOpenModal(user)}>
-                                                        View
-                                                    </button>
-                                                    <button className="btn btn-outline-info btn-sm" onClick={() => handleOpenEditModal(user)}>
-                                                        Edit
-                                                    </button>
-                                                </div>
+                                    {filteredUserList.length === 0 ? (
+                                        <tr>
+                                            <td colSpan="5" className="text-center">
+                                                <strong>No data found</strong>
                                             </td>
                                         </tr>
-                                    ))}
+                                    ) : (
+                                        filteredUserList.map(user => (
+                                            <tr key={user['Employee ID']}>
+                                                <td>{user['Employee ID']}</td>
+                                                <td>{user.Username}</td>
+                                                <td className="project-state text-center">
+                                                    <button
+                                                        className={`btn btn-sm ${user.Status === 'Active' ? 'btn-success' : 'btn-danger'}`}
+                                                        onClick={() => handleToggle(user)}
+                                                    >
+                                                        {user.Status === 'Active' ? <FaUserCheck /> : <FaUserSlash />}
+                                                        {user.Status}
+                                                    </button>
+                                                </td>
+                                                <td>{user.Position}</td>
+                                                <td className="project-actions text-right">
+                                                    <div className="btn-group" role="group" aria-label="Basic example">
+                                                        <button className="btn btn-outline-primary btn-sm" onClick={() => handleOpenModal(user)}>
+                                                            View
+                                                        </button>
+                                                        <button className="btn btn-outline-info btn-sm" onClick={() => handleOpenEditModal(user)}>
+                                                            Edit
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
                                 </tbody>
                             </table>
                         </div>
@@ -227,7 +237,7 @@ function MembersComponent() {
             {showViewHistoryModal && selectedEmployeeId && (
                 <ViewHistory 
                     show={showViewHistoryModal} 
-                    onClose={handleCloseViewHistory} 
+                    onClose={() => setShowViewHistoryModal(false)} 
                     employeeId={selectedEmployeeId} 
                 />
             )}

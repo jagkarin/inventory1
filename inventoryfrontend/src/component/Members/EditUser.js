@@ -10,6 +10,14 @@ function EditUser({ user, onUpdate, onClose }) {
     const [showToast, setShowToast] = useState(false);
 
     const handleSubmit = async () => {
+        console.log("Submit button clicked"); // For debugging
+        
+        // Validate all fields
+        if (!employeeId || !username || !password || !position) {
+            console.error("Validation failed: All fields must be filled out");
+            return; // Prevent submission if validation fails
+        }
+
         const updatedUser = { 
             'Employee ID': employeeId,
             Username: username, 
@@ -34,7 +42,7 @@ function EditUser({ user, onUpdate, onClose }) {
             const data = await response.json();
             onUpdate(data); 
             setShowToast(true); // Show Toast message
-            onClose(); // Close modal
+            onClose(); // Close Modal
         } catch (error) {
             console.error("Error updating user:", error);
         }
@@ -53,7 +61,7 @@ function EditUser({ user, onUpdate, onClose }) {
                             type="text"
                             className="form-control"
                             value={employeeId}
-                            onChange={(e) => setEmployeeId(e.target.value)}
+                            disabled // Disable input to make it non-editable
                         />
                     </div>
                     <div className="form-group">
@@ -68,7 +76,7 @@ function EditUser({ user, onUpdate, onClose }) {
                     <div className="form-group">
                         <label>Password</label>
                         <input
-                            type="text" // Keep this as type="text" to show the password
+                            type="text" // Intentionally kept as text
                             className="form-control"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
@@ -92,8 +100,8 @@ function EditUser({ user, onUpdate, onClose }) {
                             value={position}
                             onChange={(e) => setPosition(e.target.value)}
                         >
-                            <option value="">เลือกตำแหน่ง...</option>
-                            <option value="Admin">Admin</option>
+                            <option value="">Select Position...</option>
+                            <option value="admin">Admin</option>
                             <option value="Developer">Developer</option>
                             <option value="ติดตั้ง">ติดตั้ง</option>
                         </select>
@@ -119,7 +127,7 @@ function EditUser({ user, onUpdate, onClose }) {
                 <Toast.Header>
                     <strong className="mr-auto">Success</strong>
                 </Toast.Header>
-                <Toast.Body>ข้อมูลบันทึกสำเร็จ!</Toast.Body>
+                <Toast.Body>Data saved successfully!</Toast.Body>
             </Toast>
         </>
     );

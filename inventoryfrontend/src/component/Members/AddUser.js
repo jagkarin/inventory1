@@ -110,7 +110,7 @@ const AddUser = ({ onAdd, onClose }) => {
                             onChange={handleChange}
                         >
                             <option value="">เลือกตำแหน่ง...</option>
-                            <option value="admin">admin</option>
+                            <option value="admin">Admin</option>
                             <option value="Developer">Developer</option>
                             <option value="ติดตั้ง">ติดตั้ง</option>
                             {/* คุณสามารถเพิ่มตำแหน่งอื่นๆ ได้ที่นี่ */}
