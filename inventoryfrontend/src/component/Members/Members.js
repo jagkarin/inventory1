@@ -147,7 +147,7 @@ function MembersComponent() {
                                 <input
                                     type="text"
                                     className="form-control mx-2"
-                                    placeholder="Search by Username or Employee ID"
+                                    placeholder="ค้นหา"
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                     style={{ width: '250px' }} // จัดช่องค้นหาให้สวยงาม
