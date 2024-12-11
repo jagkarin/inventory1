@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 
 const AddUser = ({ onAdd, onClose }) => {
@@ -9,6 +9,24 @@ const AddUser = ({ onAdd, onClose }) => {
         Position: '',
         Password: ''
     });
+
+    useEffect(() => {
+        // ดึงข้อมูลผู้ใช้งานที่มีอยู่เพื่อกำหนด Employee ID ถัดไป
+        const fetchUsers = async () => {
+            try {
+                const response = await fetch('http://localhost:2000/api/users');
+                const users = await response.json();
+
+                const maxId = Math.max(...users.map(user => parseInt(user['Employee ID'])), 0);
+                setNewUser(prev => ({ ...prev, 'Employee ID': maxId + 1 }));
+            } catch (error) {
+                console.error('ไม่สามารถดึงข้อมูลผู้ใช้ได้:', error);
+                alert('ไม่สามารถดึงข้อมูลผู้ใช้ได้ โปรดลองอีกครั้งในภายหลัง');
+            }
+        };
+
+        fetchUsers();
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -34,18 +52,18 @@ const AddUser = ({ onAdd, onClose }) => {
 
                 if (!response.ok) {
                     const errorData = await response.json();
-                    alert(`Error: ${errorData.error}`);
+                    alert(`ข้อผิดพลาด: ${errorData.error}`);
                     return;
                 }
 
                 const addedUser = await response.json();
-                console.log('User added:', addedUser);
+                console.log('เพิ่มผู้ใช้:', addedUser);
                 onAdd(addedUser);
                 onClose();
-                
+
             } catch (error) {
-                console.error('Error adding user:', error);
-                alert('Unable to add user. Please try again later.');
+                console.error('ข้อผิดพลาดในการเพิ่มผู้ใช้:', error);
+                alert('ไม่สามารถเพิ่มผู้ใช้ได้ โปรดลองอีกครั้งในภายหลัง');
             }
         } else {
             alert("กรุณากรอกข้อมูลให้ครบถ้วน!");
@@ -55,54 +73,57 @@ const AddUser = ({ onAdd, onClose }) => {
     return (
         <Modal show onHide={onClose}>
             <Modal.Header closeButton>
-                <Modal.Title>Add User</Modal.Title>
+                <Modal.Title>เพิ่มผู้ใช้</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <form>
                     <div className="form-group">
-                        <label>Employee ID</label>
+                        <label>รหัสพนักงาน</label>
                         <input
                             type="text"
                             className="form-control"
                             name="Employee ID"
                             value={newUser['Employee ID']}
                             onChange={handleChange}
+                            disabled // ทำให้ไม่สามารถแก้ไขได้
                         />
                     </div>
                     <div className="form-group">
-                        <label>Username</label>
+                        <label>ชื่อผู้ใช้ (ไม่เกิน 20 ตัวอักษร)</label>
                         <input
                             type="text"
                             className="form-control"
                             name="Username"
                             value={newUser.Username}
                             onChange={handleChange}
+                            maxLength={20} // ตั้งค่าความยาวสูงสุดไว้ที่ 20 ตัวอักษร
                         />
                     </div>
                     <div className="form-group">
-                        <label>Password</label>
+                        <label>รหัสผ่าน (ไม่เกิน 10 ตัวอักษร)</label>
                         <input
-                            type="text" // รหัสผ่านแสดงเป็นข้อความปกติ
+                            type="text" // แสดงรหัสผ่านเป็นข้อความธรรมดา
                             className="form-control"
                             name="Password"
                             value={newUser.Password}
                             onChange={handleChange}
+                            maxLength={10} // ตั้งค่าความยาวสูงสุดไว้ที่ 10 ตัวอักษร
                         />
                     </div>
                     <div className="form-group">
-                        <label>Status</label>
+                        <label>สถานะ</label>
                         <select
                             className="form-control"
                             name="Status"
                             value={newUser.Status}
                             onChange={handleChange}
                         >
-                            <option value="Active">Active</option>
-                            <option value="Inactive">Inactive</option>
+                            <option value="Active">ใช้งาน</option>
+                            <option value="Inactive">ไม่ใช้งาน</option>
                         </select>
                     </div>
                     <div className="form-group">
-                        <label>Position</label>
+                        <label>ตำแหน่ง</label>
                         <select
                             className="form-control"
                             name="Position"
@@ -110,7 +131,7 @@ const AddUser = ({ onAdd, onClose }) => {
                             onChange={handleChange}
                         >
                             <option value="">เลือกตำแหน่ง...</option>
-                            <option value="admin">Admin</option>
+                            <option value="admin">admin</option>
                             <option value="Developer">Developer</option>
                             <option value="ติดตั้ง">ติดตั้ง</option>
                             {/* คุณสามารถเพิ่มตำแหน่งอื่นๆ ได้ที่นี่ */}
@@ -120,10 +141,10 @@ const AddUser = ({ onAdd, onClose }) => {
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={onClose}>
-                    Close
+                    ปิด
                 </Button>
                 <Button variant="primary" onClick={handleSubmit}>
-                    Add User
+                    เพิ่มผู้ใช้
                 </Button>
             </Modal.Footer>
         </Modal>
