@@ -18,6 +18,8 @@ namespace inventorybackend.src.Core.Service
             _logger = logger;
         }
 
+
+        //แสดงข้อมูลสินค้าทั้งหมด
         public async Task<List<ProductDTO>> GetALLProductAsync()
         {
             try
@@ -28,7 +30,7 @@ namespace inventorybackend.src.Core.Service
                     ProductsID = s.ProductsID,
                     ProductsName = s.ProductsName,
                     Adddate = s.Adddate,
-                    //CategoriesID = s.CategoriesID,
+                    CategoriesID = s.CategoriesID,
                     Quantity = s.Quantity,
                     Description = s.Description,
 
@@ -43,6 +45,8 @@ namespace inventorybackend.src.Core.Service
             }
         }
 
+
+        //อัพเดต/แก้ไขข้อมูลสินค้า
         public async Task<UpdateProductDTO> UpdateProductAsync(UpdateProductDTO UpdateProductDTO)
         {
             try
@@ -57,6 +61,7 @@ namespace inventorybackend.src.Core.Service
                     Adddate = DateTime.Now,
                     Quantity = UpdateProductDTO.Quantity,
                     Description = UpdateProductDTO.Description,
+                    CategoriesID = UpdateProductDTO.CategoriesID,
 
                 };
 
@@ -72,6 +77,7 @@ namespace inventorybackend.src.Core.Service
                     Adddate = DateTime.Now,
                     Quantity = UpdateProductDTO.Quantity,
                     Description = UpdateProductDTO.Description,
+                    CategoriesID= UpdateProductDTO.CategoriesID,
                 };
             }
             catch (Exception ex)
@@ -80,6 +86,39 @@ namespace inventorybackend.src.Core.Service
                 throw new Exception("Error occurred while updating Product", ex);
             }
         }
+
+        public async Task<ProductDbo> AddProductAsync(InputProductDTO InputProductDTO)
+        {
+            try
+            {
+                var Product = new Entities.ProductDbo
+                {
+                    ProductsName = InputProductDTO.ProductsName,
+                    Quantity=InputProductDTO.Quantity,
+                    Description = InputProductDTO.Description,
+                    Adddate= DateTime.Now,
+                    CategoriesID = InputProductDTO.CategoriesID
+
+
+                };
+                var addProduct = await _productRepo.AddProductAsync(Product);
+                return new ProductDbo
+                {
+                    ProductsName = addProduct.ProductsName,
+                    Quantity = addProduct.Quantity,
+                    Description = addProduct.Description,
+                    Adddate = DateTime.Now,
+                    CategoriesID = addProduct.CategoriesID
+                    
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("An error occurred while adding data.", ex);
+            }
+        }
+
+
     }
 }
 

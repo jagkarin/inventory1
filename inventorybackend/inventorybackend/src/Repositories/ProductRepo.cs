@@ -49,6 +49,7 @@ namespace inventorybackend.src.Repositories
                 existingProduct.Description = Product.Description;
                 existingProduct.ProductsID = Product.ProductsID;
                 existingProduct.Adddate = DateTime.Now;
+                existingProduct.CategoriesID = Product.CategoriesID;
 
                 _dbContext.Product.Update(existingProduct);
 
@@ -65,6 +66,20 @@ namespace inventorybackend.src.Repositories
                 await transaction.RollbackAsync();
                 _logger.LogError(ex, "Error occurred while updating Product with ID : {ProductsID}. Inner exception: {InnerException}", Product.ProductsName, ex.InnerException?.Message);
                 throw new Exception($"Error occurred while updating Product with ID {Product.ProductsName}", ex);
+            }
+        }
+
+        public async Task<ProductDbo> AddProductAsync(ProductDbo Product)
+        {
+            try
+            {
+                _dbContext.Product.Add(Product);
+                await _dbContext.SaveChangesAsync();
+                return Product;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }
