@@ -61,7 +61,7 @@ namespace inventorybackend.src.Core.Service
                     Adddate = DateTime.Now,
                     Quantity = UpdateProductDTO.Quantity,
                     Description = UpdateProductDTO.Description,
-                    CategoriesID = UpdateProductDTO.CategoriesID,
+                    //CategoriesID = UpdateProductDTO.CategoriesID,
 
                 };
 
@@ -77,7 +77,7 @@ namespace inventorybackend.src.Core.Service
                     Adddate = DateTime.Now,
                     Quantity = UpdateProductDTO.Quantity,
                     Description = UpdateProductDTO.Description,
-                    CategoriesID= UpdateProductDTO.CategoriesID,
+                    //CategoriesID= UpdateProductDTO.CategoriesID,
                 };
             }
             catch (Exception ex)
@@ -97,7 +97,7 @@ namespace inventorybackend.src.Core.Service
                     Quantity=InputProductDTO.Quantity,
                     Description = InputProductDTO.Description,
                     Adddate= DateTime.Now,
-                    CategoriesID = InputProductDTO.CategoriesID
+                    //CategoriesID = InputProductDTO.CategoriesID
 
 
                 };
@@ -108,7 +108,7 @@ namespace inventorybackend.src.Core.Service
                     Quantity = addProduct.Quantity,
                     Description = addProduct.Description,
                     Adddate = DateTime.Now,
-                    CategoriesID = addProduct.CategoriesID
+                    //CategoriesID = addProduct.CategoriesID
                     
                 };
             }
@@ -118,7 +118,18 @@ namespace inventorybackend.src.Core.Service
             }
         }
 
-
+        public async Task<List<ProductCategoryDTO>> GetAllProductCategoryAsync()
+        {
+            try
+            {
+                var productcate = await _productRepo.GetAllProductCategoryAsync();
+                return productcate;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException($"An error occurred while retrieving the productcategory rentals: {ex.Message}", ex);
+            }
+        }
     }
 }
 

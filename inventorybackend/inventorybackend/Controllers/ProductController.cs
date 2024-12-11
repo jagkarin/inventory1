@@ -95,5 +95,28 @@ namespace inventorybackend.Controllers
             }
         }
 
+        [HttpGet("GetAllProductCategory")]
+        public async Task<IActionResult> GetAllProductCategoryAsync()
+        {
+            var response = new BaseHttpResponse<List<ProductCategoryDTO>>();
+
+            try
+            {
+                var data = await _ProductService.GetAllProductCategoryAsync();
+                response.SetSuccess(data, "Success", "200");
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                var err = new ErrorData
+                {
+                    Code = "-2",
+                    Message = ex.Message
+                };
+                _logger.LogError(ex, "Error getting all productcategory");
+                return BadRequest(err);
+            }
+        }
+
     }
 }

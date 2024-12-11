@@ -4,15 +4,15 @@ using System;
 
 namespace inventorybackend.src.Entities
 {
-    [Table("Category")]
+    [Table("categorys")]
     public class CategoryDbo
     {
         [Key]
         [Required]
-        [Column("Categories_ID", TypeName = "int")]
+        [Column("CategoriesID", TypeName = "int")]
         public int CategoriesID { get; set; }
 
-        [Column("Categories_Name", TypeName = "varchar(45)")]
+        [Column("CategoriesName", TypeName = "varchar(45)")]
         public string? CategoriesName { get; set; }
     }
 }
