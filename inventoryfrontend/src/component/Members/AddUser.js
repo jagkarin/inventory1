@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button } from 'react-bootstrap';
+import { FaUserPlus, FaTimes } from 'react-icons/fa';
 
 const AddUser = ({ onAdd, onClose }) => {
     const [newUser, setNewUser] = useState({
@@ -11,7 +12,6 @@ const AddUser = ({ onAdd, onClose }) => {
     });
 
     useEffect(() => {
-        // ดึงข้อมูลผู้ใช้งานที่มีอยู่เพื่อกำหนด Employee ID ถัดไป
         const fetchUsers = async () => {
             try {
                 const response = await fetch('http://localhost:2000/api/users');
@@ -73,7 +73,9 @@ const AddUser = ({ onAdd, onClose }) => {
     return (
         <Modal show onHide={onClose}>
             <Modal.Header closeButton>
-                <Modal.Title>เพิ่มผู้ใช้</Modal.Title>
+                <Modal.Title>
+                    <FaUserPlus /> เพิ่มผู้ใช้
+                </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <form>
@@ -85,7 +87,7 @@ const AddUser = ({ onAdd, onClose }) => {
                             name="Employee ID"
                             value={newUser['Employee ID']}
                             onChange={handleChange}
-                            disabled // ทำให้ไม่สามารถแก้ไขได้
+                            disabled
                         />
                     </div>
                     <div className="form-group">
@@ -96,18 +98,18 @@ const AddUser = ({ onAdd, onClose }) => {
                             name="Username"
                             value={newUser.Username}
                             onChange={handleChange}
-                            maxLength={20} // ตั้งค่าความยาวสูงสุดไว้ที่ 20 ตัวอักษร
+                            maxLength={20}
                         />
                     </div>
                     <div className="form-group">
                         <label>รหัสผ่าน (ไม่เกิน 10 ตัวอักษร)</label>
                         <input
-                            type="text" // แสดงรหัสผ่านเป็นข้อความธรรมดา
+                            type="text" // เปลี่ยนเป็น type text เพื่อให้รหัสผ่านโชว์ตลอด
                             className="form-control"
                             name="Password"
                             value={newUser.Password}
                             onChange={handleChange}
-                            maxLength={10} // ตั้งค่าความยาวสูงสุดไว้ที่ 10 ตัวอักษร
+                            maxLength={10}
                         />
                     </div>
                     <div className="form-group">
@@ -134,14 +136,13 @@ const AddUser = ({ onAdd, onClose }) => {
                             <option value="admin">admin</option>
                             <option value="Developer">Developer</option>
                             <option value="ติดตั้ง">ติดตั้ง</option>
-                            {/* คุณสามารถเพิ่มตำแหน่งอื่นๆ ได้ที่นี่ */}
                         </select>
                     </div>
                 </form>
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={onClose}>
-                    ปิด
+                    <FaTimes /> ปิด
                 </Button>
                 <Button variant="primary" onClick={handleSubmit}>
                     เพิ่มผู้ใช้

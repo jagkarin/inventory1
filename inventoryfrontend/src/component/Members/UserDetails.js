@@ -15,6 +15,10 @@ function UserDetails({ user, onClose }) {
         setShowHistory(false);
     };
 
+    // กำหนดสีตามสถานะ
+    const statusText = user.Status === 'Active' ? 'พนักงาน' : 'ไม่เป็นพนักงาน';
+    const statusColor = user.Status === 'Active' ? 'text-success' : 'text-danger';
+
     return (
         <>
             <Modal show={true} onHide={onClose} centered className="user-details-modal">
@@ -44,7 +48,7 @@ function UserDetails({ user, onClose }) {
                     </div>
                     <div className="mb-3">
                         <strong>สถานะ:</strong>
-                        <span className="ms-2">{user.Status}</span>
+                        <span className={`ms-2 ${statusColor}`}>{statusText}</span>
                     </div>
                     <div className="mb-3">
                         <strong>ตำแหน่ง:</strong>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Button, Toast } from 'react-bootstrap';
+import { FaEdit, FaSave } from 'react-icons/fa'; // Importing both Edit and Save icons
 
 function EditUser({ user, onUpdate, onClose }) {
     const [employeeId, setEmployeeId] = useState(user['Employee ID'] || '');
@@ -52,7 +53,10 @@ function EditUser({ user, onUpdate, onClose }) {
         <>
             <Modal show={true} onHide={onClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Edit User</Modal.Title>
+                    <Modal.Title>
+                        <FaEdit className="mr-2" /> {/* Adding the edit icon */}
+                        Edit User
+                    </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <div className="form-group">
@@ -112,7 +116,7 @@ function EditUser({ user, onUpdate, onClose }) {
                         Close
                     </Button>
                     <Button variant="primary" onClick={handleSubmit}>
-                        Save Changes
+                        <FaSave className="mr-2" /> Save Changes {/* Add the save icon here */}
                     </Button>
                 </Modal.Footer>
             </Modal>
