@@ -9,11 +9,13 @@ namespace inventorybackend.src.Core.Service
     {
         private readonly IProductRepo _productRepo;
         private readonly DataContext _dataContext;
+        private readonly ILogger<ProductService> _logger;
 
-        public ProductService(IProductRepo productRepo, DataContext dataContext) 
+        public ProductService(IProductRepo productRepo, DataContext dataContext, ILogger<ProductService> logger) 
         { 
             _productRepo = productRepo;
             _dataContext = dataContext;
+            _logger = logger;
         }
 
         public async Task<List<ProductDTO>> GetALLProductAsync()
@@ -38,6 +40,44 @@ namespace inventorybackend.src.Core.Service
             {
 
                 throw new ApplicationException("An error occurred while getting the Product data.", ex);
+            }
+        }
+
+        public async Task<UpdateProductDTO> UpdateProductAsync(UpdateProductDTO UpdateProductDTO)
+        {
+            try
+            {
+                // ?????????????????????????
+                _logger.LogInformation("Received request to update Product with ID: {ProductsID} ", UpdateProductDTO.ProductsID);
+
+                var Product = new Entities.ProductDbo
+                {
+                    ProductsID = UpdateProductDTO.ProductsID,
+                    ProductsName= UpdateProductDTO.ProductsName,
+                    Adddate = DateTime.Now,
+                    Quantity = UpdateProductDTO.Quantity,
+                    Description = UpdateProductDTO.Description,
+
+                };
+
+
+                var updatedProduct = await _productRepo.UpdateProductAsync(Product);
+
+                _logger.LogInformation("Successfully updated Product with ID: {ProductsID}", UpdateProductDTO.ProductsID);
+
+                return new UpdateProductDTO
+                {
+                    ProductsID = UpdateProductDTO.ProductsID,
+                    ProductsName = UpdateProductDTO.ProductsName,
+                    Adddate = DateTime.Now,
+                    Quantity = UpdateProductDTO.Quantity,
+                    Description = UpdateProductDTO.Description,
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while updating Prodcut with ID: {ProductsID}. Inner exception: {InnerException}", UpdateProductDTO.ProductsID, ex.InnerException?.Message);
+                throw new Exception("Error occurred while updating Product", ex);
             }
         }
     }

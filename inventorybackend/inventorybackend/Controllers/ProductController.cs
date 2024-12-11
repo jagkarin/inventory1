@@ -40,5 +40,34 @@ namespace inventorybackend.Controllers
                 return BadRequest(err);
             }
         }
+
+        [HttpPut("UpdateProduct")]
+        public async Task<IActionResult> UpdateProductAsync(int ProductsID, [FromBody] UpdateProductDTO UpdateProductDTO)
+        {
+            var response = new BaseHttpResponse<UpdateProductDTO>();
+
+            try
+            {
+                UpdateProductDTO.ProductsID = ProductsID;
+
+                _logger.LogInformation("Updating Product with ID: {ProductsID}", ProductsID);
+
+                var data = await _ProductService.UpdateProductAsync(UpdateProductDTO);
+                response.SetSuccess(data, "Product updated successfully", "200");
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                var err = new ErrorData
+                {
+                    Code = "-2",
+                    Message = ex.Message
+                };
+                _logger.LogError(ex, "Error updating Product with ID: {ProductsID}. Inner exception: {InnerException}", ProductsID, ex.InnerException?.Message);
+                response.SetError(err, ex.Message, "500");
+                return BadRequest(response);
+            }
+        }
+
     }
 }

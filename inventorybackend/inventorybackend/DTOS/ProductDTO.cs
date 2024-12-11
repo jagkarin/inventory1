@@ -11,4 +11,14 @@ namespace inventorybackend.DTOS
         public DateTime? Adddate { get; set; }
         //public int CategoriesID { get; set; }
     }
+
+    public class UpdateProductDTO
+    {
+        public int ProductsID { get; set; }
+        public string? ProductsName { get; set; }
+        public string? Description { get; set; }
+        public int? Quantity { get; set; }
+        public DateTime? Adddate { get; set; }
+        //public int CategoriesID { get; set; }
+    }
 }
