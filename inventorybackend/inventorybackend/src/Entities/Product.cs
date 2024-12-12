@@ -24,7 +24,7 @@ namespace inventorybackend.src.Entities
         [Column("AddDate", TypeName = "datetime")]
         public DateTime? Adddate { get; set; }
 
-        //[Column("Categorys_ID", TypeName = "int")]
-        //public int CategoriesID { get; set; }
+        [Column("CategorysID", TypeName = "int")]
+        public int CategoriesID { get; set; }
     }
 }

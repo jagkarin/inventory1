@@ -9,9 +9,9 @@ const Inventory = () => {
     const [products, setProducts] = useState([]);
     const [newProduct, setNewProduct] = useState({
         productsID: '',  // รหัสสินค้าจะถูกตั้งค่าจาก API
-        name: '',
+        productsName: '',  // ใช้ productsName แทน name
         description: '',
-        category: '',
+        //category: '',
         quantity: '',
     });
     const [isEditing, setIsEditing] = useState(false);
@@ -19,7 +19,7 @@ const Inventory = () => {
 
     // ดึงข้อมูลสินค้าทั้งหมดเมื่อหน้าเว็บโหลด
     useEffect(() => {
-        fetch('https://localhost:7294/api/Product/GetAllProduct')
+        fetch('https://localhost:7294/api/Product/GetAllProductCategory')
             .then((res) => {
                 if (!res.ok) {
                     throw new Error('Network response was not ok');
@@ -29,6 +29,7 @@ const Inventory = () => {
             .then((response) => {
                 console.log('API Response:', response);
                 if (response.responseCode === '200') {
+                    console.log(response.data);
                     setProducts(response.data);  // เก็บข้อมูลสินค้าใน state
                 } else {
                     console.error('Failed to load products:', response.message);
@@ -40,7 +41,7 @@ const Inventory = () => {
     // เพิ่มหรือแก้ไขสินค้า
     const handleProduct = () => {
         // ตรวจสอบว่าทุกฟิลด์ถูกกรอกครบถ้วน
-        if (!newProduct.name || !newProduct.description || !newProduct.category || !newProduct.quantity) {
+        if (!newProduct.productsName || !newProduct.description || !newProduct.category || !newProduct.quantity) {
             alert('Please fill in all required fields.');
             return;
         }
@@ -48,17 +49,18 @@ const Inventory = () => {
         console.log(newProduct);
         if (isEditing) {
             // ดำเนินการอัปเดตสินค้า (PUT)
-            fetch(`https://localhost:7294/api/Product/UpdateProduct/${productIdToEdit}`, {
+            fetch(`https://localhost:7294/api/Product/UpdateProduct?ProductsID=${productIdToEdit}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newProduct),
+                body: JSON.stringify({
+                    productsID: newProduct.productsID,
+                    productsName: newProduct.productsName,  // ใช้ productsName แทน name
+                    description: newProduct.description,
+                    //category: newProduct.category,
+                    quantity: newProduct.quantity,
+                }),
             })
-                .then((res) => {
-                    if (!res.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return res.json();
-                })
+                .then((res) => res.json())
                 .then((response) => {
                     if (response.responseCode === '200') {
                         setProducts((prevProducts) =>
@@ -77,7 +79,12 @@ const Inventory = () => {
             fetch(`${API_URL}/AddProduct`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newProduct),
+                body: JSON.stringify({
+                    productsName: newProduct.productsName,  // ใช้ productsName แทน name
+                    description: newProduct.description,
+                    //category: newProduct.category,
+                    quantity: newProduct.quantity,
+                }),
             })
                 .then((res) => res.json())
                 .then((response) => {
@@ -92,14 +99,13 @@ const Inventory = () => {
         }
     };
     
-    
     // ฟังก์ชัน Reset Form
     const resetForm = () => {
         setNewProduct({
             productsID: '',  // เริ่มต้นให้เป็นค่าว่าง
-            name: '',
+            productsName: '',  // ใช้ productsName แทน name
             description: '',
-            category: '',
+            //category: '',
             quantity: '',
         });
         setIsEditing(false);
@@ -110,9 +116,9 @@ const Inventory = () => {
     const editProduct = (product) => {
         setNewProduct({
             productsID: product.productsID,
-            name: product.productsName,
+            productsName: product.productsName,  // ใช้ productsName แทน name
             description: product.description,
-            category: product.categoriesName,
+            //category: product.categoriesName,    // หมายเหตุ: ตรวจสอบว่า categoriesName ใช้ใน API หรือไม่
             quantity: product.quantity,
         });
         setIsEditing(true);
@@ -153,7 +159,6 @@ const Inventory = () => {
             </div>
         </div>
     );
-    
 };
 
 export default Inventory;

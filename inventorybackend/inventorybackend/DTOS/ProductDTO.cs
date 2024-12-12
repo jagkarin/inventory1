@@ -9,7 +9,7 @@ namespace inventorybackend.DTOS
         public string? Description { get; set; }
         public int? Quantity { get; set; }
         public DateTime? Adddate { get; set; }
-        //public int CategoriesID { get; set; }
+        public int CategoriesID { get; set; }
     }
 
     public class UpdateProductDTO
@@ -20,5 +20,25 @@ namespace inventorybackend.DTOS
         public int? Quantity { get; set; }
         public DateTime? Adddate { get; set; }
         //public int CategoriesID { get; set; }
+    }
+
+    public class InputProductDTO
+    {
+        public string? ProductsName { get; set; }
+        public string? Description { get; set; }
+        public int? Quantity { get; set; }
+        public DateTime? Adddate { get; set; }
+        public int CategoriesID { get; set; }
+    }
+
+    public class ProductCategoryDTO
+    {
+        public int ProductsID { get; set; }
+        public string? ProductsName { get; set; }
+        public string? Description { get; set; }
+        public int? Quantity { get; set; }
+        public DateTime? Adddate { get; set; }
+        public int CategoriesID { get; set; }
+        public string? CategoriesName { get; set; }
     }
 }

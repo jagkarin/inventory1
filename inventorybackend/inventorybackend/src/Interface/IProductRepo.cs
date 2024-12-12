@@ -1,4 +1,5 @@
-﻿using inventorybackend.src.Entities;
+﻿using inventorybackend.DTOS;
+using inventorybackend.src.Entities;
 
 namespace inventorybackend.src.Interface
 {
@@ -6,5 +7,7 @@ namespace inventorybackend.src.Interface
     {
         Task<List<ProductDbo>> GetALLProductAsync();
         Task<ProductDbo> UpdateProductAsync(ProductDbo Product);
+        Task<ProductDbo> AddProductAsync(ProductDbo Product);
+        Task<List<ProductCategoryDTO>> GetAllProductCategoryAsync();
     }
 }

@@ -1,4 +1,5 @@
-﻿using inventorybackend.src.Entities;
+﻿using inventorybackend.DTOS;
+using inventorybackend.src.Entities;
 using inventorybackend.src.Interface;
 using Microsoft.EntityFrameworkCore;
 
@@ -49,6 +50,7 @@ namespace inventorybackend.src.Repositories
                 existingProduct.Description = Product.Description;
                 existingProduct.ProductsID = Product.ProductsID;
                 existingProduct.Adddate = DateTime.Now;
+                //existingProduct.CategoriesID = Product.CategoriesID;
 
                 _dbContext.Product.Update(existingProduct);
 
@@ -65,6 +67,49 @@ namespace inventorybackend.src.Repositories
                 await transaction.RollbackAsync();
                 _logger.LogError(ex, "Error occurred while updating Product with ID : {ProductsID}. Inner exception: {InnerException}", Product.ProductsName, ex.InnerException?.Message);
                 throw new Exception($"Error occurred while updating Product with ID {Product.ProductsName}", ex);
+            }
+        }
+
+        public async Task<ProductDbo> AddProductAsync(ProductDbo Product)
+        {
+            try
+            {
+                _dbContext.Product.Add(Product);
+                await _dbContext.SaveChangesAsync();
+                return Product;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<List<ProductCategoryDTO>> GetAllProductCategoryAsync()
+        {
+            try
+            {
+                var productcategory = await (from p in _dbContext.Product
+                                       join c in _dbContext.Category
+                                       on p.CategoriesID equals c.CategoriesID
+                                       select new ProductCategoryDTO
+                                       {
+                                         ProductsID = p.ProductsID,
+                                         ProductsName = p.ProductsName,
+                                         Adddate = DateTime.Now,
+                                         CategoriesID = c.CategoriesID,
+                                         Description = p.Description,
+                                         Quantity = p.Quantity,
+                                         CategoriesName = c.CategoriesName,
+
+
+                                       }).ToListAsync();
+
+                return productcategory;
+            }
+            catch (Exception ex)
+            {
+                // เพิ่มข้อความแสดงข้อผิดพลาดจาก exception ที่แท้จริง
+                throw new ApplicationException($"An error occurred while retrieving the productcategory data: {ex.Message}", ex);
             }
         }
     }
