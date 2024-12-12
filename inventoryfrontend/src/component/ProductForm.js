@@ -2,12 +2,12 @@ const ProductForm = ({ newProduct, setNewProduct, isEditing, handleProduct }) =>
     // กำหนดค่าเริ่มต้นให้กับ newProduct ถ้าไม่มีค่า
     
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setNewProduct((prev) => ({ ...prev, [name]: value }));
+        const { productsName, value } = e.target;
+        setNewProduct((prev) => ({ ...prev, [productsName]: value }));
     };
     console.log('Current newProduct:', newProduct); // เพิ่มการตรวจสอบ
     const product = newProduct || { 
-        name: '', 
+        productsName: '', 
         category: '', 
         quantity: 0, 
         description: '' 
@@ -30,8 +30,8 @@ const ProductForm = ({ newProduct, setNewProduct, isEditing, handleProduct }) =>
                     <input
                         type="text"
                         id="name"
-                        value={newProduct.name}  // ตรวจสอบการแสดงชื่อสินค้า
-                        onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
+                        value={newProduct.productsName}  // ตรวจสอบการแสดงชื่อสินค้า
+                        onChange={(e) => setNewProduct({ ...newProduct, productsName: e.target.value })}
                     />
                 </div>
                 <div className="input-group">
@@ -41,7 +41,7 @@ const ProductForm = ({ newProduct, setNewProduct, isEditing, handleProduct }) =>
                         value={product.category}
                         onChange={(e) => setNewProduct({ ...product, category: e.target.value })}
                     >
-                        <option value="">Select Category</option>
+                        <option value="">กรุณาเลือก. . .</option>
                         <option value="electronics">Electronics</option>
                         <option value="furniture">Furniture</option>
                     </select>
