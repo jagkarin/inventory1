@@ -63,43 +63,60 @@ textarea {
 
 .btn-group {
     display: flex;
-    justify-content: flex-start;
-    gap: 10px;
-    margin-top: 20px;
+    gap: 10px; /* เพิ่มช่องว่างระหว่างปุ่ม */
+    margin-top: 10px;
 }
 
 .btn {
-    padding: 10px 20px;
-    font-size: 16px;
+    padding: 8px 12px;
     border-radius: 5px;
+    border: none;
     cursor: pointer;
+    font-size: 14px;
 }
+
 
 .btn-success {
     background-color: #28a745;
     border: none;
     color: white;
 }
-
-.btn-danger {
-    background-color: #dc3545;
-    border: none;
+.btn-edit {
+    background-color: #4caf50;
     color: white;
 }
-.btn-edit {
-    background-color: #28a745;
-    border: none;
+
+.btn-danger {
+    background-color: #f44336;
     color: white;
 }
 
 /* Product List */
 .product-list {
-    max-width: 900px;
-    margin: 20px auto;
+    display: flex;
+    flex-direction: column; /* จัดเรียงในแนวตั้ง */
+    gap: 20px; /* เพิ่มระยะห่างระหว่างสินค้า */
     padding: 20px;
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+.product-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* จัดชิดซ้าย */
+    border: 1px solid #ddd; /* กรอบรอบสินค้า */
+    padding: 10px; /* ระยะห่างภายใน */
+    height: 100%; /* ทำให้ความสูงเท่ากัน */
+}
+.product-name, .product-category, .product-description {
+    white-space: nowrap; /* ป้องกันข้อความขึ้นบรรทัดใหม่ */
+    overflow: hidden; /* ซ่อนข้อความเกินขอบ */
+    text-overflow: ellipsis; /* เพิ่ม ... หากข้อความยาวเกิน */
+    width: 100%; /* กำหนดความกว้าง */
+}
+
+.product-description {
+    height: 40px; /* จำกัดความสูงให้เท่ากัน */
 }
 
 .product-list h2 {
@@ -111,21 +128,22 @@ textarea {
 
 .product-card {
     display: flex;
+    flex-direction: column; /* เนื้อหาภายในการ์ดเรียงในแนวตั้ง */
     justify-content: space-between;
-    align-items: center;
-    padding: 15px;
-    margin-bottom: 10px;
-    background-color: #f8f9fa;
+    border: 1px solid #ddd;
     border-radius: 8px;
-    border: 1px solid #dee2e6;
+    padding: 15px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 
 .product-card p {
-    margin: 0;
+    margin: 5px 0;
     font-size: 14px;
-    color: #495057;
+    color: #333;
 }
+
 
 .product-card .btn {
     font-size: 14px;
@@ -136,7 +154,7 @@ textarea {
 .no-products {
     text-align: center;
     font-size: 16px;
-    color: #6c757d;
+    color: #888;
 }
 .product-card div {
     display: flex;           /* ใช้ flexbox ในการจัดการปุ่ม */
