@@ -10,9 +10,9 @@ namespace inventorybackend.src.Entities
         [Key]
         [Required]
         [Column("Category_ID", TypeName = "int")]
-        public int CategoryID { get; set; }
+        public int Category_ID { get; set; }
 
         [Column("Category_Name", TypeName = "varchar(45)")]
-        public string? CategoryName { get; set; }
+        public string? Category_Name { get; set; }
     }
 }
