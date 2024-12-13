@@ -1,7 +1,14 @@
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+
+import logo from './logo.svg';
+import { BrowserRouter as Router,Route,Routes,Link} from 'react-router-dom';
+import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import MembersComponent from './component/Members/Members';
 import Dashboard from './component/Dashboard/Dashboard';
+import Inventory from './component/Inventory';
+import RequestPage from './component/Request';
+
+
 
 function App() {
   return (
@@ -28,6 +35,7 @@ function App() {
         <Routes>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/members" element={<MembersComponent />} />
+          <Route path = "/" element = {<Inventory />} />
         </Routes>
       </div>
     </Router>

@@ -4,7 +4,7 @@ using System;
 
 namespace inventorybackend.src.Entities
 {
-    [Table("CategoryEQM")]
+    [Table("categoryeqm")]
     public class CategoryEQMDbo
     {
         [Key]

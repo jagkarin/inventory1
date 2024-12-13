@@ -1,0 +1,167 @@
+/* General Style */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7fa;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header */
+h1 {
+    text-align: center;
+    margin: 20px 0;
+    color: #343a40;
+    font-weight: 700;
+}
+
+/* Form Container */
+.container {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #495057;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group label {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.input-group input,
+.input-group select,
+.input-group textarea {
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 14px;
+    color: #495057;
+}
+
+textarea {
+    resize: none;
+}
+
+.btn-group {
+    display: flex;
+    gap: 10px; /* เพิ่มช่องว่างระหว่างปุ่ม */
+    margin-top: 10px;
+}
+
+.btn {
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+
+.btn-success {
+    background-color: #28a745;
+    border: none;
+    color: white;
+}
+.btn-edit {
+    background-color: #4caf50;
+    color: white;
+}
+
+.btn-danger {
+    background-color: #f44336;
+    color: white;
+}
+
+/* Product List */
+.product-list {
+    display: flex;
+    flex-direction: column; /* จัดเรียงในแนวตั้ง */
+    gap: 20px; /* เพิ่มระยะห่างระหว่างสินค้า */
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+.product-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* จัดชิดซ้าย */
+    border: 1px solid #ddd; /* กรอบรอบสินค้า */
+    padding: 10px; /* ระยะห่างภายใน */
+    height: 100%; /* ทำให้ความสูงเท่ากัน */
+}
+.product-name, .product-category, .product-description {
+    white-space: nowrap; /* ป้องกันข้อความขึ้นบรรทัดใหม่ */
+    overflow: hidden; /* ซ่อนข้อความเกินขอบ */
+    text-overflow: ellipsis; /* เพิ่ม ... หากข้อความยาวเกิน */
+    width: 100%; /* กำหนดความกว้าง */
+}
+
+.product-description {
+    height: 40px; /* จำกัดความสูงให้เท่ากัน */
+}
+
+.product-list h2 {
+    font-size: 22px;
+    font-weight: bold;
+    color: #495057;
+    margin-bottom: 15px;
+}
+
+.product-card {
+    display: flex;
+    flex-direction: column; /* เนื้อหาภายในการ์ดเรียงในแนวตั้ง */
+    justify-content: space-between;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+.product-card p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #333;
+}
+
+
+.product-card .btn {
+    font-size: 14px;
+    padding: 5px 10px;
+    margin-right: 10px;      /* เพิ่มระยะห่างระหว่างปุ่ม */
+}
+
+.no-products {
+    text-align: center;
+    font-size: 16px;
+    color: #888;
+}
+.product-card div {
+    display: flex;           /* ใช้ flexbox ในการจัดการปุ่ม */
+    gap: 10px;               /* เพิ่มช่องว่างระหว่างปุ่ม */
+}
+
+.btn {
+    padding: 5px 10px;
+}
+
