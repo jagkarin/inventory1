@@ -19,28 +19,28 @@ h5 {
     color: #ff7f50; /* สีสัมผัส */
 }
 
-.mb-3 strong {
+.mb-3-mb strong {
     color: #3742fa; /* สีเข้มของข้อความสำคัญ */
 }
 
-.toggle-password {
+.toggle-password-mb {
     color: #ff6f61; /* สีสำหรับปุ่มซ่อน/แสดง */
 }
 
-.toggle-password:hover {
+.toggle-password-mb:hover {
     text-decoration: underline;
 }
 
-.btn-primary {
+.btn-primary-mb {
     background-color: #6ab04c; /* สีปุ่มหลัก */
     border: none;
 }
 
-.btn-secondary {
+.btn-secondary-mb {
     background-color: #ff9f40; /* สีปุ่มรอง */
     border: none;
 }
 
-.btn-secondary:hover {
+.btn-secondary-mb:hover {
     background-color: #e74c3c; /* สีเวลากด */
 }
