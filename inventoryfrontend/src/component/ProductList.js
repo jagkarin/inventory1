@@ -23,10 +23,7 @@ const ProductList = ({ products, editProduct, deleteProduct }) => {
                         onChange={(e) => setQuery(e.target.value)}
                         className="search-input"
                     />
-                    <link
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-    rel="stylesheet"
-/>
+                    
 
                 </div>
             </div>
@@ -38,7 +35,7 @@ const ProductList = ({ products, editProduct, deleteProduct }) => {
                     <div className="table-column">ชื่อสินค้า</div>
                     <div className="table-column">ประเภท</div>
                     <div className="table-column">จำนวน</div>
-                    <div className="table-column"></div>
+                    <div className="table-column">การจัดการ</div>
                 </div>
                 {filteredProducts.length > 0 ? (
                     filteredProducts.map((product) => (
@@ -49,13 +46,13 @@ const ProductList = ({ products, editProduct, deleteProduct }) => {
                             <div className="table-column">{product.quantity}</div>
                             <div className="table-column">
                                 <button
-                                    className="btn btn-edit"
+                                    className="btnpro btn-edit"
                                     onClick={() => editProduct(product)}
                                 >
                                     แก้ไข
                                 </button>
                                 <button
-                                    className="btn btn-danger"
+                                    className="btnpro btn-danger"
                                     onClick={() => deleteProduct(product.productsID)}
                                 >
                                     ลบ

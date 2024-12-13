@@ -14,18 +14,5 @@ namespace inventorybackend.src.Repositories
             _dbContext = dbContext;
             _logger = logger;
         }
-
-        public async Task<List<ProductDbo>> GetALLProductAsync()
-        {
-            try
-            {
-                return await _dbContext.Product.ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-        }
     }
 }

@@ -66,10 +66,15 @@ const ProductForm = ({ newProduct, setNewProduct, isEditing, handleProduct }) =>
                 </div>
             </div>
             <div className="btn-group">
-                <button type="button" className="btn btn-success" onClick={handleProduct}>
-                    {isEditing ? 'แก้ไขสินค้า' : 'เพิ่มสินค้า'}
-                </button>
-            </div>
+    <button 
+        type="button" 
+        className="btnpro btn-success" 
+        onClick={handleProduct}
+    >
+        {isEditing ? 'แก้ไขสินค้า' : 'เพิ่มสินค้า'}
+    </button>
+</div>
+
         </div>
     );
 };

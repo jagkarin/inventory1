@@ -67,13 +67,7 @@ textarea {
     margin-top: 10px; /* เพิ่มระยะห่างจากด้านบน */
 }
 
-.btn {
-    padding: 10px 20px;
-    font-size: 14px;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-}
+
 
 
 
@@ -100,58 +94,7 @@ textarea {
     height: 40px; /* จำกัดความสูงให้เท่ากัน */
 }
 
-.product-list h2 {
-    font-size: 22px;
-    font-weight: bold;
-    color: #495057;
-    margin-bottom: 15px;
-}
-.product-list {
-    margin: 20px;
-    font-family: Arial, sans-serif;
-}
 
-h2 {
-    color: #333;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-/* การตกแต่งช่องค้นหา */
-.search-container {
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: center;
-}
-
-.search-wrapper {
-    position: relative;
-    width: 300px;
-}
-
-.search-input {
-    width: 100%;
-    padding: 10px 40px 10px 15px;
-    border: 1px solid #ccc;
-    border-radius: 25px;
-    font-size: 14px;
-    transition: 0.3s;
-}
-
-.search-input:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 8px rgba(0, 123, 255, 0.25);
-}
-
-.search-icon {
-    position: absolute;
-    top: 50%;
-    right: 15px;
-    transform: translateY(-50%);
-    font-size: 16px;
-    color: #aaa;
-}
 
 /* การตกแต่งรายการสินค้า */
 .product-card {
@@ -167,7 +110,7 @@ h2 {
     margin: 5px 0;
 }
 
-.btn {
+.btnpro {
     padding: 8px 15px;
     margin: 5px;
     border: none;
@@ -211,9 +154,7 @@ h2 {
     gap: 10px;               /* เพิ่มช่องว่างระหว่างปุ่ม */
 }
 
-.btn {
-    padding: 5px 10px;
-}
+
 
 /* กล่องรวม */
 .search-wrapper {
