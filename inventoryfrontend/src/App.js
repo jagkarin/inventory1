@@ -9,7 +9,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path = "/" element = {<RequestPage />} />
+        <Route path = "/" element = {<Inventory />} />
       </Routes>
     </Router>
   );

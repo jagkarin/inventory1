@@ -19,9 +19,13 @@ builder.Services.AddSwaggerGen();
 //WareHouse
 builder.Services.AddScoped<IWarehouseRepo, WarehouseRepo>();
 builder.Services.AddScoped<IWarehouseService, WarehouseService>();
-
+//Product
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductRepo, ProductRepo>();
+
+//Category
+builder.Services.AddScoped<ICategoryRepo, CategoryRepo>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 builder.Services.AddDbContext<DataContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),

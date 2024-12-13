@@ -112,5 +112,36 @@ namespace inventorybackend.src.Repositories
                 throw new ApplicationException($"An error occurred while retrieving the productcategory data: {ex.Message}", ex);
             }
         }
+
+        public async Task<ProductCategoryDTO> GetProductCategorybyIDAsync(int productID)
+        {
+            try
+            {
+                var productcategory = await (from p in _dbContext.Product
+                                             join c in _dbContext.Category
+                                             on p.CategoriesID equals c.CategoriesID
+                                             where p.ProductsID == productID
+                                             select new ProductCategoryDTO
+                                             {
+                                                 ProductsID = p.ProductsID,
+                                                 ProductsName = p.ProductsName,
+                                                 Adddate = DateTime.Now,
+                                                 CategoriesID = c.CategoriesID,
+                                                 Description = p.Description,
+                                                 Quantity = p.Quantity,
+                                                 CategoriesName = c.CategoriesName,
+
+
+                                             }).FirstOrDefaultAsync();
+
+                return productcategory;
+            }
+            catch (Exception ex)
+            {
+                // เพิ่มข้อความแสดงข้อผิดพลาดจาก exception ที่แท้จริง
+                throw new ApplicationException($"An error occurred while retrieving the productcategory data: {ex.Message}", ex);
+            }
+        }
+
     }
 }
