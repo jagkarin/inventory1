@@ -41,4 +41,6 @@ namespace inventorybackend.DTOS
         public int CategoriesID { get; set; }
         public string? CategoriesName { get; set; }
     }
+
+    
 }
