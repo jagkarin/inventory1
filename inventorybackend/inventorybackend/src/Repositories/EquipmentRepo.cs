@@ -14,5 +14,17 @@ namespace inventorybackend.src.Repositories
             _dbContext = dbContext;
             _logger = logger;
         }
+
+        public async Task<List<eqmDbo>> GetALLEQMAsync()
+        {
+            try
+            {
+                return await _dbContext.EQM.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
