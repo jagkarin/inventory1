@@ -1,0 +1,168 @@
+.product-list {
+    margin: 20px;
+    font-family: Arial, sans-serif;
+}
+
+h2 {
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* ตกแต่งช่องค้นหา */
+.searchh-container {
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-wrapper {
+    position: relative;
+    width: 350px;
+    max-width: 100%;
+}
+
+.searchh-input {
+    width: 100%;
+    padding: 12px 50px 12px 20px;
+    border: 2px solid transparent;
+    border-radius: 30px;
+    font-size: 16px;
+    color: #333;
+    background: linear-gradient(to right, #f9f9f9, #fff);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease-in-out;
+}
+
+.searchh-input:focus {
+    border-color: #007bff;
+    outline: none;
+    background: #fff;
+    box-shadow: 0 0 12px rgba(0, 123, 255, 0.5), 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.searchh-input::placeholder {
+    color: #aaa;
+    font-style: italic;
+}
+
+.search-icon {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: #666;
+    transition: color 0.3s;
+}
+
+.search-wrapper:hover .search-icon,
+.search-input:focus + .search-icon {
+    color: #007bff;
+    font-size: 20px;
+}
+
+.search-wrapper:hover .search-input {
+    background: linear-gradient(to right, #fff, #f2f7ff);
+}
+
+/* Animation */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(0, 123, 255, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(0, 123, 255, 0);
+    }
+}
+
+.searchh-input:focus {
+    animation: pulse 1.5s infinite;
+}
+
+
+/* การตกแต่งตาราง */
+.table-container {
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.table-header, .table-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.table-header {
+    background-color: #f7f7f7;
+    font-weight: bold;
+    color: #333;
+}
+
+.table-row:hover {
+    background-color: #f1f1f1;
+}
+
+.table-column {
+    flex: 1;
+    text-align: center;
+    padding: 5px;
+}
+.btnpro {
+    padding: 10px 25px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* การตกแต่งปุ่ม */
+.btnprolist {
+    padding: 8px 15px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btnpro-edit {
+    background-color: #007bff;
+    color: white;
+}
+
+.btnpro-edit:hover {
+    background-color: #0056b3;
+}
+
+.btnpro-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btnpro-danger:hover {
+    background-color: #b02a37;
+}
+
+/* ข้อความเมื่อไม่พบสินค้า */
+.no-products {
+    text-align: center;
+    font-size: 16px;
+    color: #666;
+    padding: 10px;
+}
+/* ปุ่มเพิ่มสินค้า */
+.btnpro-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+}
+

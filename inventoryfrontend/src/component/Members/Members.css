@@ -1,6 +1,6 @@
 /* src/Members.css */
 
-.content-wrapper {
+.content-wrapper-mb {
     display: flex;
     flex-direction: column;
     align-items: center; /* จัดกลางในแนวนอน */
