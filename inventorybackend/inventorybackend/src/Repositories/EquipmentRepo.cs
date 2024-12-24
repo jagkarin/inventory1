@@ -1,5 +1,6 @@
 ﻿using inventorybackend.src.Entities;
 using inventorybackend.src.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace inventorybackend.src.Repositories
 {
@@ -14,6 +15,16 @@ namespace inventorybackend.src.Repositories
             _logger = logger;
         }
 
-
+        public async Task<List<eqmDbo>> GetALLEQMAsync()
+        {
+            try
+            {
+                return await _dbContext.EQM.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

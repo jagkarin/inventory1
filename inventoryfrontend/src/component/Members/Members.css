@@ -8,7 +8,7 @@
     padding: 20px; /* เพิ่ม Padding */
 }
 
-.card {
+.card-mb {
     width: 100%; /* กำหนดให้เต็มพื้นที่ */
     max-width: 800px; /* กำหนดขนาดสูงสุดของ Card */
     margin: 15px; /* เพิ่ม Margin รอบ Card */
@@ -16,7 +16,7 @@
 }
 
 /* ทำให้ตารางอยู่กลาง */
-.table-container {
+.table-container-mb {
     width: 100%; /* เพิ่ม width เต็มพื้นที่ */
     display: flex;
     justify-content: center; /* จัดกลาง */
@@ -33,8 +33,6 @@
     padding: 12px 15px; /* เพิ่ม Padding สำหรับ cell เพื่อเว้นระยะ */
 }
 
-/* เพิ่มการเว้นระยะให้กับปุ่ม */
-.btn-group {
     display: flex; /* เพื่อจัดปุ่มในแนวระดับ */
     justify-content: center; /* จัดกลาง */
     margin-top: 10px; /* เพิ่มระยะห่างด้านบนเล็กน้อย */
