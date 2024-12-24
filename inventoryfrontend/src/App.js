@@ -1,25 +1,50 @@
-import logo from './logo.svg';
+
+import { BrowserRouter as Router,Route,Routes,Link} from 'react-router-dom';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.css';
+import MembersComponent from './component/Members/Members';
+import Dashboard from './component/Dashboard/Dashboard';
+import Inventory from './component/InventoryPage/Inventory.js';
+import RequestPage from './component/RequestP/Request.js';
+
+
 
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div>
+        {/* เมนูนำทาง */}
+        <nav className="navbar navbar-expand-lg navbar-light bg-light">
+          <div className="container-fluid">
+            <Link className="navbar-brand" to="/">My App</Link>
+            <div className="collapse navbar-collapse" id="navbarNav">
+              <ul className="navbar-nav">
+                <li className="nav-item">
+                  <Link className="nav-link" to="/dashboard">Dashboard</Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/members">Members</Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/requestpage">Request Page</Link>
+                </li>
+                
+              </ul>
+            </div>
+          </div>
+        </nav>
+
+        {/* Routes สำหรับเมนูที่เลือก */}
+        <Routes>
+        
+        <Route path="/requestpage" element={<RequestPage />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/members" element={<MembersComponent />} />
+          <Route path = "/" element = {<Inventory />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

@@ -23,5 +23,7 @@ namespace inventorybackend
 
         public DbSet<WarehouseDbo> Warehouse { get; set; }
 
+        public DbSet<RoldDbo> Role { get; set; }
+
     }
 }

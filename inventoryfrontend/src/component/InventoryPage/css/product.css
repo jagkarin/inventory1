@@ -1,0 +1,181 @@
+/* General Style */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7fa;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header */
+h1 {
+    text-align: center;
+    margin: 20px 0;
+    color: #343a40;
+    font-weight: 700;
+}
+
+/* Form Container */
+.container {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #dad9d9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #495057;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group label {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.input-group input,
+.input-group select,
+.input-group textarea {
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 14px;
+    color: #495057;
+}
+
+textarea {
+    resize: none;
+}
+
+.btn-group {
+    display: flex; /* ใช้ Flexbox เพื่อควบคุมตำแหน่ง */
+    justify-content: flex-end; /* จัดตำแหน่งปุ่มไปด้านขวา */
+    margin-top: 10px; /* เพิ่มระยะห่างจากด้านบน */
+}
+
+
+
+
+
+
+
+/* Product List */
+
+.product-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* จัดชิดซ้าย */
+    border: 1px solid #ddd; /* กรอบรอบสินค้า */
+    padding: 10px; /* ระยะห่างภายใน */
+    height: 100%; /* ทำให้ความสูงเท่ากัน */
+}
+.product-name, .product-category, .product-description {
+    white-space: nowrap; /* ป้องกันข้อความขึ้นบรรทัดใหม่ */
+    overflow: hidden; /* ซ่อนข้อความเกินขอบ */
+    text-overflow: ellipsis; /* เพิ่ม ... หากข้อความยาวเกิน */
+    width: 100%; /* กำหนดความกว้าง */
+}
+
+.product-description {
+    height: 40px; /* จำกัดความสูงให้เท่ากัน */
+}
+
+
+
+/* การตกแต่งรายการสินค้า */
+.product-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 10px 0;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.product-card p {
+    margin: 5px 0;
+}
+
+.btn {
+    padding: 10px 25px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+.btn-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: flex-end; /* จัดปุ่มไปทางขวามือ */
+    margin-top: 20px; /* ระยะห่างด้านบน */
+}
+
+.btn-pagination {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px; /* ทำให้ปุ่มมีความโค้งมน */
+    padding: 10px 20px; /* ขยายขนาดปุ่ม */
+    margin: 0 5px; /* ระยะห่างระหว่างปุ่ม */
+    font-size: 14px; /* ปรับขนาดตัวอักษร */
+    cursor: pointer; /* เปลี่ยนเมาส์เป็นรูปมือเมื่อโฮเวอร์ */
+    transition: background-color 0.3s, box-shadow 0.3s; /* เพิ่มเอฟเฟกต์การเปลี่ยนสีและเงา */
+}
+
+.btn-pagination:hover {
+    background-color: #0056b3; /* สีเข้มขึ้นเมื่อโฮเวอร์ */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* เพิ่มเงา */
+}
+
+.btn-pagination:disabled {
+    background-color: #cccccc; /* สีเทาเมื่อปุ่มถูกปิดใช้งาน */
+    cursor: not-allowed; /* เปลี่ยนเมาส์เป็นห้ามคลิก */
+}
+
+/* ข้อความเมื่อไม่พบสินค้า */
+.no-products {
+    text-align: center;
+    font-size: 16px;
+    color: #666;
+}
+
+
+.product-card .btn {
+    font-size: 14px;
+    padding: 5px 10px;
+    margin-right: 10px;      /* เพิ่มระยะห่างระหว่างปุ่ม */
+}
+
+.no-products {
+    text-align: center;
+    font-size: 16px;
+    color: #888;
+}
+.product-card div {
+    display: flex;           /* ใช้ flexbox ในการจัดการปุ่ม */
+    gap: 10px;               /* เพิ่มช่องว่างระหว่างปุ่ม */
+}
+

@@ -1,0 +1,94 @@
+body {
+    background-color: #eaeaea; /* สีพื้นหลังทั้งหน้า */
+    font-family: 'Arial', sans-serif; /* แบบตัวอักษร */
+}
+
+.login-container {
+    width: 400px; /* ปรับขนาดฟอร์ม */
+    margin: 100px auto; /* กำหนดให้ฟอร์มอยู่กลางหน้า */
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff; /* พื้นหลังฟอร์ม */
+}
+
+h2 {
+    text-align: center;
+    color: #393e46; /* สีตัวอักษร */
+    margin-bottom: 20px; /* ระยะห่างระหว่างหัวข้อกับฟอร์ม */
+}
+
+.form-group {
+    margin-bottom: 15px; /* เพิ่มระยะห่างระหว่างสองฟอร์ม */
+}
+
+.flex-container {
+    display: flex;
+    align-items: center;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    transition: border-color 0.3s;
+}
+
+.form-input:focus {
+    border-color: #007bff; /* สีของกรอบเมื่อเลื่อนเมาส์ */
+    outline: none; /* ปิดการแสดง outline */
+}
+
+.submit-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff; /* สีน้ำเงินปุ่ม */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px; /* ระยะห่างจากปุ่ม */
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.submit-button:hover {
+    background-color: #0056b3; /* เปลี่ยนสีเมื่อ hover */
+    transform: scale(1.02);
+}
+
+.links-container {
+    margin-top: 15px;
+    text-align: center; /* จัดให้อยู่กลาง */
+}
+
+.forgot-password-link,
+.register-link {
+    margin: 5px 0; /* ระยะห่างระหว่างลิงก์ */
+}
+
+.links-container a {
+    color: #007bff; /* สีของลิงก์ */
+    text-decoration: none; /* ลบเส้นขีดใต้ */
+}
+
+.links-container a:hover {
+    text-decoration: underline; /* เพิ่มเส้นขีดใต้เมื่อ hover */
+}
+.password-input-container {
+    position: relative;
+}
+
+.password-input-container input {
+    padding-right: 30px; /* เว้นที่ว่างสำหรับไอคอน */
+}
+
+.password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: all; /* อนุญาตให้คลิกได้ */
+    z-index: 1; /* ให้อยู่เหนือ input */
+}
