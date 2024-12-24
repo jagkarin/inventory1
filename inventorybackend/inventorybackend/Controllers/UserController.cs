@@ -1,6 +1,7 @@
 ﻿using inventorybackend.DTOS;
 using inventorybackend.src.Core.Interface;
 using inventorybackend.src.Core.Service;
+using inventorybackend.src.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace inventorybackend.Controllers
@@ -78,6 +79,31 @@ namespace inventorybackend.Controllers
             catch (ApplicationException ex)
             {
                 return StatusCode(500, new { message = ex.Message }); // ส่ง HTTP 500 เมื่อเกิดข้อผิดพลาดภายใน
+            }
+        }
+
+        [HttpPost("AddUser")]
+        public async Task<IActionResult> AddUserAsync([FromBody] inputuser inputuser)
+        {
+            var response = new BaseHttpResponse<UserDbo>();
+
+            try
+            {
+                var data = await _UserService.AddUserAsync(inputuser);
+                response.SetSuccess(data, "Product added successfully", "201");
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                var err = new ErrorData
+                {
+                    Code = "-2",
+                    Message = ex.Message
+                };
+                _logger.LogError(ex, "Error adding User");
+                response.SetError(err, ex.Message, "500");
+                return BadRequest(response);
             }
         }
     }

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Bar } from 'react-chartjs-2';
 import {
     Chart as ChartJS,
@@ -13,6 +12,8 @@ import {
 
 // Register Chart.js components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+
+const API_URL = 'http://localhost:2000/api/withdraw'; // Update your API URL here
 
 const BorrowedItems = () => {
     const [borrowedItems, setBorrowedItems] = useState([]);
@@ -39,8 +40,12 @@ const BorrowedItems = () => {
     const fetchBorrowedItems = async (employeeId) => {
         setLoading(true);
         try {
-            const response = await axios.get(`http://localhost:2000/api/withdraw?employeeId=${employeeId}`);
-            setBorrowedItems(response.data);
+            const response = await fetch(`${API_URL}?employeeId=${employeeId}`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            setBorrowedItems(data);
         } catch (error) {
             console.error('Error fetching borrowed items:', error);
             setError('Error fetching borrowed items');
@@ -85,8 +90,7 @@ const BorrowedItems = () => {
     };
 
     useEffect(() => {
-        // Change employeeId as necessary
-        const employeeId = 1; // Example employeeId
+        const employeeId = 1; // Example employeeId, change as needed
         fetchBorrowedItems(employeeId);
     }, []);
 
@@ -106,7 +110,6 @@ const BorrowedItems = () => {
             <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
                 <thead>
                     <tr>
-
                         <th style={{ border: '1px solid #dddddd', padding: '8px' }}>Username</th>
                         <th style={{ border: '1px solid #dddddd', padding: '8px' }}>Things</th>
                         <th style={{ border: '1px solid #dddddd', padding: '8px' }}>Quantity</th>
@@ -115,7 +118,6 @@ const BorrowedItems = () => {
                 <tbody>
                     {borrowedItems.map((item, index) => (
                         <tr key={index}>
-
                             <td style={{ border: '1px solid #dddddd', padding: '8px' }}>{item.Username || 'N/A'}</td>
                             <td style={{ border: '1px solid #dddddd', padding: '8px' }}>{item.things || 'N/A'}</td>
                             <td style={{ border: '1px solid #dddddd', padding: '8px' }}>{item.quantity || 'N/A'}</td>

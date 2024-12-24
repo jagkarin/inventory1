@@ -13,6 +13,7 @@
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.7",
     "i": "^0.3.7",
+    "jwt-decode": "^4.0.0",
     "mysql2": "^3.11.5",
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.6",
@@ -48,5 +49,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "css-loader": "^7.1.2",
+    "style-loader": "^4.0.0"
   }
 }
