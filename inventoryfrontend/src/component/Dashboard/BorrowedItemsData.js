@@ -1,36 +1,48 @@
-// BorrowedItemsData.js
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+
+const API_URL = 'http://localhost:2000/api/withdraw'; // Define the API URL
 
 function BorrowedItemsData({ employeeId }) {
     const [borrowedItems, setBorrowedItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    // Function to fetch borrowed items
     const fetchBorrowedItems = async () => {
+        setLoading(true); // Start loading
         try {
-            const response = await axios.get(`http://localhost:2000/api/withdraw/${employeeId}`);
-            setBorrowedItems(response.data);
+            const response = await fetch(`${API_URL}/${employeeId}`); // Fetch from the API
+            if (!response.ok) {
+                throw new Error('Network response was not ok'); // Throw error if response is not okay
+            }
+            const data = await response.json(); // Parse JSON response
+            setBorrowedItems(data); // Set borrowed items state
         } catch (error) {
             console.error('Error fetching borrowed items:', error);
-            setError('Error fetching borrowed items');
+            setError('Error fetching borrowed items'); // Set error state
         } finally {
-            setLoading(false);
+            setLoading(false); // End loading
         }
     };
 
+    // Use effect to fetch borrowed items whenever employeeId changes
     useEffect(() => {
-        fetchBorrowedItems();
+        if (employeeId) {
+            fetchBorrowedItems(); // Fetch borrowed items if employeeId exists
+        }
     }, [employeeId]);
 
+    // Render loading state
     if (loading) {
         return <p>Loading borrowed items...</p>;
     }
 
+    // Render error state
     if (error) {
         return <p>{error}</p>;
     }
-
+    
+    // Render borrowed items table
     return (
         <>
             <h2>Borrowed Items Data</h2>
