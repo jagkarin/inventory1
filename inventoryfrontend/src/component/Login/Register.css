@@ -1,0 +1,99 @@
+.register-container {
+    padding: 30px; 
+    background-color: #ffffff; /* เปลี่ยนสีพื้นหลังให้เป็นสีขาว */
+    border-radius: 10px; 
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); 
+    max-width: 400px; /* จำกัดความกว้าง ช่วยให้จัดอยู่กลางจอได้ */
+    margin: auto; 
+}
+
+h2 {
+    color: #333333; 
+    text-align: center; /* จัดกึ่งกลาง */
+    font-family: 'Arial', sans-serif; /* ใช้ฟอนต์เป็น Arial */
+}
+
+.form-group {
+    margin-bottom: 20px; 
+}
+
+.form-input {
+    width: 100%; 
+    padding: 12px; 
+    border: 1px solid #dddddd; 
+    border-radius: 5px; 
+    transition: border-color 0.3s; /* เอฟเฟกต์การเปลี่ยนสีของเส้นขอบ */
+}
+
+.form-input:focus {
+    border-color: #007bff; /* สีเมื่อมีการโฟกัส */
+    outline: none; /* เอาเส้นขอบตอนโฟกัสออก */
+}
+
+.password-strength {
+    margin: 5px 0; 
+    font-weight: bold; 
+    font-size: 0.9em; /* ขนาดฟอนต์ที่เล็กลง */
+}
+
+.password-strength.strong {
+    color: #28a745; 
+}
+
+.password-strength.medium {
+    color: #ffc107; 
+}
+
+.password-strength.weak {
+    color: #dc3545; 
+}
+
+.password-requirements {
+    color: #dc3545; 
+    font-weight: bold; 
+    margin: 10px 0; 
+}
+
+.note {
+    color: #dc3545; 
+    font-weight: bold; 
+    margin-top: 15px; 
+}
+
+.error-message {
+    color: #dc3545; 
+    font-weight: bold; 
+    text-align: center; /* จัดกึ่งกลาง */
+}
+
+.success-message {
+    color: #28a745; 
+    font-weight: bold; 
+    text-align: center; /* จัดกึ่งกลาง */
+}
+
+.submit-button {
+    background-color: #007bff; 
+    color: white; 
+    padding: 12px 20px; 
+    border: none; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    width: 100%; /* ให้ปุ่มกว้างเต็มฟอร์ม */
+    transition: background-color 0.3s; /* เอฟเฟกต์การเปลี่ยนสีของปุ่ม */
+}
+
+.submit-button:hover {
+    background-color: #0056b3; 
+}
+
+.login-link {
+    text-align: center; 
+    margin-top: 15px; 
+}
+
+.password-rules h4 {
+    color: red; /* เปลี่ยนสีให้เป็นแดง */
+    font-weight: bold; /* ตัวหนา */
+    margin-bottom: 10px; /* เว้นระยะห่างจากรายการ */
+}

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Table, Spinner } from 'react-bootstrap';
-import axios from 'axios';
+
+const API_URL = 'http://localhost:2000/api/withdraw'; // Centralized API URL
 
 const WithdrawalHistoryModal = ({ userId, show, onClose }) => {
     const [historyData, setHistoryData] = useState([]);
@@ -11,17 +12,21 @@ const WithdrawalHistoryModal = ({ userId, show, onClose }) => {
         const fetchHistoryData = async () => {
             setLoading(true); // Start loading
             try {
-                const response = await axios.get(`http://localhost:2000/api/withdraw/${userId}`); // Adjusted endpoint
-                setHistoryData(response.data);
-                setLoading(false);
+                const response = await fetch(`${API_URL}/${userId}`); // Using fetch instead of axios
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                setHistoryData(data);
             } catch (err) {
                 setError(err);
-                setLoading(false);
+            } finally {
+                setLoading(false); // End loading
             }
         };
 
         if (show) {
-            fetchHistoryData();
+            fetchHistoryData(); // Fetch data only if the modal is shown
         }
     }, [show, userId]);
 

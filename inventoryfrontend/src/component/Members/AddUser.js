@@ -1,155 +1,106 @@
-import React, { useState, useEffect } from 'react';
-import { Modal, Button } from 'react-bootstrap';
-import { FaUserPlus, FaTimes } from 'react-icons/fa';
+import React, { useState } from 'react';
+import { Modal, Button, Form, Alert } from 'react-bootstrap';
 
-const AddUser = ({ onAdd, onClose }) => {
+const API_URL = 'http://localhost:2000/api/users';
+
+function AddUser({ onAdd, onClose }) {
     const [newUser, setNewUser] = useState({
-        'Employee ID': '',
         Username: '',
-        Status: 'Active',
+        'Employee ID': '',
         Position: '',
-        Password: ''
+        Status: 'Active'
     });
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
-    useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const response = await fetch('http://localhost:2000/api/users');
-                const users = await response.json();
-
-                const maxId = Math.max(...users.map(user => parseInt(user['Employee ID'])), 0);
-                setNewUser(prev => ({ ...prev, 'Employee ID': maxId + 1 }));
-            } catch (error) {
-                console.error('ไม่สามารถดึงข้อมูลผู้ใช้ได้:', error);
-                alert('ไม่สามารถดึงข้อมูลผู้ใช้ได้ โปรดลองอีกครั้งในภายหลัง');
-            }
-        };
-
-        fetchUsers();
-    }, []);
-
-    const handleChange = (e) => {
+    const handleInputChange = (e) => {
         const { name, value } = e.target;
         setNewUser({ ...newUser, [name]: value });
     };
 
-    const handleSubmit = async () => {
-        const isFormValid = 
-            newUser['Employee ID'] &&
-            newUser.Username &&
-            newUser.Password &&
-            newUser.Position;
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError(null); // Reset error state
 
-        if (isFormValid) {
-            try {
-                const response = await fetch('http://localhost:2000/api/users', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(newUser),
-                });
+        try {
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newUser),
+            });
 
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    alert(`ข้อผิดพลาด: ${errorData.error}`);
-                    return;
-                }
-
-                const addedUser = await response.json();
-                console.log('เพิ่มผู้ใช้:', addedUser);
-                onAdd(addedUser);
-                onClose();
-
-            } catch (error) {
-                console.error('ข้อผิดพลาดในการเพิ่มผู้ใช้:', error);
-                alert('ไม่สามารถเพิ่มผู้ใช้ได้ โปรดลองอีกครั้งในภายหลัง');
+            if (!response.ok) {
+                throw new Error('Failed to add user. Please try again.');
             }
-        } else {
-            alert("กรุณากรอกข้อมูลให้ครบถ้วน!");
+
+            const userData = await response.json();
+            onAdd(userData); // Call the parent function to add the user
+            onClose(); // Close the modal after adding the user
+        } catch (err) {
+            setError(err.message); // Set the error message
+        } finally {
+            setLoading(false); // Stop loading after the request finishes
         }
     };
 
     return (
-        <Modal show onHide={onClose}>
+        <Modal show={true} onHide={onClose}>
             <Modal.Header closeButton>
-                <Modal.Title>
-                    <FaUserPlus /> เพิ่มผู้ใช้
-                </Modal.Title>
+                <Modal.Title>Add User</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <form>
-                    <div className="form-group">
-                        <label>รหัสพนักงาน</label>
-                        <input
+                {error && <Alert variant="danger">{error}</Alert>}
+                <Form onSubmit={handleSubmit}>
+                    <Form.Group controlId="formUsername">
+                        <Form.Label>Username</Form.Label>
+                        <Form.Control
                             type="text"
-                            className="form-control"
-                            name="Employee ID"
-                            value={newUser['Employee ID']}
-                            onChange={handleChange}
-                            disabled
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>ชื่อผู้ใช้ (ไม่เกิน 20 ตัวอักษร)</label>
-                        <input
-                            type="text"
-                            className="form-control"
+                            placeholder="Enter username"
                             name="Username"
                             value={newUser.Username}
-                            onChange={handleChange}
-                            maxLength={20}
+                            onChange={handleInputChange}
+                            required
                         />
-                    </div>
-                    <div className="form-group">
-                        <label>รหัสผ่าน (ไม่เกิน 10 ตัวอักษร)</label>
-                        <input
-                            type="text" // เปลี่ยนเป็น type text เพื่อให้รหัสผ่านโชว์ตลอด
-                            className="form-control"
-                            name="Password"
-                            value={newUser.Password}
-                            onChange={handleChange}
-                            maxLength={10}
+                    </Form.Group>
+                    <Form.Group controlId="formEmployeeId">
+                        <Form.Label>Employee ID</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Enter employee ID"
+                            name="Employee ID"
+                            value={newUser['Employee ID']}
+                            onChange={handleInputChange}
+                            required
                         />
-                    </div>
-                    <div className="form-group">
-                        <label>สถานะ</label>
-                        <select
-                            className="form-control"
-                            name="Status"
-                            value={newUser.Status}
-                            onChange={handleChange}
-                        >
-                            <option value="Active">ใช้งาน</option>
-                            <option value="Inactive">ไม่ใช้งาน</option>
-                        </select>
-                    </div>
-                    <div className="form-group">
-                        <label>ตำแหน่ง</label>
-                        <select
-                            className="form-control"
+                    </Form.Group>
+                    <Form.Group controlId="formPosition">
+                        <Form.Label>Position</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Enter position"
                             name="Position"
                             value={newUser.Position}
-                            onChange={handleChange}
-                        >
-                            <option value="">เลือกตำแหน่ง...</option>
-                            <option value="admin">admin</option>
-                            <option value="Developer">Developer</option>
-                            <option value="ติดตั้ง">ติดตั้ง</option>
-                        </select>
-                    </div>
-                </form>
+                            onChange={handleInputChange}
+                            required
+                        />
+                    </Form.Group>
+                    <Form.Group controlId="formStatus">
+                        <Form.Label>Status</Form.Label>
+                        <Form.Control as="select" name="Status" value={newUser.Status} onChange={handleInputChange}>
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                        </Form.Control>
+                    </Form.Group>
+                    <Button variant="primary" type="submit" disabled={loading}>
+                        {loading ? 'Adding...' : 'Add User'}
+                    </Button>
+                </Form>
             </Modal.Body>
-            <Modal.Footer>
-                <Button variant="secondary" onClick={onClose}>
-                    <FaTimes /> ปิด
-                </Button>
-                <Button variant="primary" onClick={handleSubmit}>
-                    เพิ่มผู้ใช้
-                </Button>
-            </Modal.Footer>
         </Modal>
     );
-};
+}
 
 export default AddUser;
