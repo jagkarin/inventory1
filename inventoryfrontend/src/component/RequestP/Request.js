@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./css/request.css";
 
-const API_URL = "https://localhost:7294/api/Product";
+const API_URL = "https://localhost:7294/api/Product/GetAllProduct";
 
 const RequestPage = () => {
     const [products, setProducts] = useState([]);
@@ -9,10 +9,12 @@ const RequestPage = () => {
     const [isCartVisible, setIsCartVisible] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [productsPerPage] = useState(10);
+    const [currentPageCart, setCurrentPageCart] = useState(1);
+    const [cartPerPage] = useState(10);
 
     // ดึงข้อมูลสินค้าจาก API
     useEffect(() => {
-        fetch(`${API_URL}/GetAllProduct`)
+        fetch(API_URL)
             .then((res) => res.json())
             .then((data) => {
                 if (data.responseCode === "200") {
@@ -24,30 +26,55 @@ const RequestPage = () => {
             .catch((err) => console.error(err));
     }, []);
 
-    // ฟังก์ชันจัดการรถเข็น
+    // ฟังก์ชันเพิ่มสินค้าลงในรถเข็น และลดจำนวนสินค้าในคลัง
     const handleAddToCart = (product) => {
-        setCart((prevCart) => {
-            const existingProduct = prevCart.find(
-                (item) => item.productsID === product.productsID
-            );
-            if (existingProduct) {
-                return prevCart.map((item) =>
-                    item.productsID === product.productsID
-                        ? { ...item, quantity: item.quantity + 1 }
-                        : item
+        if (product.quantity > 0) {
+            setCart((prevCart) => {
+                const existingProduct = prevCart.find(
+                    (item) => item.productsID === product.productsID
                 );
-            } else {
-                return [...prevCart, { ...product, quantity: 1 }];
-            }
-        });
+                if (existingProduct) {
+                    return prevCart.map((item) =>
+                        item.productsID === product.productsID
+                            ? { ...item, quantity: item.quantity + 1 }
+                            : item
+                    );
+                } else {
+                    return [...prevCart, { ...product, quantity: 1 }];
+                }
+            });
+
+            setProducts((prevProducts) =>
+                prevProducts.map((item) =>
+                    item.productsID === product.productsID
+                        ? { ...item, quantity: item.quantity - 1 }
+                        : item
+                )
+            );
+        } else {
+            alert("สินค้าหมดแล้ว");
+        }
     };
 
+    // ฟังก์ชันลบสินค้าจากรถเข็น และคืนจำนวนสินค้าในคลัง
     const handleRemoveFromCart = (productsID) => {
+        const productToRemove = cart.find((item) => item.productsID === productsID);
+        if (productToRemove) {
+            setProducts((prevProducts) =>
+                prevProducts.map((item) =>
+                    item.productsID === productToRemove.productsID
+                        ? { ...item, quantity: item.quantity + productToRemove.quantity }
+                        : item
+                )
+            );
+        }
+
         setCart((prevCart) =>
             prevCart.filter((item) => item.productsID !== productsID)
         );
     };
 
+    // ฟังก์ชันยืนยันการเบิกสินค้า
     const handleConfirmRequest = () => {
         const requestData = cart.map((item) => ({
             productsID: item.productsID,
@@ -75,13 +102,10 @@ const RequestPage = () => {
             .catch((err) => console.error(err));
     };
 
-    // Pagination Logic
+    // Pagination Logic - Products
     const indexOfLastProduct = currentPage * productsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-    const currentProducts = products.slice(
-        indexOfFirstProduct,
-        indexOfLastProduct
-    );
+    const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
 
     const nextPage = () => {
         if (currentPage < Math.ceil(products.length / productsPerPage)) {
@@ -92,6 +116,23 @@ const RequestPage = () => {
     const prevPage = () => {
         if (currentPage > 1) {
             setCurrentPage(currentPage - 1);
+        }
+    };
+
+    // Pagination Logic - Cart
+    const indexOfLastCart = currentPageCart * cartPerPage;
+    const indexOfFirstCart = indexOfLastCart - cartPerPage;
+    const currentCart = cart.slice(indexOfFirstCart, indexOfLastCart);
+
+    const nextPageCart = () => {
+        if (currentPageCart < Math.ceil(cart.length / cartPerPage)) {
+            setCurrentPageCart(currentPageCart + 1);
+        }
+    };
+
+    const prevPageCart = () => {
+        if (currentPageCart > 1) {
+            setCurrentPageCart(currentPageCart - 1);
         }
     };
 
@@ -121,7 +162,7 @@ const RequestPage = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {cart.map((item) => (
+                                    {currentCart.map((item) => (
                                         <tr key={item.productsID}>
                                             <td>{item.productsID}</td>
                                             <td>{item.productsName}</td>
@@ -130,9 +171,7 @@ const RequestPage = () => {
                                                 <button
                                                     className="btn-remove"
                                                     onClick={() =>
-                                                        handleRemoveFromCart(
-                                                            item.productsID
-                                                        )
+                                                        handleRemoveFromCart(item.productsID)
                                                     }
                                                 >
                                                     ลบ
@@ -149,6 +188,29 @@ const RequestPage = () => {
                                 >
                                     ยืนยันการเบิกสินค้า
                                 </button>
+                                <div className="pagination-container">
+                                    <button
+                                        className="btn-pagination"
+                                        onClick={prevPageCart}
+                                        disabled={currentPageCart === 1}
+                                    >
+                                        ย้อนกลับ
+                                    </button>
+                                    <span>
+                                        หน้า {currentPageCart} /{" "}
+                                        {Math.ceil(cart.length / cartPerPage)}
+                                    </span>
+                                    <button
+                                        className="btn-pagination"
+                                        onClick={nextPageCart}
+                                        disabled={
+                                            currentPageCart ===
+                                            Math.ceil(cart.length / cartPerPage)
+                                        }
+                                    >
+                                        ถัดไป
+                                    </button>
+                                </div>
                             </div>
                         </>
                     ) : (
@@ -163,7 +225,7 @@ const RequestPage = () => {
                                 <th>รหัสสินค้า</th>
                                 <th>ชื่อสินค้า</th>
                                 <th>ประเภท</th>
-                                <th>จำนวน</th>
+                                <th>จำนวนในคลัง</th>
                                 <th>เพิ่ม</th>
                             </tr>
                         </thead>
@@ -177,9 +239,7 @@ const RequestPage = () => {
                                     <td>
                                         <button
                                             className="btn-add"
-                                            onClick={() =>
-                                                handleAddToCart(product)
-                                            }
+                                            onClick={() => handleAddToCart(product)}
                                         >
                                             เพิ่ม
                                         </button>

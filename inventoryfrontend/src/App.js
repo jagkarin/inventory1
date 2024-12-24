@@ -1,12 +1,12 @@
 
-import logo from './logo.svg';
 import { BrowserRouter as Router,Route,Routes,Link} from 'react-router-dom';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import MembersComponent from './component/Members/Members';
 import Dashboard from './component/Dashboard/Dashboard';
-import Inventory from './component/Inventory';
-import RequestPage from './component/Request';
+import Inventory from './component/InventoryPage/Inventory.js';
+import RequestPage from './component/RequestP/Request.js';
+
 
 
 
@@ -26,6 +26,10 @@ function App() {
                 <li className="nav-item">
                   <Link className="nav-link" to="/members">Members</Link>
                 </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/requestpage">Request Page</Link>
+                </li>
+                
               </ul>
             </div>
           </div>
@@ -33,6 +37,8 @@ function App() {
 
         {/* Routes สำหรับเมนูที่เลือก */}
         <Routes>
+        
+        <Route path="/requestpage" element={<RequestPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/members" element={<MembersComponent />} />
           <Route path = "/" element = {<Inventory />} />

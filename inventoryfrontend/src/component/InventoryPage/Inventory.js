@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import ProductList from './ProductList';
 import ProductForm from './ProductForm';
-import "./css/product.css";
+import './css/product.css';
 
-const API_URL = 'https://localhost:7294/api/Product';
+const API_URL = 'https://localhost:7294/api/Product/GetAllProduct';
 
 const Inventory = () => {
     const [products, setProducts] = useState([]);

@@ -47,7 +47,7 @@ h2 {
     font-style: italic;
 }
 
-.search-icon {
+.searchh-icon {
     position: absolute;
     top: 50%;
     right: 20px;
@@ -57,13 +57,13 @@ h2 {
     transition: color 0.3s;
 }
 
-.search-wrapper:hover .search-icon,
-.search-input:focus + .search-icon {
+.searchh-wrapper:hover .search-icon,
+.searchh-input:focus + .search-icon {
     color: #007bff;
     font-size: 20px;
 }
 
-.search-wrapper:hover .search-input {
+.searchh-wrapper:hover .search-input {
     background: linear-gradient(to right, #fff, #f2f7ff);
 }
 
