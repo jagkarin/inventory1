@@ -25,5 +25,19 @@ namespace inventorybackend.src.Infrastructure.Repositories
             }
         }
 
+        public async Task<WarehouseDbo> AddWarehouseAsync(WarehouseDbo Warehouse)
+        {
+            try
+            {
+                _dbContext.Warehouse.Add(Warehouse);
+                await _dbContext.SaveChangesAsync();
+                return Warehouse;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }

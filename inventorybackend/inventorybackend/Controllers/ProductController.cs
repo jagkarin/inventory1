@@ -118,5 +118,24 @@ namespace inventorybackend.Controllers
             }
         }
 
+        [HttpGet("GetProductbyProductID")]
+        public async Task<IActionResult> GetProductByIdAsync(int ProductsID)
+        {
+            try
+            {
+                
+                var ProductDto = await _ProductService.GetProductByIdAsync(ProductsID);
+                return Ok(ProductDto); // ส่งผลลัพธ์กลับในรูปแบบ JSON
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message }); // ส่ง HTTP 404 ถ้าไม่พบข้อมูล
+            }
+            catch (ApplicationException ex)
+            {
+                return StatusCode(500, new { message = ex.Message }); // ส่ง HTTP 500 เมื่อเกิดข้อผิดพลาดภายใน
+            }
+        }
+
     }
 }

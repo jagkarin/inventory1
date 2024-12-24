@@ -8,9 +8,9 @@ namespace inventorybackend.src.Repositories
     public class ProductRepo : IProductRepo
     {
         public readonly DataContext _dbContext;
-        private readonly ILogger<UserDbo> _logger;
+        private readonly ILogger<ProductDbo> _logger;
 
-        public ProductRepo(DataContext dbContext, ILogger<UserDbo> logger)
+        public ProductRepo(DataContext dbContext, ILogger<ProductDbo> logger)
         {
             _dbContext = dbContext;
             _logger = logger;   
@@ -28,6 +28,12 @@ namespace inventorybackend.src.Repositories
             }
 
         }
+
+        public async Task<ProductDbo> GetProductByIdAsync(int ProductsID)
+        {
+            return await _dbContext.Product.FirstOrDefaultAsync(w => w.ProductsID == ProductsID);
+        }
+
 
         public async Task<ProductDbo> UpdateProductAsync(ProductDbo Product)
         {
@@ -142,6 +148,8 @@ namespace inventorybackend.src.Repositories
                 throw new ApplicationException($"An error occurred while retrieving the productcategory data: {ex.Message}", ex);
             }
         }
+
+
 
     }
 }

@@ -45,6 +45,29 @@ namespace inventorybackend.src.Core.Service
             }
         }
 
+        public async Task<ProductDTO> GetProductByIdAsync(int ProductsID)
+        {
+            try
+            {
+                var productusedto = await _productRepo.GetProductByIdAsync(ProductsID);
+                var productDto = new ProductDTO
+                {
+                    ProductsID = productusedto.ProductsID,
+                    ProductsName = productusedto.ProductsName,
+                    Adddate = productusedto.Adddate,
+                    CategoriesID = productusedto.CategoriesID,
+                    Quantity = productusedto.Quantity,
+                    Description = productusedto.Description,
+                };
+
+                return productDto;
+            }
+            catch (Exception ex) 
+            {
+                throw new ApplicationException($"ไม่พบข้อมูล: {ex.Message}", ex);
+            }
+        }
+
 
         //อัพเดต/แก้ไขข้อมูลสินค้า
         public async Task<UpdateProductDTO> UpdateProductAsync(UpdateProductDTO UpdateProductDTO)
@@ -127,7 +150,7 @@ namespace inventorybackend.src.Core.Service
             }
             catch (Exception ex)
             {
-                throw new ApplicationException($"An error occurred while retrieving the productcategory rentals: {ex.Message}", ex);
+                throw new ApplicationException($"An error occurred while retrieving the productcategory : {ex.Message}", ex);
             }
         }
     }
