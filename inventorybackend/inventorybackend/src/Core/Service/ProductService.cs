@@ -187,6 +187,24 @@ namespace inventorybackend.src.Core.Service
             return true; // คืนค่า true ถ้าลบสำเร็จ
         }
 
+        public async Task<ProductwithimageDTO> AddProductAsync(ProductwithimageDTO productDto, string imagePath)
+        {
+            // สร้าง Dbo จาก Dto ที่ส่งเข้ามา
+            var product = new ProductDbo
+            {
+                ProductsName = productDto.ProductsName,
+                Description = productDto.Description,
+                Adddate = DateTime.Now,
+                CategoriesID = productDto.CategoriesID,
+                Productimage = imagePath,
+                Quantity = productDto.Quantity,
+            };
+
+            // บันทึกสินค้าในฐานข้อมูล
+            await _productRepo.AddProductAsync(product);
+
+            return productDto;
+        }
     }
 }
 

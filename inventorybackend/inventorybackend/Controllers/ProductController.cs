@@ -12,11 +12,17 @@ namespace inventorybackend.Controllers
     {
         private readonly IProductService _ProductService;
         private readonly ILogger<ProductController> _logger;
+        //change to path yourself
+        private readonly string _imagePath = @"E:\GIt\inven\inventoryfrontend\src\asset";
 
         public ProductController(IProductService productService, ILogger<ProductController> logger)
         {
             _ProductService = productService;
             _logger = logger;
+            if (!Directory.Exists(_imagePath))
+            {
+                Directory.CreateDirectory(_imagePath); // ตรวจสอบและสร้างโฟลเดอร์หากยังไม่มี
+            }
         }
 
         [HttpGet("GetAllProduct")]
@@ -159,6 +165,28 @@ namespace inventorybackend.Controllers
             }
         }
 
+        [HttpPost("addimage")]
+        public async Task<IActionResult> AddProduct([FromForm] ProductwithimageDTO productDto, IFormFile productImage)
+        {
+            if (productImage == null || productImage.Length == 0)
+                return BadRequest("Please upload a valid image.");
 
+            // สร้างชื่อไฟล์ใหม่ด้วย GUID เพื่อป้องกันชื่อซ้ำกัน
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(productImage.FileName)}";
+            var fullPath = Path.Combine(_imagePath, fileName);
+
+            // บันทึกรูปภาพลง path
+            using (var stream = new FileStream(fullPath, FileMode.Create))
+            {
+                await productImage.CopyToAsync(stream);
+            }
+
+            // บันทึกข้อมูลสินค้า พร้อม path ของรูปในฐานข้อมูล
+            productDto.Productimage = fullPath; // อัปเดต path ใน Dto
+
+            var result = await _ProductService.AddProductAsync(productDto, fullPath);
+
+            return Ok(result);
+        }
     }
 }

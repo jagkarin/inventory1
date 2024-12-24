@@ -164,6 +164,11 @@ namespace inventorybackend.src.Repositories
             return false; // คืนค่า false ถ้าไม่เจอข้อมูล
         }
 
-
+        public async Task<ProductDbo> AddProductwithimageAsync(ProductDbo product)
+        {
+            await _dbContext.Set<ProductDbo>().AddAsync(product);
+            await _dbContext.SaveChangesAsync();
+            return product;
+        }
     }
 }
