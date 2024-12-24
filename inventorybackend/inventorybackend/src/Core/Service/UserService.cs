@@ -85,7 +85,8 @@ namespace inventorybackend.src.Core.Service
                     UserID  = inputuser.UserID,
                     Username=inputuser.Username,
                     Password = inputuser.Password,
-                    CreatedAt=inputuser.CreatedAt,
+                    CreatedAt= DateTime.Now,
+                    RoleID = inputuser.RoleID,
 
 
                 };
@@ -96,6 +97,7 @@ namespace inventorybackend.src.Core.Service
                     Username=adduser.Username,
                     Password=adduser.Password,
                     CreatedAt = adduser.CreatedAt,
+                    RoleID=adduser.RoleID,
 
                 };
             }

@@ -88,5 +88,8 @@ namespace inventorybackend.DTOS
         public string? Password { get; set; }
 
         public DateTime? CreatedAt { get; set; }
+
+        public int RoleID { get; set; }
+
     }
 }
