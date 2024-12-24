@@ -91,5 +91,19 @@ namespace inventorybackend.src.Repositories
             }
         }
 
+        public async Task<UserDbo> AddUserAsync(UserDbo User)
+        {
+            try
+            {
+                _dbContext.User.Add(User);
+                await _dbContext.SaveChangesAsync();
+                return User;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }
