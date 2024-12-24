@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { Modal, Button, Toast } from 'react-bootstrap';
-import { FaEdit, FaSave } from 'react-icons/fa'; // Importing both Edit and Save icons
+import { FaEdit, FaSave } from 'react-icons/fa';
+
+// Define the API URL
+const API_URL = 'http://localhost:2000/api/users';
 
 function EditUser({ user, onUpdate, onClose }) {
-    const [employeeId, setEmployeeId] = useState(user['Employee ID'] || '');
+    const [employeeId] = useState(user['Employee ID'] || '');
     const [username, setUsername] = useState(user.Username || '');
     const [password, setPassword] = useState(user.Password || '');
     const [status, setStatus] = useState(user.Status || 'Inactive');
@@ -11,16 +14,14 @@ function EditUser({ user, onUpdate, onClose }) {
     const [showToast, setShowToast] = useState(false);
 
     const handleSubmit = async () => {
-        console.log("Submit button clicked"); // For debugging
-        
         // Validate all fields
-        if (!employeeId || !username || !password || !position) {
-            console.error("Validation failed: All fields must be filled out");
+        if (!username || !password || !position) {
+            alert("กรุณากรอกข้อมูลให้ครบถ้วน!"); // Alert for empty fields if necessary
             return; // Prevent submission if validation fails
         }
 
         const updatedUser = { 
-            'Employee ID': employeeId,
+            'Employee ID': employeeId, // Employee ID should remain unchanged
             Username: username, 
             Password: password, 
             Status: status, 
@@ -28,7 +29,7 @@ function EditUser({ user, onUpdate, onClose }) {
         };
 
         try {
-            const response = await fetch(`http://localhost:2000/api/users/${employeeId}`, {
+            const response = await fetch(`${API_URL}/${employeeId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -37,7 +38,9 @@ function EditUser({ user, onUpdate, onClose }) {
             });
 
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                const errorData = await response.json();
+                alert(`ข้อผิดพลาด: ${errorData.error}`);
+                return;
             }
 
             const data = await response.json();
@@ -46,6 +49,7 @@ function EditUser({ user, onUpdate, onClose }) {
             onClose(); // Close Modal
         } catch (error) {
             console.error("Error updating user:", error);
+            alert('ไม่สามารถอัปเดตข้อมูลผู้ใช้ได้ โปรดลองอีกครั้งในภายหลัง');
         }
     };
 
@@ -54,7 +58,7 @@ function EditUser({ user, onUpdate, onClose }) {
             <Modal show={true} onHide={onClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        <FaEdit className="mr-2" /> {/* Adding the edit icon */}
+                        <FaEdit className="mr-2" />
                         Edit User
                     </Modal.Title>
                 </Modal.Header>
@@ -65,7 +69,7 @@ function EditUser({ user, onUpdate, onClose }) {
                             type="text"
                             className="form-control"
                             value={employeeId}
-                            disabled // Disable input to make it non-editable
+                            disabled // Keep it disabled to avoid changes
                         />
                     </div>
                     <div className="form-group">
@@ -80,7 +84,7 @@ function EditUser({ user, onUpdate, onClose }) {
                     <div className="form-group">
                         <label>Password</label>
                         <input
-                            type="text" // Intentionally kept as text
+                            type="password" // Change to password type for security
                             className="form-control"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
@@ -105,9 +109,9 @@ function EditUser({ user, onUpdate, onClose }) {
                             onChange={(e) => setPosition(e.target.value)}
                         >
                             <option value="">Select Position...</option>
-                            <option value="admin">Admin</option>
+                            <option value="Admin">Admin</option>
                             <option value="Developer">Developer</option>
-                            <option value="ติดตั้ง">ติดตั้ง</option>
+                            <option value="Installer">ติดตั้ง</option>
                         </select>
                     </div>
                 </Modal.Body>
@@ -116,7 +120,7 @@ function EditUser({ user, onUpdate, onClose }) {
                         Close
                     </Button>
                     <Button variant="primary" onClick={handleSubmit}>
-                        <FaSave className="mr-2" /> Save Changes {/* Add the save icon here */}
+                        <FaSave className="mr-2" /> Save Changes
                     </Button>
                 </Modal.Footer>
             </Modal>

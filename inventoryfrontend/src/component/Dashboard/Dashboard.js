@@ -9,7 +9,6 @@ import {
     Tooltip,
     Legend,
 } from 'chart.js';
-import axios from 'axios';
 import * as XLSX from 'xlsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUsers, faBoxes, faHandHoldingUsd, faWrench, faFileExcel } from '@fortawesome/free-solid-svg-icons';
@@ -20,11 +19,13 @@ import Repair from './Repair';
 // Register Chart.js components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
+const API_URL = 'http://localhost:2000/api'; // Centralized API URL
+
 function WarehouseDashboard() {
     const [users, setUsers] = useState([]);
     const [borrowedItems, setBorrowedItems] = useState([]); 
     const [products, setProducts] = useState([]);
-    const [repairs, setRepairs] = useState([]); // State for repairs
+    const [repairs, setRepairs] = useState([]);
     const [chartData, setChartData] = useState({});
     const [positionCounts, setPositionCounts] = useState({});
     const [showData, setShowData] = useState(false);
@@ -32,41 +33,23 @@ function WarehouseDashboard() {
     const [showBorrowedItems, setShowBorrowedItems] = useState(false);
     const [showRepairData, setShowRepairData] = useState(false);
 
-    const fetchUsers = async () => {
+    const fetchData = async (endpoint, setter) => {
         try {
-            const response = await axios.get('http://localhost:2000/api/users');
-            setUsers(response.data);
+            const response = await fetch(`${API_URL}/${endpoint}`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            setter(data);
         } catch (error) {
-            console.error('Error fetching users:', error);
+            console.error(`Error fetching ${endpoint}:`, error);
         }
     };
 
-    const fetchBorrowedItems = async () => {
-        try {
-            const response = await axios.get('http://localhost:2000/api/withdraw');
-            setBorrowedItems(response.data);
-        } catch (error) {
-            console.error('Error fetching borrowed items:', error);
-        }
-    };
-
-    const fetchProducts = async () => {
-        try {
-            const response = await axios.get('http://localhost:2000/api/products');
-            setProducts(response.data);
-        } catch (error) {
-            console.error('Error fetching products:', error);
-        }
-    };
-
-    const fetchRepairs = async () => {
-        try {
-            const response = await axios.get('http://localhost:2000/api/repair');
-            setRepairs(response.data);
-        } catch (error) {
-            console.error('Error fetching repairs:', error);
-        }
-    };
+    const fetchUsers = () => fetchData('users', setUsers);
+    const fetchBorrowedItems = () => fetchData('withdraw', setBorrowedItems);
+    const fetchProducts = () => fetchData('products', setProducts);
+    const fetchRepairs = () => fetchData('repair', setRepairs);
 
     const getRandomColor = () => {
         const letters = '0123456789ABCDEF';
@@ -106,13 +89,13 @@ function WarehouseDashboard() {
         const userSheet = XLSX.utils.json_to_sheet(users);
         const borrowedSheet = XLSX.utils.json_to_sheet(borrowedItems);
         const productSheet = XLSX.utils.json_to_sheet(products);
-        const repairSheet = XLSX.utils.json_to_sheet(repairs); // เพิ่มหน้ารายการการซ่อม
+        const repairSheet = XLSX.utils.json_to_sheet(repairs);
 
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, userSheet, 'Users');
         XLSX.utils.book_append_sheet(wb, borrowedSheet, 'Borrowed Items');
         XLSX.utils.book_append_sheet(wb, productSheet, 'Products');
-        XLSX.utils.book_append_sheet(wb, repairSheet, 'Repairs'); // เพิ่ม Repair Data
+        XLSX.utils.book_append_sheet(wb, repairSheet, 'Repairs');
 
         XLSX.writeFile(wb, 'WarehouseData.xlsx');
     };
@@ -121,7 +104,7 @@ function WarehouseDashboard() {
         fetchUsers();
         fetchBorrowedItems();
         fetchProducts();
-        fetchRepairs(); // ดึงข้อมูลการซ่อมเมื่อ component mount
+        fetchRepairs();
     }, []);
 
     useEffect(() => {
@@ -229,9 +212,9 @@ function WarehouseDashboard() {
                 </div>
             )}
 
-            {showProducts && <Product />} {/* Show product data */}
-            {showBorrowedItems && <BorrowedItems />} {/* Show borrowed items */}
-            {showRepairData && <Repair />} {/* Call Repair component to show repair data */}
+            {showProducts && <Product />}
+            {showBorrowedItems && <BorrowedItems />}
+            {showRepairData && <Repair />}
         </div>
     );
 }

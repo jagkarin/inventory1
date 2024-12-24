@@ -31,12 +31,12 @@ h5 {
     text-decoration: underline;
 }
 
-.btn-primary {
+.btn-primary-ud {
     background-color: #6ab04c; /* สีปุ่มหลัก */
     border: none;
 }
 
-.btn-secondary {
+.btn-secondary-ud {
     background-color: #ff9f40; /* สีปุ่มรอง */
     border: none;
 }

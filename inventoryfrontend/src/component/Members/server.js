@@ -158,6 +158,16 @@ app.put('/api/users/:employeeId', async (req, res) => {
     const employeeId = req.params.employeeId;
 
     try {
+        // ตรวจสอบผู้ใช้ก่อนอัปเดต
+        const [existingUser] = await connection.execute(
+            'SELECT * FROM user WHERE `Employee ID` = ?', [employeeId]
+        );
+
+        if (existingUser.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // ตรวจสอบว่าข้อมูลมีการเปลี่ยนแปลงหรือไม่
         if (!Username || !Password || !Position) {
             return res.status(400).json({ error: 'กรุณากรอกข้อมูลให้ครบถ้วน!' });
         }
@@ -168,7 +178,7 @@ app.put('/api/users/:employeeId', async (req, res) => {
         );
 
         if (result.affectedRows === 0) {
-            return res.status(404).json({ error: 'User not found or no changes made' });
+            return res.status(400).json({ error: 'No changes made' });
         }
 
         res.json({
@@ -208,6 +218,114 @@ app.get('/api/repair', async (req, res) => {
         res.json(results);
     } catch (error) {
         console.error('Error fetching repair records:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    } finally {
+        await connection.end();
+    }
+});
+
+// API to change password by Username
+app.put('/api/users/change-password/:username', async (req, res) => {
+    const connection = await connectDB();
+    const { Password } = req.body;
+    const username = req.params.username;
+
+    try {
+        // ตรวจสอบว่าผู้ใช้มีอยู่หรือไม่
+        const [existingUser] = await connection.execute(
+            'SELECT * FROM user WHERE Username = ?', [username]
+        );
+
+        if (existingUser.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // ตรวจสอบว่ามีการส่ง Password ใหม่เข้ามาหรือไม่
+        if (!Password) {
+            return res.status(400).json({ error: 'กรุณากรอกรหัสผ่านใหม่!' });
+        }
+
+        const [result] = await connection.execute(
+            'UPDATE user SET Password = ? WHERE Username = ?',
+            [Password, username]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(400).json({ error: 'No changes made' });
+        }
+
+        res.json({ message: 'Password updated successfully' });
+    } catch (error) {
+        console.error('Error changing password:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    } finally {
+        await connection.end();
+    }
+});
+
+// API to check if a username exists
+app.get('/api/users/check-username/:username', async (req, res) => {
+    const { username } = req.params; // รับชื่อผู้ใช้จากพารามิเตอร์
+    const connection = await connectDB();
+    try {
+        const [results] = await connection.query('SELECT * FROM user WHERE username = ?', [username]);
+        if (results.length > 0) {
+            // Username exists
+            res.json({ exists: true });
+        } else {
+            // Username does not exist
+            res.json({ exists: false });
+        }
+    } catch (error) {
+        console.error('Error checking username:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    } finally {
+        await connection.end();
+    }
+});
+
+// API for user registration
+app.post('/api/register', async (req, res) => {
+    const connection = await connectDB();
+    const { 'Employee ID': employeeId, Username, Password, Status, Position } = req.body;
+
+    try {
+        // Validate input
+        if (!employeeId || !Username || !Password || !Status || !Position) {
+            return res.status(400).json({ error: 'Please enter all required fields!' });
+        }
+
+        // Check if the Employee ID already exists
+        const [existingUser] = await connection.execute('SELECT * FROM user WHERE `Employee ID` = ?', [employeeId]);
+
+        if (existingUser.length > 0) {
+            return res.status(400).json({ error: 'Employee ID already exists!' });
+        }
+
+        // Check if the username already exists
+        const [existingUserByUsername] = await connection.execute('SELECT * FROM user WHERE Username = ?', [Username]);
+
+        if (existingUserByUsername.length > 0) {
+            return res.status(400).json({ error: 'Username already exists!' });
+        }
+
+        // Insert new user in the database
+        const [result] = await connection.execute(
+            'INSERT INTO user (`Employee ID`, Username, Password, Status, Position) VALUES (?, ?, ?, ?, ?)',
+            [employeeId, Username, Password, Status, Position]
+        );
+
+        const newUser = {
+            id: result.insertId,
+            'Employee ID': employeeId,
+            Username,
+            Status,
+            Position,
+        };
+
+        res.status(201).json(newUser);
+    } catch (error) {
+        console.error('Error registering user:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     } finally {
         await connection.end();
