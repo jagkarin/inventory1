@@ -108,5 +108,56 @@ namespace inventorybackend.Controllers
                 return BadRequest(response);
             }
         }
+
+        [HttpDelete("{EQMID}")]
+        public async Task<IActionResult> DeleteEQM(int EQMID)
+        {
+            var product = await _EquipmentService.GetEquipmentByIdAsync(EQMID);
+            if (product == null)
+            {
+                return NotFound(new { Message = "ไม่พบข้อมูลผลิตภัณฑ์ที่ต้องการลบ" }); // สถานะ HTTP 404
+            }
+            else
+            {
+                var isDeleted = await _EquipmentService.DeleteEQMAsync(EQMID);
+                if (isDeleted)
+                {
+                    return Ok(new { Message = "ลบข้อมูลสำเร็จ" }); // สถานะ HTTP 200
+                }
+                else
+                {
+                    return StatusCode(500, new { Message = "เกิดข้อผิดพลาดในการลบข้อมูล" }); // สถานะ HTTP 500
+                }
+            }
+        }
+
+
+        [HttpPut("UpdateEquipment")]
+        public async Task<IActionResult> UpdateEQMAsync(int EQMID ,[FromBody] UpdateEquipmentDTO UpdateEquipment)
+        {
+            var response = new BaseHttpResponse<UpdateEquipmentDTO>();
+
+            try
+            {
+                UpdateEquipment.EQMID = EQMID;
+
+                _logger.LogInformation("Updating Equipment with ID: {EQMID}", EQMID);
+
+                var data = await _EquipmentService.UpdateEQMAsync(UpdateEquipment);
+                response.SetSuccess(data, "Product updated successfully", "200");
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                var err = new ErrorData
+                {
+                    Code = "-2",
+                    Message = ex.Message
+                };
+                _logger.LogError(ex, "Error updating Equipment with ID: {EQMID}. Inner exception: {InnerException}", EQMID, ex.InnerException?.Message);
+                response.SetError(err, ex.Message, "500");
+                return BadRequest(response);
+            }
+        }
     }
 }

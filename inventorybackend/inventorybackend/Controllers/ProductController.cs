@@ -137,5 +137,28 @@ namespace inventorybackend.Controllers
             }
         }
 
+        [HttpDelete("{ProductsID}")]
+        public async Task<IActionResult> DeleteProduct(int ProductsID)
+        {
+            var product = await _ProductService.GetProductByIdAsync(ProductsID);
+            if (product == null)
+            {
+                return NotFound(new { Message = "ไม่พบข้อมูลผลิตภัณฑ์ที่ต้องการลบ" }); // สถานะ HTTP 404
+            }
+            else
+            {
+                var isDeleted = await _ProductService.DeleteProductAsync(ProductsID);
+                if (isDeleted)
+                {
+                    return Ok(new { Message = "ลบข้อมูลสำเร็จ" }); // สถานะ HTTP 200
+                }
+                else
+                {
+                    return StatusCode(500, new { Message = "เกิดข้อผิดพลาดในการลบข้อมูล" }); // สถานะ HTTP 500
+                }
+            }
+        }
+
+
     }
 }
