@@ -75,5 +75,34 @@ namespace inventorybackend.src.Core.Service
                 throw new ApplicationException($"An error occurred while retrieving the User : {ex.Message}", ex);
             }
         }
+
+        public async Task<UserDbo> AddUserAsync(inputuser inputuser)
+        {
+            try
+            {
+                var user = new Entities.UserDbo
+                {
+                    UserID  = inputuser.UserID,
+                    Username=inputuser.Username,
+                    Password = inputuser.Password,
+                    CreatedAt=inputuser.CreatedAt,
+
+
+                };
+                var adduser = await _userrepo.AddUserAsync(user);
+                return new UserDbo
+                {
+                    UserID= adduser.UserID,
+                    Username=adduser.Username,
+                    Password=adduser.Password,
+                    CreatedAt = adduser.CreatedAt,
+
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("An error occurred while adding data.", ex);
+            }
+        }
     }
 }
