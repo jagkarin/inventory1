@@ -3,6 +3,7 @@ using inventorybackend.src.Core.Interface;
 using inventorybackend.src.Entities;
 using inventorybackend.src.Interface;
 using inventorybackend.src.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace inventorybackend.src.Core.Service
 {
@@ -106,5 +107,7 @@ namespace inventorybackend.src.Core.Service
                 throw new ApplicationException("An error occurred while adding data.", ex);
             }
         }
+
+       
     }
 }
