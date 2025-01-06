@@ -6,6 +6,7 @@ using inventorybackend.src.Infrastructure.Repositories;
 using inventorybackend.src.Interface;
 using inventorybackend.src.Repositories;
 using inventorybackend;
+using auth.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +35,11 @@ builder.Services.AddScoped<IEquipmentRepo, EquipmentRepo>();
 //User
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepo, UserRepo>();
+
+//JWT
+builder.Services.AddScoped<JwtService>();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 
 builder.Services.AddDbContext<DataContext>(options =>

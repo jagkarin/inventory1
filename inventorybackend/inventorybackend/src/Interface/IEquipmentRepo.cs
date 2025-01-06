@@ -9,5 +9,7 @@ namespace inventorybackend.src.Interface
         Task<eqmDbo> GetEquipmentByIdAsync(int EQMID);
         Task<List<EqmwithCategory>> GetAllEquipmentCategoryAsync();
         Task<eqmDbo> AddEquipmentAsync(eqmDbo eqm);
+        Task<bool> DeleteEQMAsync(int EQMID);
+        Task<eqmDbo> UpdateEQMAsync(eqmDbo eqm);
     }
 }

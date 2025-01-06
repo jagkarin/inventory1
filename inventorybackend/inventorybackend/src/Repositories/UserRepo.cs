@@ -65,6 +65,12 @@ namespace inventorybackend.src.Repositories
 
         }
 
+        //auth
+        public async Task<UserDbo> GetById(int UserID)
+        {
+            return await _dbContext.User.FirstOrDefaultAsync(u => u.UserID == UserID);
+        }
+
 
         public async Task<Userprofile> GetUserByuserIDAsync(int userid)
         {
@@ -89,6 +95,62 @@ namespace inventorybackend.src.Repositories
             {
                 throw new Exception($"เกิดข้อผิดพลาดขณะดึงข้อมูลผู้ใช้: {ex.Message}", ex);
             }
+        }
+
+        public async Task<UserDbo> AddUserAsync(UserDbo User)
+        {
+            try
+            {
+                _dbContext.User.Add(User);
+                await _dbContext.SaveChangesAsync();
+                return User;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        //auth
+        public async Task<UserDbo> GetByusername(string username)
+        {
+            return await _dbContext.User.FirstOrDefaultAsync(u => u.Username == username);
+        }
+
+        //auth
+        public async Task<UserDbo> Update(UserDbo user)
+        {
+            var existingUser = await _dbContext.User.FirstOrDefaultAsync(u => u.UserID == user.UserID);
+            if (existingUser == null)
+            {
+                throw new Exception("User not found.");
+            }
+
+            existingUser.Username = user.Username;
+            existingUser.Email = user.Email;
+            existingUser.Password = user.Password; 
+
+            await _dbContext.SaveChangesAsync();
+            return existingUser;
+        }
+
+        public async Task<UserDbo> UpdateProfileImage(int userId, string imagePath)
+        {
+            // ค้นหาผู้ใช้จากฐานข้อมูลโดยใช้ UserID
+            var existingUser = await _dbContext.User.FirstOrDefaultAsync(u => u.UserID == userId);
+            if (existingUser == null)
+            {
+                throw new Exception("User not found.");
+            }
+
+            // อัปเดตรูปโปรไฟล์ของผู้ใช้
+            existingUser.Profilepicture = imagePath;
+
+            // บันทึกการเปลี่ยนแปลงในฐานข้อมูล
+            await _dbContext.SaveChangesAsync();
+
+            // คืนค่าผู้ใช้ที่อัปเดตรูปโปรไฟล์แล้ว
+            return existingUser;
         }
 
     }

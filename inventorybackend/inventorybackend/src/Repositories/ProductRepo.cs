@@ -56,7 +56,8 @@ namespace inventorybackend.src.Repositories
                 existingProduct.Description = Product.Description;
                 existingProduct.ProductsID = Product.ProductsID;
                 existingProduct.Adddate = DateTime.Now;
-                //existingProduct.CategoriesID = Product.CategoriesID;
+                existingProduct.CategoriesID = Product.CategoriesID;
+                existingProduct.Productimage = Product.Productimage;
 
                 _dbContext.Product.Update(existingProduct);
 
@@ -106,6 +107,7 @@ namespace inventorybackend.src.Repositories
                                          Description = p.Description,
                                          Quantity = p.Quantity,
                                          CategoriesName = c.CategoriesName,
+                                         Productimage = p.Productimage,
 
 
                                        }).ToListAsync();
@@ -136,6 +138,7 @@ namespace inventorybackend.src.Repositories
                                                  Description = p.Description,
                                                  Quantity = p.Quantity,
                                                  CategoriesName = c.CategoriesName,
+                                                 Productimage = p.Productimage,
 
 
                                              }).FirstOrDefaultAsync();
@@ -149,7 +152,23 @@ namespace inventorybackend.src.Repositories
             }
         }
 
+        public async Task<bool> DeleteProductAsync(int ProductsID)
+        {
+            var product = await _dbContext.Product.FindAsync(ProductsID);
+            if (product != null)
+            {
+                _dbContext.Product.Remove(product);
+                await _dbContext.SaveChangesAsync();
+                return true; // คืนค่า true ถ้าลบสำเร็จ
+            }
+            return false; // คืนค่า false ถ้าไม่เจอข้อมูล
+        }
 
-
+        public async Task<ProductDbo> AddProductwithimageAsync(ProductDbo product)
+        {
+            await _dbContext.Set<ProductDbo>().AddAsync(product);
+            await _dbContext.SaveChangesAsync();
+            return product;
+        }
     }
 }

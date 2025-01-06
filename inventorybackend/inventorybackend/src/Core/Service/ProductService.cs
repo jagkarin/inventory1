@@ -33,6 +33,7 @@ namespace inventorybackend.src.Core.Service
                     CategoriesID = s.CategoriesID,
                     Quantity = s.Quantity,
                     Description = s.Description,
+                    Productimage = s.Productimage,
 
                 }).ToList();
 
@@ -50,6 +51,12 @@ namespace inventorybackend.src.Core.Service
             try
             {
                 var productusedto = await _productRepo.GetProductByIdAsync(ProductsID);
+
+                if (productusedto == null)
+                {
+                    throw new ApplicationException($"ไม่พบข้อมูลผลิตภัณฑ์ที่มีรหัส {ProductsID}");
+                }
+
                 var productDto = new ProductDTO
                 {
                     ProductsID = productusedto.ProductsID,
@@ -58,15 +65,23 @@ namespace inventorybackend.src.Core.Service
                     CategoriesID = productusedto.CategoriesID,
                     Quantity = productusedto.Quantity,
                     Description = productusedto.Description,
+                    Productimage = productusedto.Productimage,
                 };
 
                 return productDto;
             }
-            catch (Exception ex) 
+            catch (ApplicationException ex)
             {
-                throw new ApplicationException($"ไม่พบข้อมูล: {ex.Message}", ex);
+                // ส่งต่อข้อผิดพลาดแบบ custom
+                throw;
+            }
+            catch (Exception ex)
+            {
+                // จับข้อผิดพลาดทั่วไปที่ไม่คาดคิด
+                throw new ApplicationException($"เกิดข้อผิดพลาด: {ex.Message}", ex);
             }
         }
+
 
 
         //อัพเดต/แก้ไขข้อมูลสินค้า
@@ -84,7 +99,8 @@ namespace inventorybackend.src.Core.Service
                     Adddate = DateTime.Now,
                     Quantity = UpdateProductDTO.Quantity,
                     Description = UpdateProductDTO.Description,
-                    //CategoriesID = UpdateProductDTO.CategoriesID,
+                    CategoriesID = UpdateProductDTO.CategoriesID,
+                    Productimage= UpdateProductDTO.Productimage,
 
                 };
 
@@ -100,7 +116,8 @@ namespace inventorybackend.src.Core.Service
                     Adddate = DateTime.Now,
                     Quantity = UpdateProductDTO.Quantity,
                     Description = UpdateProductDTO.Description,
-                    //CategoriesID= UpdateProductDTO.CategoriesID,
+                    CategoriesID= UpdateProductDTO.CategoriesID,
+                    Productimage = UpdateProductDTO.Productimage,
                 };
             }
             catch (Exception ex)
@@ -120,18 +137,22 @@ namespace inventorybackend.src.Core.Service
                     Quantity=InputProductDTO.Quantity,
                     Description = InputProductDTO.Description,
                     Adddate= DateTime.Now,
-                    //CategoriesID = InputProductDTO.CategoriesID
+                    CategoriesID = InputProductDTO.CategoriesID,
+                    Productimage = InputProductDTO.Productimage,
 
 
                 };
                 var addProduct = await _productRepo.AddProductAsync(Product);
                 return new ProductDbo
                 {
+                    ProductsID = addProduct.ProductsID,
                     ProductsName = addProduct.ProductsName,
                     Quantity = addProduct.Quantity,
                     Description = addProduct.Description,
                     Adddate = DateTime.Now,
-                    //CategoriesID = addProduct.CategoriesID
+                    CategoriesID = addProduct.CategoriesID,
+                    Productimage= addProduct.Productimage,
+                    
                     
                 };
             }
@@ -152,6 +173,37 @@ namespace inventorybackend.src.Core.Service
             {
                 throw new ApplicationException($"An error occurred while retrieving the productcategory : {ex.Message}", ex);
             }
+        }
+
+        public async Task<bool> DeleteProductAsync(int ProductsID)
+        {
+            var product = await _productRepo.GetProductByIdAsync(ProductsID); // ตรวจสอบว่ามีข้อมูลหรือไม่
+            if (product == null)
+            {
+                return false; // คืนค่า false ถ้าไม่พบข้อมูล
+            }
+
+            await _productRepo.DeleteProductAsync(ProductsID); // ลบข้อมูล
+            return true; // คืนค่า true ถ้าลบสำเร็จ
+        }
+
+        public async Task<ProductwithimageDTO> AddProductAsync(ProductwithimageDTO productDto, string imagePath)
+        {
+            // สร้าง Dbo จาก Dto ที่ส่งเข้ามา
+            var product = new ProductDbo
+            {
+                ProductsName = productDto.ProductsName,
+                Description = productDto.Description,
+                Adddate = DateTime.Now,
+                CategoriesID = productDto.CategoriesID,
+                Productimage = imagePath,
+                Quantity = productDto.Quantity,
+            };
+
+            // บันทึกสินค้าในฐานข้อมูล
+            await _productRepo.AddProductAsync(product);
+
+            return productDto;
         }
     }
 }
