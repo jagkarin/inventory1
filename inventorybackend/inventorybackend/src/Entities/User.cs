@@ -19,7 +19,7 @@ namespace inventorybackend.src.Entities
         public string? Password { get; set; }
 
         [Column("Role_ID", TypeName = "int")]
-        public int? RoleID { get; set; }
+        public int RoleID { get; set; }
 
         [Column("Email", TypeName = "varchar(50)")]
         public string? Email { get; set; }

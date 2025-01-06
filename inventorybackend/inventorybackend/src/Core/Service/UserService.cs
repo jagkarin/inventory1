@@ -3,6 +3,7 @@ using inventorybackend.src.Core.Interface;
 using inventorybackend.src.Entities;
 using inventorybackend.src.Interface;
 using inventorybackend.src.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace inventorybackend.src.Core.Service
 {
@@ -75,5 +76,38 @@ namespace inventorybackend.src.Core.Service
                 throw new ApplicationException($"An error occurred while retrieving the User : {ex.Message}", ex);
             }
         }
+
+        public async Task<UserDbo> AddUserAsync(inputuser inputuser)
+        {
+            try
+            {
+                var user = new Entities.UserDbo
+                {
+                    UserID  = inputuser.UserID,
+                    Username=inputuser.Username,
+                    Password = inputuser.Password,
+                    CreatedAt= DateTime.Now,
+                    RoleID = inputuser.RoleID,
+
+
+                };
+                var adduser = await _userrepo.AddUserAsync(user);
+                return new UserDbo
+                {
+                    UserID= adduser.UserID,
+                    Username=adduser.Username,
+                    Password=adduser.Password,
+                    CreatedAt = adduser.CreatedAt,
+                    RoleID=adduser.RoleID,
+
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("An error occurred while adding data.", ex);
+            }
+        }
+
+       
     }
 }

@@ -26,5 +26,8 @@ namespace inventorybackend.src.Entities
 
         [Column("CategorysID", TypeName = "int")]
         public int CategoriesID { get; set; }
+
+        [Column("Product_image", TypeName = "varchar(255)")]
+        public string? Productimage { get; set; }
     }
 }

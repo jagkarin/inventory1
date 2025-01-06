@@ -76,5 +76,37 @@ namespace inventorybackend.DTOS
         public int? RoleID { get; set; }
 
         public string? RoleName { get; set; }
+
+        public string? Profilepicture { get; set; }
+    }
+
+
+    public class inputuser
+    {
+        public int UserID { get; set; }
+
+        public string? Username { get; set; }
+
+        public string? Password { get; set; }
+
+        public DateTime? CreatedAt { get; set; }
+
+        public int RoleID { get; set; }
+
+    }
+
+    public class LoginDto
+    {
+        public string? Username { set; get; }
+        public string? Password { set; get; }
+    }
+
+
+    public class RegisterDto
+    {
+        public string? Username { set; get; }
+        public string? Password { set; get; }
+        public int RoleId { get; set; }
+        public DateTime? CreatedAt { get; set; }
     }
 }
