@@ -10,6 +10,8 @@ namespace inventorybackend.src.Interface
         Task<ProductDbo> AddProductAsync(ProductDbo Product);
         Task<List<ProductCategoryDTO>> GetAllProductCategoryAsync();
         Task<ProductDbo> GetProductByIdAsync(int ProductsID);
+        Task<bool> DeleteProductAsync(int ProductsID);
 
+        Task<ProductDbo> AddProductwithimageAsync(ProductDbo product);
     }
 }

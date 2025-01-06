@@ -10,6 +10,7 @@ namespace inventorybackend.DTOS
         public int? Quantity { get; set; }
         public DateTime? Adddate { get; set; }
         public int CategoriesID { get; set; }
+        public string? Productimage { get; set; }
     }
 
     public class UpdateProductDTO
@@ -19,7 +20,8 @@ namespace inventorybackend.DTOS
         public string? Description { get; set; }
         public int? Quantity { get; set; }
         public DateTime? Adddate { get; set; }
-        //public int CategoriesID { get; set; }
+        public int CategoriesID { get; set; }
+        public string? Productimage { get; set; }
     }
 
     public class InputProductDTO
@@ -29,6 +31,8 @@ namespace inventorybackend.DTOS
         public int? Quantity { get; set; }
         public DateTime? Adddate { get; set; }
         public int CategoriesID { get; set; }
+        public string? Productimage { get; set; }
+
     }
 
     public class ProductCategoryDTO
@@ -40,7 +44,18 @@ namespace inventorybackend.DTOS
         public DateTime? Adddate { get; set; }
         public int CategoriesID { get; set; }
         public string? CategoriesName { get; set; }
+        public string? Productimage { get; set; }
     }
 
-    
+    public class ProductwithimageDTO
+    {
+        public string? ProductsName { get; set; }
+        public string? Description { get; set; }
+        public int? Quantity { get; set; }
+        public DateTime? Adddate { get; set; }
+        public int CategoriesID { get; set; }
+        public string? Productimage { get; set; }
+    }
+
+
 }
