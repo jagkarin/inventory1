@@ -137,6 +137,7 @@ namespace inventorybackend.src.Core.Service
                     Quantity=InputProductDTO.Quantity,
                     Description = InputProductDTO.Description,
                     Adddate= DateTime.Now,
+                    CategoriesID = InputProductDTO.CategoriesID
                     CategoriesID = InputProductDTO.CategoriesID,
                     Productimage = InputProductDTO.Productimage,
 
@@ -150,6 +151,7 @@ namespace inventorybackend.src.Core.Service
                     Quantity = addProduct.Quantity,
                     Description = addProduct.Description,
                     Adddate = DateTime.Now,
+                    CategoriesID = addProduct.CategoriesID
                     CategoriesID = addProduct.CategoriesID,
                     Productimage= addProduct.Productimage,
                     

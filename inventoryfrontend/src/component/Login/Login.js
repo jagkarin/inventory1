@@ -14,6 +14,22 @@ const Login = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
+        
+        // Allow login without username and password
+        if (username === '' && password === '') {
+            navigate('/profile', { state: { username: 'Guest', position: 'Guest' } });
+            return;
+        }
+
+        fetch(API_URL)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(users => {
+                const foundUser = users.find((user) => user.Username === username && user.Password === password);
         try {
             const response = await fetch("https://localhost:7294/api/login", {
                 method: "POST",
@@ -71,7 +87,6 @@ const Login = () => {
                         className="form-input"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
-                        required
                     />
                 </div>
 
@@ -84,7 +99,6 @@ const Login = () => {
                             className="form-input"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            required
                         />
                         <span 
                             className="password-toggle"
