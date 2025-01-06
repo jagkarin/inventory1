@@ -115,29 +115,29 @@ namespace inventorybackend.Controllers
             }
         }
 
-        [HttpPut("update-profile-image")]
-        public async Task<IActionResult> UpdateProfileImage([FromForm] Userprofile userprofile, IFormFile userimage)
-        {
-            if (userimage == null || userimage.Length == 0)
-                return BadRequest("Please upload a valid image.");
+        //[HttpPut("update-profile-image")]
+        //public async Task<IActionResult> UpdateProfileImage([FromForm] Userprofile userprofile, IFormFile userimage)
+        //{
+        //    if (userimage == null || userimage.Length == 0)
+        //        return BadRequest("Please upload a valid image.");
 
-            // สร้างชื่อไฟล์ใหม่ด้วย GUID เพื่อป้องกันชื่อซ้ำกัน
-            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(userimage.FileName)}";
-            var fullPath = Path.Combine(_imagePath, fileName);
+        //    // สร้างชื่อไฟล์ใหม่ด้วย GUID เพื่อป้องกันชื่อซ้ำกัน
+        //    var fileName = $"{Guid.NewGuid()}{Path.GetExtension(userimage.FileName)}";
+        //    var fullPath = Path.Combine(_imagePath, fileName);
 
-            // บันทึกรูปภาพลง path
-            using (var stream = new FileStream(fullPath, FileMode.Create))
-            {
-                await userimage.CopyToAsync(stream);
-            }
+        //    // บันทึกรูปภาพลง path
+        //    using (var stream = new FileStream(fullPath, FileMode.Create))
+        //    {
+        //        await userimage.CopyToAsync(stream);
+        //    }
 
-            // บันทึกข้อมูลสินค้า พร้อม path ของรูปในฐานข้อมูล
-            productDto.Productimage = fullPath; // อัปเดต path ใน Dto
+        //    // บันทึกข้อมูลสินค้า พร้อม path ของรูปในฐานข้อมูล
+        //    productDto.Productimage = fullPath; // อัปเดต path ใน Dto
 
-            var result = await _ProductService.AddProductAsync(productDto, fullPath);
+        //    var result = await _ProductService.AddProductAsync(productDto, fullPath);
 
-            return Ok(result);
-        }
+        //    return Ok(result);
+        //}
 
 
 

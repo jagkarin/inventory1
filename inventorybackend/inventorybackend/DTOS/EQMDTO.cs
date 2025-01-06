@@ -71,5 +71,21 @@ namespace inventorybackend.DTOS
 
         public string? EQMimage { get; set; }
     }
+
+    public class EquipmentwithimageDTO
+    {
+
+        public string? EQMName { get; set; }
+
+        public string? EQMDescription { get; set; }
+
+        public int? Quantity { get; set; }
+
+        public DateTime? Adddate { get; set; }
+
+        public int Category_ID { get; set; }
+
+        public string? EQMimage { get; set; }
+    }
 }
 
