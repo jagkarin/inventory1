@@ -28,6 +28,13 @@ const Login = () => {
 
     const handleLogin = (e) => {
         e.preventDefault();
+        
+        // Allow login without username and password
+        if (username === '' && password === '') {
+            navigate('/profile', { state: { username: 'Guest', position: 'Guest' } });
+            return;
+        }
+
         fetch(API_URL)
             .then(response => {
                 if (!response.ok) {
@@ -77,7 +84,6 @@ const Login = () => {
                         className="form-input"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
-                        required
                     />
                 </div>
 
@@ -90,7 +96,6 @@ const Login = () => {
                             className="form-input"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            required
                         />
                         <span 
                             className="password-toggle"

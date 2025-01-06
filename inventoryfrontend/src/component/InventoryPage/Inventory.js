@@ -56,7 +56,7 @@ const Inventory = () => {
                 })
                 .catch((err) => console.error('Error updating product:', err));
         } else {
-            fetch(`${API_URL}/AddProduct`, {
+            fetch('https://localhost:7294/api/Product/AddProduct', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newProduct),
