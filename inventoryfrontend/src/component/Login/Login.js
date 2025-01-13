@@ -3,17 +3,17 @@ import { Link, useNavigate } from 'react-router-dom';
 import './Login.css';
 
 const Login = () => {
-    const API_URL = 'http://localhost:2000/api/users'; // Declare the API URL here
+    const API_URL = 'http://localhost:2000/api/users';
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-    
+    const [passwordStrength, setPasswordStrength] = useState('');
+
     const navigate = useNavigate();
 
-    // Load data from localStorage once when the component mounts
     useEffect(() => {
         const savedUsername = localStorage.getItem('username');
         const savedPassword = localStorage.getItem('password');
@@ -36,26 +36,34 @@ const Login = () => {
                 return response.json();
             })
             .then(users => {
-                const foundUser = users.find((user) => user.Username === username && user.Password === password);
+                const foundUser = users.find(user => user.Username === username);
 
                 if (foundUser) {
-                    if (foundUser.Status === 'Active') {
-                        navigate('/profile', { state: { username: foundUser.Username, position: foundUser.Position } });
+                    if (foundUser.Password === password) {
+                        if (foundUser.Status === 'Active') {
+                            localStorage.setItem('user', JSON.stringify({
+                                Username: foundUser.Username,
+                                Position: foundUser.Position
+                            }));
+                            navigate('/profile', { state: { username: foundUser.Username, position: foundUser.Position } });
 
-                        if (rememberMe) {
-                            localStorage.setItem('username', username);
-                            localStorage.setItem('password', password);
-                            localStorage.setItem('rememberMe', 'true');
+                            if (rememberMe) {
+                                localStorage.setItem('username', username);
+                                localStorage.setItem('password', password);
+                                localStorage.setItem('rememberMe', 'true');
+                            } else {
+                                localStorage.removeItem('username');
+                                localStorage.removeItem('password');
+                                localStorage.removeItem('rememberMe');
+                            }
                         } else {
-                            localStorage.removeItem('username');
-                            localStorage.removeItem('password');
-                            localStorage.removeItem('rememberMe');
+                            setErrorMessage('บัญชีผู้ใช้นี้ไม่สามารถเข้าสู่ระบบได้');
                         }
                     } else {
-                        setErrorMessage('บัญชีผู้ใช้นี้ไม่สามารถเข้าสู่ระบบได้');
+                        setErrorMessage('รหัสผ่านไม่ถูกต้อง');
                     }
                 } else {
-                    setErrorMessage('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+                    setErrorMessage('ชื่อผู้ใช้ไม่ถูกต้อง');
                 }
             })
             .catch(error => {
@@ -64,9 +72,34 @@ const Login = () => {
             });
     };
 
+    const checkPasswordStrength = (password) => {
+        if (password.length < 6) {
+            setPasswordStrength('อ่อน');
+        } else if (password.length < 10) {
+            setPasswordStrength('ปานกลาง');
+        } else {
+            setPasswordStrength('แข็งแรง');
+        }
+    };
+
+    useEffect(() => {
+        checkPasswordStrength(password);
+    }, [password]);
+
+    const getWelcomeMessage = () => {
+        const hour = new Date().getHours();
+        if (hour < 12) {
+            return 'สวัสดีตอนเช้า';
+        } else if (hour < 18) {
+            return 'สวัสดีตอนบ่าย';
+        } else {
+            return 'สวัสดีตอนเย็น';
+        }
+    };
+
     return (
         <div className="login-container">
-            <h2>เข้าสู่ระบบ</h2>
+            <h2>{getWelcomeMessage()}</h2>
             {errorMessage && <p className="error-message">{errorMessage}</p>}
             <form onSubmit={handleLogin}>
                 <div className="form-group">
@@ -99,6 +132,9 @@ const Login = () => {
                         >
                             {showPassword ? '👁️' : '👁️‍🗨️'}
                         </span>
+                    </div>
+                    <div className="password-strength">
+                        <p>ความแข็งแรงของรหัสผ่าน: {passwordStrength}</p>
                     </div>
                 </div>
 
