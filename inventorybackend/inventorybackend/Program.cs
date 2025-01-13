@@ -48,7 +48,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontend", policy =>
+    options.AddPolicy("AllowAll", policy =>
     {
         policy.WithOrigins("http://localhost:3000") // ระบุ Origin ของ Frontend
               .AllowAnyHeader()
@@ -59,7 +59,7 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-app.UseCors("AllowFrontend");
+app.UseCors("AllowAll");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

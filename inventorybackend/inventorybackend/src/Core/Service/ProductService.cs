@@ -70,7 +70,7 @@ namespace inventorybackend.src.Core.Service
 
                 return productDto;
             }
-            catch (ApplicationException ex)
+            catch (ApplicationException)
             {
                 // ส่งต่อข้อผิดพลาดแบบ custom
                 throw;
