@@ -74,9 +74,34 @@ const Login = () => {
         }
     };
 
+    const checkPasswordStrength = (password) => {
+        if (password.length < 6) {
+            setPasswordStrength('อ่อน');
+        } else if (password.length < 10) {
+            setPasswordStrength('ปานกลาง');
+        } else {
+            setPasswordStrength('แข็งแรง');
+        }
+    };
+
+    useEffect(() => {
+        checkPasswordStrength(password);
+    }, [password]);
+
+    const getWelcomeMessage = () => {
+        const hour = new Date().getHours();
+        if (hour < 12) {
+            return 'สวัสดีตอนเช้า';
+        } else if (hour < 18) {
+            return 'สวัสดีตอนบ่าย';
+        } else {
+            return 'สวัสดีตอนเย็น';
+        }
+    };
+
     return (
         <div className="login-container">
-            <h2>เข้าสู่ระบบ</h2>
+            <h2>{getWelcomeMessage()}</h2>
             {errorMessage && <p className="error-message">{errorMessage}</p>}
             <form onSubmit={handleLogin}>
                 <div className="form-group">
@@ -107,6 +132,9 @@ const Login = () => {
                         >
                             {showPassword ? '👁️' : '👁️‍🗨️'}
                         </span>
+                    </div>
+                    <div className="password-strength">
+                        <p>ความแข็งแรงของรหัสผ่าน: {passwordStrength}</p>
                     </div>
                 </div>
 
