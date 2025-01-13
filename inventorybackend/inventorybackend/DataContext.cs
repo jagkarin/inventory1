@@ -19,14 +19,6 @@ namespace inventorybackend
         public DbSet<RoldDbo> Role { get; set; }
 
         // ใช้ OnModelCreating เพื่อกำหนดคอนฟิกต่าง ๆ
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-
-            // ตัวอย่างการตั้งค่าให้ Role_ID ใน User ต้องไม่เป็น null
-            modelBuilder.Entity<UserDbo>()
-            .Property(u => u.RoleID)
-            .HasDefaultValue(1); // สมมติว่า default คือ 1
-        }
+        
     }
 }

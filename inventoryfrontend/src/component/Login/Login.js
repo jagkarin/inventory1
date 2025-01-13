@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie'; // ใช้ js-cookie
+import { jwtDecode } from 'jwt-decode'; // แก้ไขการ import ให้ถูกต้อง
 import './Login.css';
-import { jwtDecode } from "jwt-decode";
+
 
 const Login = () => {
     const [username, setUsername] = useState("");
@@ -28,15 +29,16 @@ const Login = () => {
                 if (data.token && data.token.split('.').length === 3) {
                     // ใช้ js-cookie แทน localStorage
                     Cookies.set("token", data.token, {
-                        expires: rememberMe ? 1 : 1, // ตั้งค่าอายุ Cookie 1 วัน หรือ 7 วันถ้าเลือก "จำรหัสผ่าน"
-                        secure: true, // เปิดใช้งาน Secure สำหรับ HTTPS
-                        sameSite: "strict", // ป้องกัน CSRF
+                        expires: rememberMe ? 1 : 1, //  "จำรหัสผ่าน", 1 
+                        secure: true,
+                        sameSite: "strict",
                     });
 
                     try {
                         const decodedToken = jwtDecode(data.token);
                         const roleId = decodedToken.roleId;
 
+                        // นำผู้ใช้ไปยังหน้าที่เกี่ยวข้องตาม roleId
                         if (roleId === "1") {
                             navigate("/dashboard");
                         } else if (roleId === "3") {
@@ -58,9 +60,34 @@ const Login = () => {
         }
     };
 
+    const checkPasswordStrength = (password) => {
+        if (password.length < 6) {
+            setPasswordStrength('อ่อน');
+        } else if (password.length < 10) {
+            setPasswordStrength('ปานกลาง');
+        } else {
+            setPasswordStrength('แข็งแรง');
+        }
+    };
+
+    useEffect(() => {
+        checkPasswordStrength(password);
+    }, [password]);
+
+    const getWelcomeMessage = () => {
+        const hour = new Date().getHours();
+        if (hour < 12) {
+            return 'สวัสดีตอนเช้า';
+        } else if (hour < 18) {
+            return 'สวัสดีตอนบ่าย';
+        } else {
+            return 'สวัสดีตอนเย็น';
+        }
+    };
+
     return (
         <div className="login-container">
-            <h2>เข้าสู่ระบบ</h2>
+            <h2>{getWelcomeMessage()}</h2>
             {errorMessage && <p className="error-message">{errorMessage}</p>}
             <form onSubmit={handleLogin}>
                 <div className="form-group">
@@ -71,7 +98,6 @@ const Login = () => {
                         className="form-input"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
-                        required
                     />
                 </div>
 
@@ -84,7 +110,6 @@ const Login = () => {
                             className="form-input"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            required
                         />
                         <span 
                             className="password-toggle"
@@ -93,6 +118,9 @@ const Login = () => {
                         >
                             {showPassword ? '👁️' : '👁️‍🗨️'}
                         </span>
+                    </div>
+                    <div className="password-strength">
+                        <p>ความแข็งแรงของรหัสผ่าน: {passwordStrength}</p>
                     </div>
                 </div>
 
@@ -107,14 +135,6 @@ const Login = () => {
                 </div>
 
                 <button type="submit" className="submit-button">เข้าสู่ระบบ</button>
-                <div className="links-container">
-                    <p className="forgot-password-link">
-                        <Link to="/forgot-password">ลืมรหัสผ่าน?</Link>
-                    </p>
-                    <p className="register-link">
-                        ยังไม่มีบัญชี? <Link to="/register">สมัครบัญชี</Link>
-                    </p>
-                </div>
             </form>
         </div>
     );

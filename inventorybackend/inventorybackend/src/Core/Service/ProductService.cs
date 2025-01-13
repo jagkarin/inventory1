@@ -100,7 +100,6 @@ namespace inventorybackend.src.Core.Service
                     Quantity = UpdateProductDTO.Quantity,
                     Description = UpdateProductDTO.Description,
                     CategoriesID = UpdateProductDTO.CategoriesID,
-                    Productimage= UpdateProductDTO.Productimage,
 
                 };
 
@@ -117,48 +116,12 @@ namespace inventorybackend.src.Core.Service
                     Quantity = UpdateProductDTO.Quantity,
                     Description = UpdateProductDTO.Description,
                     CategoriesID= UpdateProductDTO.CategoriesID,
-                    Productimage = UpdateProductDTO.Productimage,
                 };
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error occurred while updating Prodcut with ID: {ProductsID}. Inner exception: {InnerException}", UpdateProductDTO.ProductsID, ex.InnerException?.Message);
                 throw new Exception("Error occurred while updating Product", ex);
-            }
-        }
-
-        public async Task<ProductDbo> AddProductAsync(InputProductDTO InputProductDTO)
-        {
-            try
-            {
-                var Product = new Entities.ProductDbo
-                {
-                    ProductsName = InputProductDTO.ProductsName,
-                    Quantity=InputProductDTO.Quantity,
-                    Description = InputProductDTO.Description,
-                    Adddate= DateTime.Now,
-                    CategoriesID = InputProductDTO.CategoriesID,
-                    Productimage = InputProductDTO.Productimage,
-
-
-                };
-                var addProduct = await _productRepo.AddProductAsync(Product);
-                return new ProductDbo
-                {
-                    ProductsID = addProduct.ProductsID,
-                    ProductsName = addProduct.ProductsName,
-                    Quantity = addProduct.Quantity,
-                    Description = addProduct.Description,
-                    Adddate = DateTime.Now,
-                    CategoriesID = addProduct.CategoriesID,
-                    Productimage= addProduct.Productimage,
-                    
-                    
-                };
-            }
-            catch (Exception ex)
-            {
-                throw new ApplicationException("An error occurred while adding data.", ex);
             }
         }
 
@@ -187,24 +150,44 @@ namespace inventorybackend.src.Core.Service
             return true; // คืนค่า true ถ้าลบสำเร็จ
         }
 
-        public async Task<ProductwithimageDTO> AddProductAsync(ProductwithimageDTO productDto, string imagePath)
+
+
+        public async Task<ProductwithimageDTO> AddProductAsync(ProductwithimageDTO productDto, string? imagePath)
         {
-            // สร้าง Dbo จาก Dto ที่ส่งเข้ามา
             var product = new ProductDbo
             {
                 ProductsName = productDto.ProductsName,
                 Description = productDto.Description,
                 Adddate = DateTime.Now,
                 CategoriesID = productDto.CategoriesID,
-                Productimage = imagePath,
+                Productimage = imagePath, // กำหนดค่าเป็น null ได้
                 Quantity = productDto.Quantity,
             };
 
-            // บันทึกสินค้าในฐานข้อมูล
             await _productRepo.AddProductAsync(product);
 
             return productDto;
         }
+
+
+
+        public async Task UpdateProductwithimageAsync(ProductwithimageDTO productDto, string imagePath)
+        {
+            var product = new ProductDbo
+            {
+                ProductsName = productDto.ProductsName,
+                Description = productDto.Description,
+                Quantity = productDto.Quantity,
+                CategoriesID = productDto.CategoriesID,
+                Productimage = imagePath
+            };
+
+            await _productRepo.UpdateProductwithimageAsync(product);
+        }
+
+
+
+
     }
 }
 

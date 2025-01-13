@@ -77,7 +77,6 @@ namespace inventorybackend.DTOS
 
         public string? RoleName { get; set; }
 
-        public string? Profilepicture { get; set; }
     }
 
 
@@ -108,5 +107,24 @@ namespace inventorybackend.DTOS
         public string? Password { set; get; }
         public int RoleId { get; set; }
         public DateTime? CreatedAt { get; set; }
+    }
+
+    public class UpdateUserProfliebyUser
+    {
+        public int UserID { get; set; }
+
+        public string? Firstname { get; set; }
+
+        public string? Lastname { get; set; }
+
+        public string? Email { get; set; }
+
+        public string? Phonenumber { get; set; } 
+
+        public DateTime? Dateofbirth { get; set; }
+
+        public DateTime? UpdatedAt { get; set; }
+
+        public string? Address { get; set; }
     }
 }

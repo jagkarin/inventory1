@@ -133,24 +133,49 @@ namespace inventorybackend.src.Repositories
             await _dbContext.SaveChangesAsync();
             return existingUser;
         }
-
-        public async Task<UserDbo> UpdateProfileImage(int userId, string imagePath)
+        public async Task<UserDbo> UpdateUserprofileAsync(UserDbo User)
         {
-            // ค้นหาผู้ใช้จากฐานข้อมูลโดยใช้ UserID
-            var existingUser = await _dbContext.User.FirstOrDefaultAsync(u => u.UserID == userId);
-            if (existingUser == null)
+            using var transaction = await _dbContext.Database.BeginTransactionAsync();
+            try
             {
-                throw new Exception("User not found.");
+                // Log before finding the user
+                _logger.LogInformation("Attempting to update User with ID: {UserID}", User.UserID);
+
+                var existingUser = await _dbContext.User.FindAsync(User.UserID);
+                if (existingUser == null)
+                {
+                    _logger.LogError("Products with ID {UserID} not found", User.UserID);
+                    throw new Exception($"User with ID {User.UserID} not found");
+                }
+
+                _logger.LogInformation("Found User with ID : {UserID}.", User.UserID);
+                existingUser.Email = User.Email;
+                existingUser.Phonenumber = User.Phonenumber;
+                existingUser.Firstname = User.Firstname;
+                existingUser.Lastname = User.Lastname;
+                existingUser.Dateofbirth = User.Dateofbirth;
+                existingUser.UpdatedAt = DateTime.Now;
+                existingUser.Address = User.Address;
+                existingUser.UserID = User.UserID;
+              
+
+
+                _dbContext.User.Update(existingUser);
+
+
+                await _dbContext.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+                _logger.LogInformation("Successfully updated User with ID: {UserID}", User.UserID);
+
+                return existingUser;
             }
-
-            // อัปเดตรูปโปรไฟล์ของผู้ใช้
-            existingUser.Profilepicture = imagePath;
-
-            // บันทึกการเปลี่ยนแปลงในฐานข้อมูล
-            await _dbContext.SaveChangesAsync();
-
-            // คืนค่าผู้ใช้ที่อัปเดตรูปโปรไฟล์แล้ว
-            return existingUser;
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                _logger.LogError(ex, "Error occurred while updating User with ID : {UserID}. Inner exception: {InnerException}", User.UserID, ex.InnerException?.Message);
+                throw new Exception($"Error occurred while updating User with ID {User.UserID}", ex);
+            }
         }
 
     }

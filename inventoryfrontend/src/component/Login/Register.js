@@ -14,8 +14,9 @@ const Register = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const [passwordStrength, setPasswordStrength] = useState('');
-    const [showPassword, setShowPassword] = useState(false); // New state for password visibility
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false); // New state for confirm password visibility
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [missingCharactersMessage, setMissingCharactersMessage] = useState(''); // New state
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -57,6 +58,26 @@ const Register = () => {
         setter(e.target.value);
     };
 
+    const handlePaste = (e) => {
+        e.preventDefault(); // Prevent the paste action
+    };
+
+    const handleCopy = (e) => {
+        alert('หัดกรอกเองบ้างนะ! 😉'); // Show your playful message
+    };
+
+    const findMissingCharacters = (password, confirmPassword) => {
+        const missingChars = [];
+        const confirmPasswordSet = new Set(confirmPassword);
+
+        for (const char of password) {
+            if (!confirmPasswordSet.has(char) && !missingChars.includes(char)) {
+                missingChars.push(char);
+            }
+        }
+        return missingChars; // Always return an array
+    };
+
     const handleRegister = async (e) => {
         e.preventDefault();
 
@@ -73,7 +94,6 @@ const Register = () => {
             return;
         }
 
-        // ตรวจสอบความแข็งแกร่งของรหัสผ่าน
         const strongPasswordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])([a-zA-Z0-9!@#$%^&*]{8,})$/;
         if (!strongPasswordRegex.test(password)) {
             setErrorMessage('รหัสผ่านต้องมีตัวอักษร, ตัวเลข, และสัญลักษณ์พิเศษอย่างน้อยหนึ่งตัว');
@@ -81,10 +101,16 @@ const Register = () => {
             return;
         }
 
+        const missingChars = findMissingCharacters(password, confirmPassword);
         if (password !== confirmPassword) {
-            setErrorMessage('รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน');
+            const missingCount = missingChars.length;
+            // Update the missing characters message
+            setMissingCharactersMessage(`ตัวอักษรที่ขาด: ${missingChars.join(', ')}`);
+            setErrorMessage(`รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน`);
             setSuccessMessage('');
             return;
+        } else {
+            setMissingCharactersMessage(''); // Reset message if passwords match
         }
 
         const userData = { 
@@ -152,6 +178,8 @@ const Register = () => {
                                 handleInputChange(setPassword, 20, 'รหัสผ่านไม่ควรเกิน 20 ตัวอักษร')(e);
                                 checkPasswordStrength(e.target.value);
                             }}
+                            onPaste={handlePaste}
+                            onCopy={handleCopy}
                             required
                         />
                         <span 
@@ -187,6 +215,8 @@ const Register = () => {
                             className="form-input"
                             value={confirmPassword}
                             onChange={handleInputChange(setConfirmPassword, 20, 'ยืนยันรหัสผ่านไม่ควรเกิน 20 ตัวอักษร')}
+                            onPaste={handlePaste} 
+                            onCopy={handleCopy} 
                             required
                         />
                         <span 
@@ -198,6 +228,10 @@ const Register = () => {
                         </span>
                     </div>
                 </div>
+
+                {missingCharactersMessage && (
+                    <p style={{ color: 'green' }}>{missingCharactersMessage}</p> // Show missing characters in green
+                )}
 
                 <div className="password-rules">
                     <h4>กฎการตั้งรหัสผ่าน:</h4>

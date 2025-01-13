@@ -11,7 +11,9 @@ namespace inventorybackend.src.Interface
         Task<UserDbo> AddUserAsync(UserDbo User);
         Task<UserDbo> GetByusername(string username);
         Task<UserDbo> Update(UserDbo user);
-
+        Task<UserDbo> UpdateUserprofileAsync(UserDbo User);
         Task<UserDbo> GetById(int UserID);
+
+     
     }
 }

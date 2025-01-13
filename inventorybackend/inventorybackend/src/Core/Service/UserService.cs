@@ -108,6 +108,51 @@ namespace inventorybackend.src.Core.Service
             }
         }
 
-       
+        public async Task<UpdateUserProfliebyUser> UpdateUserprofileAsync(UpdateUserProfliebyUser UserProflie)
+        {
+            try
+            {
+                // ?????????????????????????
+                _logger.LogInformation("Received request to update User with ID: {ProductsID} ", UserProflie.UserID);
+
+                var user = new Entities.UserDbo
+                {
+                    UserID = UserProflie.UserID,
+                    Firstname = UserProflie.Firstname,
+                    Lastname = UserProflie.Lastname,
+                    Address = UserProflie.Address,
+                    UpdatedAt = DateTime.Now,
+                    Phonenumber = UserProflie.Phonenumber,
+                    Dateofbirth = UserProflie.Dateofbirth,
+                    Email = UserProflie.Email,
+                    
+
+                };
+
+
+                var updatedProduct = await _userrepo.UpdateUserprofileAsync(user);
+
+                _logger.LogInformation("Successfully updated User with ID: {UserID}", UserProflie.UserID);
+
+                return new UpdateUserProfliebyUser
+                {
+                    UserID = UserProflie.UserID,
+                    Firstname = UserProflie.Firstname,
+                    Lastname = UserProflie.Lastname,
+                    Address = UserProflie.Address,
+                    UpdatedAt = DateTime.Now,
+                    Phonenumber = UserProflie.Phonenumber,
+                    Dateofbirth = UserProflie.Dateofbirth,
+                    Email= UserProflie.Email,
+
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while updating User with ID: {UserID}. Inner exception: {InnerException}", UserProflie.UserID, ex.InnerException?.Message);
+                throw new Exception("Error occurred while updating User", ex);
+            }
+        }
+
     }
 }
