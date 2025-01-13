@@ -12,11 +12,17 @@ namespace inventorybackend.Controllers
     {
         private readonly IProductService _ProductService;
         private readonly ILogger<ProductController> _logger;
+        //change to path yourself
+        private readonly string _imagePath = @"E:\GIt\inven\inventoryfrontend\src\asset";
 
         public ProductController(IProductService productService, ILogger<ProductController> logger)
         {
             _ProductService = productService;
             _logger = logger;
+            if (!Directory.Exists(_imagePath))
+            {
+                Directory.CreateDirectory(_imagePath); // ตรวจสอบและสร้างโฟลเดอร์หากยังไม่มี
+            }
         }
 
         [HttpGet("GetAllProduct")]
@@ -117,6 +123,73 @@ namespace inventorybackend.Controllers
                 return BadRequest(err);
             }
         }
+
+        [HttpGet("GetProductbyProductID")]
+        public async Task<IActionResult> GetProductByIdAsync(int ProductsID)
+        {
+            try
+            {
+                
+                var ProductDto = await _ProductService.GetProductByIdAsync(ProductsID);
+                return Ok(ProductDto); // ส่งผลลัพธ์กลับในรูปแบบ JSON
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message }); // ส่ง HTTP 404 ถ้าไม่พบข้อมูล
+            }
+            catch (ApplicationException ex)
+            {
+                return StatusCode(500, new { message = ex.Message }); // ส่ง HTTP 500 เมื่อเกิดข้อผิดพลาดภายใน
+            }
+        }
+
+        [HttpDelete("{ProductsID}")]
+        public async Task<IActionResult> DeleteProduct(int ProductsID)
+        {
+            var product = await _ProductService.GetProductByIdAsync(ProductsID);
+            if (product == null)
+            {
+                return NotFound(new { Message = "ไม่พบข้อมูลผลิตภัณฑ์ที่ต้องการลบ" }); // สถานะ HTTP 404
+            }
+            else
+            {
+                var isDeleted = await _ProductService.DeleteProductAsync(ProductsID);
+                if (isDeleted)
+                {
+                    return Ok(new { Message = "ลบข้อมูลสำเร็จ" }); // สถานะ HTTP 200
+                }
+                else
+                {
+                    return StatusCode(500, new { Message = "เกิดข้อผิดพลาดในการลบข้อมูล" }); // สถานะ HTTP 500
+                }
+            }
+        }
+
+        [HttpPost("addimage")]
+        public async Task<IActionResult> AddProduct([FromForm] ProductwithimageDTO productDto, IFormFile productImage)
+        {
+            if (productImage == null || productImage.Length == 0)
+                return BadRequest("Please upload a valid image.");
+
+            // สร้างชื่อไฟล์ใหม่ด้วย GUID เพื่อป้องกันชื่อซ้ำกัน
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(productImage.FileName)}";
+            var fullPath = Path.Combine(_imagePath, fileName);
+
+            // บันทึกรูปภาพลง path
+            using (var stream = new FileStream(fullPath, FileMode.Create))
+            {
+                await productImage.CopyToAsync(stream);
+            }
+
+            // บันทึกข้อมูลสินค้า พร้อม path ของรูปในฐานข้อมูล
+            productDto.Productimage = fullPath; // อัปเดต path ใน Dto
+
+            var result = await _ProductService.AddProductAsync(productDto, fullPath);
+
+            return Ok(result);
+        }
+
+
 
     }
 }

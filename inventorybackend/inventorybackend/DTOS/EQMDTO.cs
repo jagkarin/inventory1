@@ -16,5 +16,76 @@ namespace inventorybackend.DTOS
         public DateTime? Adddate { get; set; }
 
         public int Category_ID { get; set; }
+
+        public string? EQMimage { get; set; }
+    }
+
+    public class InputEQMDTO
+    {
+
+        public string? EQMName { get; set; }
+
+        public string? EQMDescription { get; set; }
+
+        public int? Quantity { get; set; }
+
+        public DateTime? Adddate { get; set; }
+
+        public int Category_ID { get; set; }
+        public string? EQMimage { get; set; }
+    }
+
+
+    public class EqmwithCategory
+    {
+        public int EQMID { get; set; }
+
+        public string? EQMName { get; set; }
+
+        public string? EQMDescription { get; set; }
+
+        public int? Quantity { get; set; }
+
+        public DateTime? Adddate { get; set; }
+
+        public int Category_ID { get; set; }
+
+        public string? Category_Name { get; set; }
+
+        public string? EQMimage { get; set; }
+    }
+
+    public class UpdateEquipmentDTO
+    {
+        public int EQMID { get; set; }
+
+        public string? EQMName { get; set; }
+
+        public string? EQMDescription { get; set; }
+
+        public int? Quantity { get; set; }
+
+        public DateTime? Adddate { get; set; }
+
+        public int Category_ID { get; set; }
+
+        public string? EQMimage { get; set; }
+    }
+
+    public class EquipmentwithimageDTO
+    {
+
+        public string? EQMName { get; set; }
+
+        public string? EQMDescription { get; set; }
+
+        public int? Quantity { get; set; }
+
+        public DateTime? Adddate { get; set; }
+
+        public int Category_ID { get; set; }
+
+        public string? EQMimage { get; set; }
     }
 }
+

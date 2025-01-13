@@ -110,8 +110,8 @@ textarea {
     margin: 5px 0;
 }
 
-.btnpro {
-    padding: 8px 15px;
+.btn {
+    padding: 10px 25px;
     margin: 5px;
     border: none;
     border-radius: 5px;
@@ -127,8 +127,33 @@ textarea {
     background-color: #218838;
 }
 
+.pagination-container {
+    display: flex;
+    justify-content: flex-end; /* จัดปุ่มไปทางขวามือ */
+    margin-top: 20px; /* ระยะห่างด้านบน */
+}
 
+.btn-pagination {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px; /* ทำให้ปุ่มมีความโค้งมน */
+    padding: 10px 20px; /* ขยายขนาดปุ่ม */
+    margin: 0 5px; /* ระยะห่างระหว่างปุ่ม */
+    font-size: 14px; /* ปรับขนาดตัวอักษร */
+    cursor: pointer; /* เปลี่ยนเมาส์เป็นรูปมือเมื่อโฮเวอร์ */
+    transition: background-color 0.3s, box-shadow 0.3s; /* เพิ่มเอฟเฟกต์การเปลี่ยนสีและเงา */
+}
 
+.btn-pagination:hover {
+    background-color: #0056b3; /* สีเข้มขึ้นเมื่อโฮเวอร์ */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* เพิ่มเงา */
+}
+
+.btn-pagination:disabled {
+    background-color: #cccccc; /* สีเทาเมื่อปุ่มถูกปิดใช้งาน */
+    cursor: not-allowed; /* เปลี่ยนเมาส์เป็นห้ามคลิก */
+}
 
 /* ข้อความเมื่อไม่พบสินค้า */
 .no-products {
@@ -152,42 +177,5 @@ textarea {
 .product-card div {
     display: flex;           /* ใช้ flexbox ในการจัดการปุ่ม */
     gap: 10px;               /* เพิ่มช่องว่างระหว่างปุ่ม */
-}
-
-
-
-/* กล่องรวม */
-.search-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-    width: 80%;
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-/* ไอคอนค้นหา */
-.search-icon {
-    position: absolute;
-    left: 10px;
-    font-size: 18px;
-    color: #aaa;
-}
-
-/* ช่อง input */
-.search-input {
-    width: 100%;
-    padding: 12px 20px 12px 40px; /* เพิ่ม padding ด้านซ้ายสำหรับไอคอน */
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-}
-
-.search-input:focus {
-    border-color: #007bff;
-    box-shadow: 0 2px 5px rgba(0, 123, 255, 0.4);
-    outline: none;
 }
 

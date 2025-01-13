@@ -21,10 +21,13 @@ namespace inventorybackend.src.Entities
         [Column("Quantity", TypeName = "int")]
         public int? Quantity { get; set; }
 
-        [Column("Add_Date", TypeName = "datetime")]
+        [Column("AddDate", TypeName = "datetime")]
         public DateTime? Adddate { get; set;}
 
         [Column("Category_ID", TypeName ="int")]
         public int Category_ID { get; set; }
+
+        [Column("EQM_image", TypeName = "varchar(255)")]
+        public string? EQMimage { get; set; }
     }
 }

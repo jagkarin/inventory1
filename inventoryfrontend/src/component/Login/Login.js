@@ -1,33 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie'; // ใช้ js-cookie
 import './Login.css';
+import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
-    const API_URL = 'http://localhost:2000/api/users';
-
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [rememberMe, setRememberMe] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
     const [showPassword, setShowPassword] = useState(false);
-    const [passwordStrength, setPasswordStrength] = useState('');
-
+    const [rememberMe, setRememberMe] = useState(false);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const savedUsername = localStorage.getItem('username');
-        const savedPassword = localStorage.getItem('password');
-        const savedRememberMe = localStorage.getItem('rememberMe') === 'true';
-
-        if (savedRememberMe) {
-            setUsername(savedUsername || '');
-            setPassword(savedPassword || '');
-            setRememberMe(savedRememberMe);
-        }
-    }, []);
-
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
+        
+        // Allow login without username and password
+        if (username === '' && password === '') {
+            navigate('/profile', { state: { username: 'Guest', position: 'Guest' } });
+            return;
+        }
+
         fetch(API_URL)
             .then(response => {
                 if (!response.ok) {
@@ -36,40 +29,49 @@ const Login = () => {
                 return response.json();
             })
             .then(users => {
-                const foundUser = users.find(user => user.Username === username);
+                const foundUser = users.find((user) => user.Username === username && user.Password === password);
+        try {
+            const response = await fetch("https://localhost:7294/api/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ username, password }),
+            });
 
-                if (foundUser) {
-                    if (foundUser.Password === password) {
-                        if (foundUser.Status === 'Active') {
-                            localStorage.setItem('user', JSON.stringify({
-                                Username: foundUser.Username,
-                                Position: foundUser.Position
-                            }));
-                            navigate('/profile', { state: { username: foundUser.Username, position: foundUser.Position } });
+            if (response.ok) {
+                const data = await response.json();
+                if (data.token && data.token.split('.').length === 3) {
+                    // ใช้ js-cookie แทน localStorage
+                    Cookies.set("token", data.token, {
+                        expires: rememberMe ? 1 : 1, // ตั้งค่าอายุ Cookie 1 วัน หรือ 7 วันถ้าเลือก "จำรหัสผ่าน"
+                        secure: true, // เปิดใช้งาน Secure สำหรับ HTTPS
+                        sameSite: "strict", // ป้องกัน CSRF
+                    });
 
-                            if (rememberMe) {
-                                localStorage.setItem('username', username);
-                                localStorage.setItem('password', password);
-                                localStorage.setItem('rememberMe', 'true');
-                            } else {
-                                localStorage.removeItem('username');
-                                localStorage.removeItem('password');
-                                localStorage.removeItem('rememberMe');
-                            }
+                    try {
+                        const decodedToken = jwtDecode(data.token);
+                        const roleId = decodedToken.roleId;
+
+                        if (roleId === "1") {
+                            navigate("/dashboard");
+                        } else if (roleId === "3") {
+                            navigate("/Inventory");
                         } else {
-                            setErrorMessage('บัญชีผู้ใช้นี้ไม่สามารถเข้าสู่ระบบได้');
+                            setErrorMessage("ไม่ทราบสิทธิ์การเข้าถึง (Unknown roleId)");
                         }
-                    } else {
-                        setErrorMessage('รหัสผ่านไม่ถูกต้อง');
+                    } catch (error) {
+                        setErrorMessage("ไม่สามารถถอดรหัสโทเคนได้");
                     }
                 } else {
-                    setErrorMessage('ชื่อผู้ใช้ไม่ถูกต้อง');
+                    setErrorMessage("รูปแบบโทเคนไม่ถูกต้อง");
                 }
-            })
-            .catch(error => {
-                console.error('Error during login:', error);
-                setErrorMessage('เกิดข้อผิดพลาดในการเข้าสู่ระบบ');
-            });
+            } else {
+                setErrorMessage("เข้าสู่ระบบล้มเหลว");
+            }
+        } catch (error) {
+            setErrorMessage("เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์");
+        }
     };
 
     const checkPasswordStrength = (password) => {
@@ -110,7 +112,6 @@ const Login = () => {
                         className="form-input"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
-                        required
                     />
                 </div>
 
@@ -123,7 +124,6 @@ const Login = () => {
                             className="form-input"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            required
                         />
                         <span 
                             className="password-toggle"

@@ -6,6 +6,7 @@ using inventorybackend.src.Infrastructure.Repositories;
 using inventorybackend.src.Interface;
 using inventorybackend.src.Repositories;
 using inventorybackend;
+using auth.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,20 @@ builder.Services.AddScoped<IProductRepo, ProductRepo>();
 //Category
 builder.Services.AddScoped<ICategoryRepo, CategoryRepo>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+
+//Equipment
+builder.Services.AddScoped<IEquipmentService, EquipmentService>();
+builder.Services.AddScoped<IEquipmentRepo, EquipmentRepo>();
+
+//User
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepo, UserRepo>();
+
+//JWT
+builder.Services.AddScoped<JwtService>();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 
 builder.Services.AddDbContext<DataContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),

@@ -1,6 +1,7 @@
 ﻿using inventorybackend.src.Core.Interface;
 using inventorybackend.src.Infrastructure.Interface;
 using inventorybackend.DTOS;
+using inventorybackend.src.Entities;
 
 namespace inventorybackend.src.Core.Service
 {
@@ -34,6 +35,32 @@ namespace inventorybackend.src.Core.Service
             {
 
                 throw new ApplicationException("An error occurred while getting the Warehouse data.", ex);
+            }
+        }
+
+        public async Task<WarehouseDbo> AddWarehouseAsync(InputWarehouseDTO InputWarehouseDTO)
+        {
+            try
+            {
+                var warehouse = new Entities.WarehouseDbo
+                {
+                    WarehouseID = InputWarehouseDTO.Warehouseid,
+                    WarehouseName = InputWarehouseDTO.Warehousename,
+                    WarehouseAddress = InputWarehouseDTO.Warehouseaddress,
+
+
+                };
+                var addwarehouse = await _WarehouseRepo.AddWarehouseAsync(warehouse);
+                return new WarehouseDbo
+                {
+                    WarehouseID = addwarehouse.WarehouseID,
+                    WarehouseName = addwarehouse.WarehouseName,
+                    WarehouseAddress = addwarehouse.WarehouseAddress,
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("An error occurred while adding data.", ex);
             }
         }
     }
