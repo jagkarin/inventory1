@@ -33,9 +33,12 @@
     padding: 12px 15px; /* เพิ่ม Padding สำหรับ cell เพื่อเว้นระยะ */
 }
 
+.btn-group {
     display: flex; /* เพื่อจัดปุ่มในแนวระดับ */
     justify-content: center; /* จัดกลาง */
     margin-top: 10px; /* เพิ่มระยะห่างด้านบนเล็กน้อย */
+
+}
 
 .btn-group .btn {
     margin: 0 5px; /* เว้นระยะระหว่างปุ่ม */

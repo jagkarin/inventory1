@@ -13,5 +13,10 @@ namespace inventorybackend.src.Interface
         Task<bool> DeleteProductAsync(int ProductsID);
 
         Task<ProductDbo> AddProductwithimageAsync(ProductDbo product);
+
+
+        Task UpdateProductwithimageAsync(ProductDbo product);
+
+
     }
 }

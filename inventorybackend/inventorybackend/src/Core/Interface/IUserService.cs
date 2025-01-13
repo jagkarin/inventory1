@@ -8,6 +8,7 @@ namespace inventorybackend.src.Core.Interface
         Task<List<UserDTO>> GetALLUserAsync();
         Task<List<UserwithroleDTO>> GetALLUserwithroleAsync();
         Task<Userprofile> GetUserByuserIDAsync(int userid);
+        Task<UpdateUserProfliebyUser> UpdateUserprofileAsync(UpdateUserProfliebyUser UserProflie);
 
         Task<UserDbo> AddUserAsync(inputuser inputuser);
     }

@@ -42,8 +42,12 @@
 }
 
 .sidebar {
+  display: flex;
+  flex-direction: column; /* จัดเรียงแนวตั้ง */
+  justify-content: space-between; /* กระจายระหว่างรายการเมนูและปุ่ม Logout */
   width: 200px;
   padding: 10px;
+  height: 100vh; /* ให้ Sidebar ยืดเต็มความสูงของหน้าจอ */
 }
 
 .content {
@@ -61,4 +65,18 @@
 .nav-link:hover {
   background-color: #f0f0f0;
   border-radius: 5px;
+}
+
+.logout {
+  background-color: #af0505;
+  border-radius: 5px;
+  padding: 10px;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+  color: white;
+}
+
+.logout:hover {
+  background-color: #8c0404; /* สีเข้มขึ้นเมื่อ hover */
 }

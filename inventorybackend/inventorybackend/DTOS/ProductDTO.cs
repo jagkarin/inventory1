@@ -21,7 +21,6 @@ namespace inventorybackend.DTOS
         public int? Quantity { get; set; }
         public DateTime? Adddate { get; set; }
         public int CategoriesID { get; set; }
-        public string? Productimage { get; set; }
     }
 
     public class InputProductDTO
@@ -49,6 +48,7 @@ namespace inventorybackend.DTOS
 
     public class ProductwithimageDTO
     {
+        public int ProductsID { get; set; }
         public string? ProductsName { get; set; }
         public string? Description { get; set; }
         public int? Quantity { get; set; }
