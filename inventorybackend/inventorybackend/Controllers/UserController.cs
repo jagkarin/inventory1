@@ -4,6 +4,7 @@ using inventorybackend.src.Core.Service;
 using inventorybackend.src.Entities;
 using inventorybackend.src.Interface;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace inventorybackend.Controllers
 {
@@ -13,10 +14,12 @@ namespace inventorybackend.Controllers
         private readonly ILogger<UserController> _logger;
         private readonly IUserRepo _userRepo;
         private readonly string _imagePath = @"E:\GIt\inven\inventoryfrontend\src\asset";
+        public readonly DataContext _dbContext;
 
-        public UserController(IUserService userService, ILogger<UserController> logger , IUserRepo userRepo)
+        public UserController(IUserService userService, ILogger<UserController> logger , IUserRepo userRepo, DataContext _dataContext)
         {
             _UserService = userService;
+            _dbContext = _dataContext;
             _userRepo = userRepo;
             _logger = logger;
             if (!Directory.Exists(_imagePath))
@@ -115,30 +118,34 @@ namespace inventorybackend.Controllers
             }
         }
 
-        //[HttpPut("update-profile-image")]
-        //public async Task<IActionResult> UpdateProfileImage([FromForm] Userprofile userprofile, IFormFile userimage)
-        //{
-        //    if (userimage == null || userimage.Length == 0)
-        //        return BadRequest("Please upload a valid image.");
 
-        //    // สร้างชื่อไฟล์ใหม่ด้วย GUID เพื่อป้องกันชื่อซ้ำกัน
-        //    var fileName = $"{Guid.NewGuid()}{Path.GetExtension(userimage.FileName)}";
-        //    var fullPath = Path.Combine(_imagePath, fileName);
+        [HttpPut("UpdateUserProfilebyUser")]
+        public async Task<IActionResult> UpdateUserprofileAsync(int UserID, [FromBody] UpdateUserProfliebyUser UserProflie)
+        {
+            var response = new BaseHttpResponse<UpdateUserProfliebyUser>();
 
-        //    // บันทึกรูปภาพลง path
-        //    using (var stream = new FileStream(fullPath, FileMode.Create))
-        //    {
-        //        await userimage.CopyToAsync(stream);
-        //    }
+            try
+            {
+                UserProflie.UserID = UserID;
 
-        //    // บันทึกข้อมูลสินค้า พร้อม path ของรูปในฐานข้อมูล
-        //    productDto.Productimage = fullPath; // อัปเดต path ใน Dto
+                _logger.LogInformation("Updating User with ID: {UserID}", UserID);
 
-        //    var result = await _ProductService.AddProductAsync(productDto, fullPath);
-
-        //    return Ok(result);
-        //}
-
+                var data = await _UserService.UpdateUserprofileAsync(UserProflie);
+                response.SetSuccess(data, "User updated successfully", "200");
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                var err = new ErrorData
+                {
+                    Code = "-2",
+                    Message = ex.Message
+                };
+                _logger.LogError(ex, "Error updating User with ID: {UserID}. Inner exception: {InnerException}", UserID, ex.InnerException?.Message);
+                response.SetError(err, ex.Message, "500");
+                return BadRequest(response);
+            }
+        }
 
 
     }

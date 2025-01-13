@@ -76,30 +76,6 @@ namespace inventorybackend.Controllers
             }
         }
 
-        [HttpPost("AddProduct")]
-        public async Task<IActionResult> AddProductAsync([FromBody] InputProductDTO InputProductDTO)
-        {
-            var response = new BaseHttpResponse<ProductDbo>();
-
-            try
-            {
-                var data = await _ProductService.AddProductAsync(InputProductDTO);
-                response.SetSuccess(data, "Product added successfully", "201");
-
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                var err = new ErrorData
-                {
-                    Code = "-2",
-                    Message = ex.Message
-                };
-                _logger.LogError(ex, "Error adding Product");
-                response.SetError(err, ex.Message, "500");
-                return BadRequest(response);
-            }
-        }
 
         [HttpGet("GetAllProductCategory")]
         public async Task<IActionResult> GetAllProductCategoryAsync()
@@ -166,10 +142,42 @@ namespace inventorybackend.Controllers
         }
 
         [HttpPost("addimage")]
-        public async Task<IActionResult> AddProduct([FromForm] ProductwithimageDTO productDto, IFormFile productImage)
+        public async Task<IActionResult> AddProduct([FromForm] ProductwithimageDTO productDto, IFormFile? productImage)
+        {
+            string? fullPath = null;
+
+            // ตรวจสอบว่ามีการอัปโหลดรูปภาพหรือไม่
+            if (productImage != null && productImage.Length > 0)
+            {
+                // สร้างชื่อไฟล์ใหม่ด้วย GUID เพื่อป้องกันชื่อซ้ำกัน
+                var fileName = $"{Guid.NewGuid()}{Path.GetExtension(productImage.FileName)}";
+                fullPath = Path.Combine(_imagePath, fileName);
+
+                // บันทึกรูปภาพลง path
+                using (var stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    await productImage.CopyToAsync(stream);
+                }
+            }
+
+            // บันทึกข้อมูลสินค้า โดยส่ง path ของรูปภาพ (ถ้ามี) หรือ null ไปยัง Service
+            productDto.Productimage = fullPath;
+
+            var result = await _ProductService.AddProductAsync(productDto, fullPath);
+
+            return Ok(result);
+        }
+
+
+
+
+        [HttpPut("updateProduct/{productId}")]
+        public async Task<IActionResult> UpdateProduct(int productId, [FromForm] ProductwithimageDTO productDto, IFormFile productImage)
         {
             if (productImage == null || productImage.Length == 0)
+            {
                 return BadRequest("Please upload a valid image.");
+            }
 
             // สร้างชื่อไฟล์ใหม่ด้วย GUID เพื่อป้องกันชื่อซ้ำกัน
             var fileName = $"{Guid.NewGuid()}{Path.GetExtension(productImage.FileName)}";
@@ -181,15 +189,22 @@ namespace inventorybackend.Controllers
                 await productImage.CopyToAsync(stream);
             }
 
-            // บันทึกข้อมูลสินค้า พร้อม path ของรูปในฐานข้อมูล
-            productDto.Productimage = fullPath; // อัปเดต path ใน Dto
+            try
+            {
+                // อัปเดต ProductID เพื่อให้ตรงกับข้อมูลใน DTO
+                productDto.ProductsID = productId;
 
-            var result = await _ProductService.AddProductAsync(productDto, fullPath);
+                // เรียกใช้ Service เพื่ออัปเดตข้อมูลสินค้าและรูปภาพ
+                await _ProductService.UpdateProductwithimageAsync(productDto, fullPath);
 
-            return Ok(result);
+                return Ok(new { message = "Product updated successfully." });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating product with ID: {ProductId}", productId);
+                return StatusCode(500, new { error = ex.Message });
+            }
         }
-
-
 
     }
 }

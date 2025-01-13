@@ -12,11 +12,16 @@ namespace inventorybackend.Controllers
     {
         private readonly IEquipmentService _EquipmentService;
         private readonly ILogger<EquipmentController> _logger;
+        private readonly string _imagePath = @"E:\GIt\inven\inventoryfrontend\src\asset";
 
         public EquipmentController(IEquipmentService equipmentService, ILogger<EquipmentController> logger)
         {
             _EquipmentService = equipmentService;
             _logger = logger;
+            if (!Directory.Exists(_imagePath))
+            {
+                Directory.CreateDirectory(_imagePath); // ตรวจสอบและสร้างโฟลเดอร์หากยังไม่มี
+            }
         }
 
         [HttpGet("GetAllEquipment")]
@@ -159,5 +164,34 @@ namespace inventorybackend.Controllers
                 return BadRequest(response);
             }
         }
+
+        [HttpPost("addimage")]
+        public async Task<IActionResult> AddEquipment([FromForm] EquipmentwithimageDTO EQMDto, IFormFile? productImage)
+        {
+            string? fullPath = null;
+
+            // ตรวจสอบว่ามีการอัปโหลดรูปภาพหรือไม่
+            if (productImage != null && productImage.Length > 0)
+            {
+                // สร้างชื่อไฟล์ใหม่ด้วย GUID เพื่อป้องกันชื่อซ้ำกัน
+                var fileName = $"{Guid.NewGuid()}{Path.GetExtension(productImage.FileName)}";
+                fullPath = Path.Combine(_imagePath, fileName);
+
+                // บันทึกรูปภาพลง path
+                using (var stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    await productImage.CopyToAsync(stream);
+                }
+            }
+
+            // บันทึกข้อมูลอุปกรณ์ พร้อม path ของรูปในฐานข้อมูล (ถ้ามี)
+            EQMDto.EQMimage = fullPath;
+
+            // เรียกใช้งาน Service เพื่อเพิ่มข้อมูล
+            var result = await _EquipmentService.AddEquipmentAsync(EQMDto, fullPath);
+
+            return Ok(result);
+        }
+
     }
 }

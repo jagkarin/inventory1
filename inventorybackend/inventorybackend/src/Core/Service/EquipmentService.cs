@@ -183,5 +183,26 @@ namespace inventorybackend.src.Core.Service
                 throw new Exception("Error occurred while updating Equipment", ex);
             }
         }
+
+
+        public async Task<EquipmentwithimageDTO> AddEquipmentAsync(EquipmentwithimageDTO EQMDto, string imagePath)
+        {
+            // สร้าง Dbo จาก Dto ที่ส่งเข้ามา
+            var EQM = new eqmDbo
+            {
+                EQMName = EQMDto.EQMName,
+                EQMDescription= EQMDto.EQMDescription,
+                EQMimage = EQMDto.EQMimage,
+                Adddate= DateTime.Now,
+                Category_ID = EQMDto.Category_ID,
+                Quantity = EQMDto.Quantity,
+                
+            };
+
+            // บันทึกสินค้าในฐานข้อมูล
+            await _equipmentRepo.AddEquipmentAsync(EQM);
+
+            return EQMDto;
+        }
     }
 }
