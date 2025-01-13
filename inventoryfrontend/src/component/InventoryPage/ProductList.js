@@ -1,22 +1,23 @@
-import React, { useState } from "react";
-import "./css/ProductList.css";
+import React, { useState } from 'react';
+import './css/ProductList.css';
 
-const ProductList = ({ products, editProduct, deleteProduct }) => {
-    const [query, setQuery] = useState(""); // ค่าการค้นหาที่ผู้ใช้กรอก
+const ProductList = ({ products = [], editProduct, deleteProduct }) => {
+    const [query, setQuery] = useState('');
 
+    // ค้นหาสินค้าจาก query
     const filteredProducts = products.filter((product) =>
-        product.productsName?.toLowerCase().includes(query.toLowerCase()) // ค้นหาจากชื่อสินค้า
+        product.productsName?.toLowerCase().includes(query.toLowerCase())
     );
 
     const handleProductEdit = (product, actionType) => {
-        const confirmMessage = actionType === "edit"
-            ? `ยืนยันที่จะแก้ไขสินค้า ${product.productsName || "ไม่มีชื่อสินค้า"}`
-            : `ยืนยันที่จะลบสินค้า ${product.productsName || "ไม่มีชื่อสินค้า"}`;
-        
+        const confirmMessage =
+            actionType === 'edit'
+                ? `ยืนยันที่จะแก้ไขสินค้า ${product.productsName || 'ไม่มีชื่อสินค้า'}`
+                : `ยืนยันที่จะลบสินค้า ${product.productsName || 'ไม่มีชื่อสินค้า'}`;
         if (window.confirm(confirmMessage)) {
-            if (actionType === "edit") {
+            if (actionType === 'edit') {
                 editProduct(product);
-            } else if (actionType === "delete") {
+            } else if (actionType === 'delete') {
                 deleteProduct(product.productsID);
             }
         }
@@ -28,12 +29,12 @@ const ProductList = ({ products, editProduct, deleteProduct }) => {
 
             <div className="searchh-container">
                 <div className="searchh-wrapper">
-                    <input 
-                        type="text" 
-                        className="searchh-input" 
+                    <input
+                        type="text"
+                        className="searchh-input"
                         placeholder="ค้นหาสินค้าของคุณ..."
-                        value={query} // ให้ค่าของ input เป็นค่าของ query
-                        onChange={(e) => setQuery(e.target.value)} // อัปเดตค่า query ทุกครั้งที่มีการพิมพ์
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
                     />
                 </div>
             </div>
@@ -60,21 +61,25 @@ const ProductList = ({ products, editProduct, deleteProduct }) => {
                                         height="100"
                                     />
                                 ) : (
-                                    <span>No Image</span>
+                                    <span>ไม่มีรูปภาพ</span>
                                 )}
                             </div>
                             <div className="table-column">{product.productsName}</div>
                             <div className="table-column">{product.CategoriesName}</div>
                             <div className="table-column">{product.quantity}</div>
-                            
                             <div className="table-column">
-                                <button 
+                                <button
                                     className="btnpro btnpro-edit"
-                                    onClick={() => handleProductEdit(product, "edit")}>แก้ไข
+                                    onClick={() => handleProductEdit(product, 'edit')}
+                                >
+                                    แก้ไข
                                 </button>
                                 <button
                                     className="btnpro btnpro-danger"
-                                    onClick={() => handleProductEdit(product, "delete")}>ลบ</button>
+                                    onClick={() => handleProductEdit(product, 'delete')}
+                                >
+                                    ลบ
+                                </button>
                             </div>
                         </div>
                     ))

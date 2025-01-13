@@ -54,10 +54,10 @@ namespace inventorybackend.src.Repositories
                 existingProduct.ProductsName = Product.ProductsName;
                 existingProduct.Quantity = Product.Quantity;
                 existingProduct.Description = Product.Description;
-                existingProduct.ProductsID = Product.ProductsID;
+                existingProduct.ProductsID = Product.ProductsID; 
                 existingProduct.Adddate = DateTime.Now;
                 existingProduct.CategoriesID = Product.CategoriesID;
-                existingProduct.Productimage = Product.Productimage;
+               
 
                 _dbContext.Product.Update(existingProduct);
 
@@ -170,5 +170,31 @@ namespace inventorybackend.src.Repositories
             await _dbContext.SaveChangesAsync();
             return product;
         }
+
+
+        public async Task UpdateProductwithimageAsync(ProductDbo product)
+        {
+            var existingProduct = await _dbContext.Product.FirstOrDefaultAsync(p => p.ProductsID == product.ProductsID);
+
+            if (existingProduct != null)
+            {
+                // อัปเดตเฉพาะฟิลด์ที่ต้องการ
+                existingProduct.ProductsName = product.ProductsName;
+                existingProduct.Description = product.Description;
+                existingProduct.Quantity = product.Quantity;
+                existingProduct.CategoriesID = product.CategoriesID;
+                existingProduct.Productimage = product.Productimage;
+
+                _dbContext.Product.Update(existingProduct);
+                await _dbContext.SaveChangesAsync();
+            }
+            else
+            {
+                throw new Exception($"Product with ID {product.ProductsID} not found.");
+            }
+        }
+
+
+
     }
 }

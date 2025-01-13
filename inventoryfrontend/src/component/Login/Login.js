@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie'; // ใช้ js-cookie
+import { jwtDecode } from 'jwt-decode'; // แก้ไขการ import ให้ถูกต้อง
 import './Login.css';
-import { jwtDecode } from "jwt-decode";
+
 
 const Login = () => {
     const [username, setUsername] = useState("");
@@ -14,22 +15,6 @@ const Login = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        
-        // Allow login without username and password
-        if (username === '' && password === '') {
-            navigate('/profile', { state: { username: 'Guest', position: 'Guest' } });
-            return;
-        }
-
-        fetch(API_URL)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(users => {
-                const foundUser = users.find((user) => user.Username === username && user.Password === password);
         try {
             const response = await fetch("https://localhost:7294/api/login", {
                 method: "POST",
@@ -44,15 +29,16 @@ const Login = () => {
                 if (data.token && data.token.split('.').length === 3) {
                     // ใช้ js-cookie แทน localStorage
                     Cookies.set("token", data.token, {
-                        expires: rememberMe ? 1 : 1, // ตั้งค่าอายุ Cookie 1 วัน หรือ 7 วันถ้าเลือก "จำรหัสผ่าน"
-                        secure: true, // เปิดใช้งาน Secure สำหรับ HTTPS
-                        sameSite: "strict", // ป้องกัน CSRF
+                        expires: rememberMe ? 1 : 1, // 7 วันถ้าเลือก "จำรหัสผ่าน", 1 วันถ้าไม่เลือก
+                        secure: true,
+                        sameSite: "strict",
                     });
 
                     try {
                         const decodedToken = jwtDecode(data.token);
                         const roleId = decodedToken.roleId;
 
+                        // นำผู้ใช้ไปยังหน้าที่เกี่ยวข้องตาม roleId
                         if (roleId === "1") {
                             navigate("/dashboard");
                         } else if (roleId === "3") {
@@ -121,14 +107,6 @@ const Login = () => {
                 </div>
 
                 <button type="submit" className="submit-button">เข้าสู่ระบบ</button>
-                <div className="links-container">
-                    <p className="forgot-password-link">
-                        <Link to="/forgot-password">ลืมรหัสผ่าน?</Link>
-                    </p>
-                    <p className="register-link">
-                        ยังไม่มีบัญชี? <Link to="/register">สมัครบัญชี</Link>
-                    </p>
-                </div>
             </form>
         </div>
     );
