@@ -29,7 +29,7 @@ const Login = () => {
                 if (data.token && data.token.split('.').length === 3) {
                     // ใช้ js-cookie แทน localStorage
                     Cookies.set("token", data.token, {
-                        expires: rememberMe ? 1 : 1, // 7 วันถ้าเลือก "จำรหัสผ่าน", 1 วันถ้าไม่เลือก
+                        expires: rememberMe ? 1 : 1, //  "จำรหัสผ่าน", 1 
                         secure: true,
                         sameSite: "strict",
                     });

@@ -21,7 +21,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 const API_URL = 'http://localhost:2000/api';
 
 function WarehouseDashboard() {
-  const [users, setUsers] = useState([]); 
+  const [users, setUsers] = useState([]); // ตั้งค่าเริ่มต้นเป็น array ว่าง
   const [borrowedItems, setBorrowedItems] = useState([]);
   const [products, setProducts] = useState([]);
   const [repairs, setRepairs] = useState([]);
