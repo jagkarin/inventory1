@@ -48,35 +48,6 @@ namespace inventorybackend.Controllers
             }
         }
 
-        [HttpPut("UpdateProduct")]
-        public async Task<IActionResult> UpdateProductAsync(int ProductsID, [FromBody] UpdateProductDTO UpdateProductDTO)
-        {
-            var response = new BaseHttpResponse<UpdateProductDTO>();
-
-            try
-            {
-                UpdateProductDTO.ProductsID = ProductsID;
-
-                _logger.LogInformation("Updating Product with ID: {ProductsID}", ProductsID);
-
-                var data = await _ProductService.UpdateProductAsync(UpdateProductDTO);
-                response.SetSuccess(data, "Product updated successfully", "200");
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                var err = new ErrorData
-                {
-                    Code = "-2",
-                    Message = ex.Message
-                };
-                _logger.LogError(ex, "Error updating Product with ID: {ProductsID}. Inner exception: {InnerException}", ProductsID, ex.InnerException?.Message);
-                response.SetError(err, ex.Message, "500");
-                return BadRequest(response);
-            }
-        }
-
-
         [HttpGet("GetAllProductCategory")]
         public async Task<IActionResult> GetAllProductCategoryAsync()
         {
@@ -119,28 +90,6 @@ namespace inventorybackend.Controllers
             }
         }
 
-        [HttpDelete("{ProductsID}")]
-        public async Task<IActionResult> DeleteProduct(int ProductsID)
-        {
-            var product = await _ProductService.GetProductByIdAsync(ProductsID);
-            if (product == null)
-            {
-                return NotFound(new { Message = "ไม่พบข้อมูลผลิตภัณฑ์ที่ต้องการลบ" }); // สถานะ HTTP 404
-            }
-            else
-            {
-                var isDeleted = await _ProductService.DeleteProductAsync(ProductsID);
-                if (isDeleted)
-                {
-                    return Ok(new { Message = "ลบข้อมูลสำเร็จ" }); // สถานะ HTTP 200
-                }
-                else
-                {
-                    return StatusCode(500, new { Message = "เกิดข้อผิดพลาดในการลบข้อมูล" }); // สถานะ HTTP 500
-                }
-            }
-        }
-
         [HttpPost("addimage")]
         public async Task<IActionResult> AddProduct([FromForm] ProductwithimageDTO productDto, IFormFile? productImage)
         {
@@ -169,24 +118,51 @@ namespace inventorybackend.Controllers
         }
 
 
+        [HttpPut("UpdateProduct")]
+        public async Task<IActionResult> UpdateProductAsync(int ProductsID, [FromBody] UpdateProductDTO UpdateProductDTO)
+        {
+            var response = new BaseHttpResponse<UpdateProductDTO>();
+
+            try
+            {
+                UpdateProductDTO.ProductsID = ProductsID;
+
+                _logger.LogInformation("Updating Product with ID: {ProductsID}", ProductsID);
+
+                var data = await _ProductService.UpdateProductAsync(UpdateProductDTO);
+                response.SetSuccess(data, "Product updated successfully", "200");
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                var err = new ErrorData
+                {
+                    Code = "-2",
+                    Message = ex.Message
+                };
+                _logger.LogError(ex, "Error updating Product with ID: {ProductsID}. Inner exception: {InnerException}", ProductsID, ex.InnerException?.Message);
+                response.SetError(err, ex.Message, "500");
+                return BadRequest(response);
+            }
+        }
 
 
         [HttpPut("updateProduct/{productId}")]
-        public async Task<IActionResult> UpdateProduct(int productId, [FromForm] ProductwithimageDTO productDto, IFormFile productImage)
+        public async Task<IActionResult> UpdateProduct(int productId, [FromForm] ProductwithimageDTO productDto, IFormFile? productImage)
         {
-            if (productImage == null || productImage.Length == 0)
-            {
-                return BadRequest("Please upload a valid image.");
-            }
+            string? fullPath = null;
 
-            // สร้างชื่อไฟล์ใหม่ด้วย GUID เพื่อป้องกันชื่อซ้ำกัน
-            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(productImage.FileName)}";
-            var fullPath = Path.Combine(_imagePath, fileName);
-
-            // บันทึกรูปภาพลง path
-            using (var stream = new FileStream(fullPath, FileMode.Create))
+            if (productImage != null)
             {
-                await productImage.CopyToAsync(stream);
+                // สร้างชื่อไฟล์ใหม่ด้วย GUID เพื่อป้องกันชื่อซ้ำกัน
+                var fileName = $"{Guid.NewGuid()}{Path.GetExtension(productImage.FileName)}";
+                fullPath = Path.Combine(_imagePath, fileName);
+
+                // บันทึกรูปภาพลง path
+                using (var stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    await productImage.CopyToAsync(stream);
+                }
             }
 
             try
@@ -195,6 +171,7 @@ namespace inventorybackend.Controllers
                 productDto.ProductsID = productId;
 
                 // เรียกใช้ Service เพื่ออัปเดตข้อมูลสินค้าและรูปภาพ
+                // ตรวจสอบว่ามีไฟล์รูปภาพหรือไม่
                 await _ProductService.UpdateProductwithimageAsync(productDto, fullPath);
 
                 return Ok(new { message = "Product updated successfully." });
@@ -205,6 +182,34 @@ namespace inventorybackend.Controllers
                 return StatusCode(500, new { error = ex.Message });
             }
         }
+
+
+        [HttpDelete("{ProductsID}")]
+        public async Task<IActionResult> DeleteProduct(int ProductsID)
+        {
+            var product = await _ProductService.GetProductByIdAsync(ProductsID);
+            if (product == null)
+            {
+                return NotFound(new { Message = "ไม่พบข้อมูลผลิตภัณฑ์ที่ต้องการลบ" }); // สถานะ HTTP 404
+            }
+            else
+            {
+                var isDeleted = await _ProductService.DeleteProductAsync(ProductsID);
+                if (isDeleted)
+                {
+                    return Ok(new { Message = "ลบข้อมูลสำเร็จ" }); // สถานะ HTTP 200
+                }
+                else
+                {
+                    return StatusCode(500, new { Message = "เกิดข้อผิดพลาดในการลบข้อมูล" }); // สถานะ HTTP 500
+                }
+            }
+        }
+
+
+
+       
+
 
     }
 }
