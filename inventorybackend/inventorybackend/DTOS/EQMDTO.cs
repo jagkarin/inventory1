@@ -74,6 +74,7 @@ namespace inventorybackend.DTOS
 
     public class EquipmentwithimageDTO
     {
+        public int EQMID { get; set; }
 
         public string? EQMName { get; set; }
 

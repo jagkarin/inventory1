@@ -11,5 +11,8 @@ namespace inventorybackend.src.Interface
         Task<eqmDbo> AddEquipmentAsync(eqmDbo eqm);
         Task<bool> DeleteEQMAsync(int EQMID);
         Task<eqmDbo> UpdateEQMAsync(eqmDbo eqm);
+
+
+        Task UpdateeqmwithimageAsync(eqmDbo eqm);
     }
 }

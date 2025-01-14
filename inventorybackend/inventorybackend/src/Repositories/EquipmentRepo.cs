@@ -133,6 +133,27 @@ namespace inventorybackend.src.Repositories
 
 
 
+        public async Task UpdateeqmwithimageAsync(eqmDbo eqm)
+        {
+            var existingeqm = await _dbContext.EQM.FirstOrDefaultAsync(p => p.EQMID == eqm.EQMID);
+
+            if (existingeqm != null)
+            {
+                // อัปเดตเฉพาะฟิลด์ที่ต้องการ
+                existingeqm.EQMName = eqm.EQMName;
+                existingeqm.EQMDescription = eqm.EQMDescription;
+                existingeqm.Quantity = eqm.Quantity;
+                existingeqm.Category_ID = eqm.Category_ID;
+                existingeqm.EQMimage = eqm.EQMimage;
+
+                _dbContext.EQM.Update(existingeqm);
+                await _dbContext.SaveChangesAsync();
+            }
+            else
+            {
+                throw new Exception($"Equipment with ID {eqm.EQMID} not found.");
+            }
+        }
 
 
     }

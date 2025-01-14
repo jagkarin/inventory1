@@ -2,6 +2,7 @@
 using inventorybackend.src.Core.Interface;
 using inventorybackend.src.Entities;
 using inventorybackend.src.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace inventorybackend.src.Core.Service
 {
@@ -171,23 +172,32 @@ namespace inventorybackend.src.Core.Service
 
 
 
-        public async Task UpdateProductwithimageAsync(ProductwithimageDTO productDto, string imagePath)
+        public async Task UpdateProductwithimageAsync(ProductwithimageDTO productDto, string? imagePath)
         {
-            var product = new ProductDbo
-            {
-                ProductsName = productDto.ProductsName,
-                Description = productDto.Description,
-                Quantity = productDto.Quantity,
-                CategoriesID = productDto.CategoriesID,
-                Productimage = imagePath
-            };
+            // ดึงข้อมูลสินค้าเดิมจากฐานข้อมูล
+            var existingProduct = await _dataContext.Product.FindAsync(productDto.ProductsID);
 
-            await _productRepo.UpdateProductwithimageAsync(product);
+            if (existingProduct == null)
+                throw new Exception("Product not found.");
+
+            // อัปเดตข้อมูลสินค้า
+            existingProduct.ProductsName = productDto.ProductsName;
+            existingProduct.Description = productDto.Description;
+            existingProduct.Adddate = productDto.Adddate;
+            existingProduct.Quantity = productDto.Quantity;
+            existingProduct.CategoriesID = productDto.CategoriesID;
+
+            // อัปเดตรูปภาพเฉพาะเมื่อมีการส่งมา
+            if (!string.IsNullOrEmpty(imagePath))
+            {
+                existingProduct.Productimage = imagePath;
+            }
+
+            await _dataContext.SaveChangesAsync();
         }
 
 
-
-
+       
     }
 }
 

@@ -89,82 +89,6 @@ namespace inventorybackend.Controllers
             }
         }
 
-        [HttpPost("AddEquipment")]
-        public async Task<IActionResult> AddEquipmentAsync([FromBody] InputEQMDTO InputEQMDTO)
-        {
-            var response = new BaseHttpResponse<eqmDbo>();
-
-            try
-            {
-                var data = await _EquipmentService.AddEquipmentAsync(InputEQMDTO);
-                response.SetSuccess(data, "Equipment added successfully", "201");
-
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                var err = new ErrorData
-                {
-                    Code = "-2",
-                    Message = ex.Message
-                };
-                _logger.LogError(ex, "Error adding Equipment");
-                response.SetError(err, ex.Message, "500");
-                return BadRequest(response);
-            }
-        }
-
-        [HttpDelete("{EQMID}")]
-        public async Task<IActionResult> DeleteEQM(int EQMID)
-        {
-            var product = await _EquipmentService.GetEquipmentByIdAsync(EQMID);
-            if (product == null)
-            {
-                return NotFound(new { Message = "ไม่พบข้อมูลผลิตภัณฑ์ที่ต้องการลบ" }); // สถานะ HTTP 404
-            }
-            else
-            {
-                var isDeleted = await _EquipmentService.DeleteEQMAsync(EQMID);
-                if (isDeleted)
-                {
-                    return Ok(new { Message = "ลบข้อมูลสำเร็จ" }); // สถานะ HTTP 200
-                }
-                else
-                {
-                    return StatusCode(500, new { Message = "เกิดข้อผิดพลาดในการลบข้อมูล" }); // สถานะ HTTP 500
-                }
-            }
-        }
-
-
-        [HttpPut("UpdateEquipment")]
-        public async Task<IActionResult> UpdateEQMAsync(int EQMID ,[FromBody] UpdateEquipmentDTO UpdateEquipment)
-        {
-            var response = new BaseHttpResponse<UpdateEquipmentDTO>();
-
-            try
-            {
-                UpdateEquipment.EQMID = EQMID;
-
-                _logger.LogInformation("Updating Equipment with ID: {EQMID}", EQMID);
-
-                var data = await _EquipmentService.UpdateEQMAsync(UpdateEquipment);
-                response.SetSuccess(data, "Product updated successfully", "200");
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                var err = new ErrorData
-                {
-                    Code = "-2",
-                    Message = ex.Message
-                };
-                _logger.LogError(ex, "Error updating Equipment with ID: {EQMID}. Inner exception: {InnerException}", EQMID, ex.InnerException?.Message);
-                response.SetError(err, ex.Message, "500");
-                return BadRequest(response);
-            }
-        }
-
         [HttpPost("addimage")]
         public async Task<IActionResult> AddEquipment([FromForm] EquipmentwithimageDTO EQMDto, IFormFile? productImage)
         {
@@ -192,6 +116,97 @@ namespace inventorybackend.Controllers
 
             return Ok(result);
         }
+
+        [HttpPut("UpdateEquipment")]
+        public async Task<IActionResult> UpdateEQMAsync(int EQMID, [FromBody] UpdateEquipmentDTO UpdateEquipment)
+        {
+            var response = new BaseHttpResponse<UpdateEquipmentDTO>();
+
+            try
+            {
+                UpdateEquipment.EQMID = EQMID;
+
+                _logger.LogInformation("Updating Equipment with ID: {EQMID}", EQMID);
+
+                var data = await _EquipmentService.UpdateEQMAsync(UpdateEquipment);
+                response.SetSuccess(data, "Product updated successfully", "200");
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                var err = new ErrorData
+                {
+                    Code = "-2",
+                    Message = ex.Message
+                };
+                _logger.LogError(ex, "Error updating Equipment with ID: {EQMID}. Inner exception: {InnerException}", EQMID, ex.InnerException?.Message);
+                response.SetError(err, ex.Message, "500");
+                return BadRequest(response);
+            }
+        }
+
+
+
+
+        [HttpPut("updateEquipment/{EQMID}")]
+        public async Task<IActionResult> UpdateEQM(int EQMID, [FromForm] EquipmentwithimageDTO EQMDto, IFormFile? EQMImage)
+        {
+            string? fullPath = null;
+
+            if (EQMImage != null)
+            {
+                // สร้างชื่อไฟล์ใหม่ด้วย GUID เพื่อป้องกันชื่อซ้ำกัน
+                var fileName = $"{Guid.NewGuid()}{Path.GetExtension(EQMImage.FileName)}";
+                fullPath = Path.Combine(_imagePath, fileName);
+
+                // บันทึกรูปภาพลง path
+                using (var stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    await EQMImage.CopyToAsync(stream);
+                }
+            }
+
+            try
+            {
+                // อัปเดต ProductID เพื่อให้ตรงกับข้อมูลใน DTO
+                EQMDto.EQMID = EQMID;
+
+                // เรียกใช้ Service เพื่ออัปเดตข้อมูลสินค้าและรูปภาพ
+                // ตรวจสอบว่ามีไฟล์รูปภาพหรือไม่
+                await _EquipmentService.UpdateEQMwithimageAsync(EQMDto, fullPath);
+
+                return Ok(new { message = "Equipment updated successfully." });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating Equipment with ID: {EQMID}", EQMID);
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
+
+
+        [HttpDelete("{EQMID}")]
+        public async Task<IActionResult> DeleteEQM(int EQMID)
+        {
+            var product = await _EquipmentService.GetEquipmentByIdAsync(EQMID);
+            if (product == null)
+            {
+                return NotFound(new { Message = "ไม่พบข้อมูลผลิตภัณฑ์ที่ต้องการลบ" }); // สถานะ HTTP 404
+            }
+            else
+            {
+                var isDeleted = await _EquipmentService.DeleteEQMAsync(EQMID);
+                if (isDeleted)
+                {
+                    return Ok(new { Message = "ลบข้อมูลสำเร็จ" }); // สถานะ HTTP 200
+                }
+                else
+                {
+                    return StatusCode(500, new { Message = "เกิดข้อผิดพลาดในการลบข้อมูล" }); // สถานะ HTTP 500
+                }
+            }
+        }
+
 
     }
 }

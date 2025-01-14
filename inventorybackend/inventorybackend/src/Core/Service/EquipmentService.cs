@@ -64,7 +64,7 @@ namespace inventorybackend.src.Core.Service
                     Adddate = eqmusedto.Adddate,
                     Quantity = eqmusedto.Quantity,
                     Category_ID = eqmusedto.Category_ID,
-                    EQMimage= eqmusedto.EQMimage,
+                    EQMimage = eqmusedto.EQMimage,
                 };
 
                 return eqmDto;
@@ -103,9 +103,9 @@ namespace inventorybackend.src.Core.Service
                 var eqm = new Entities.eqmDbo
                 {
                     EQMName = InputEQMDTO.EQMName,
-                    EQMDescription  = InputEQMDTO.EQMDescription,
+                    EQMDescription = InputEQMDTO.EQMDescription,
                     Adddate = DateTime.Now,
-                    Quantity= InputEQMDTO.Quantity,
+                    Quantity = InputEQMDTO.Quantity,
                     Category_ID = InputEQMDTO.Category_ID,
                     EQMimage = InputEQMDTO.EQMimage,
 
@@ -115,12 +115,12 @@ namespace inventorybackend.src.Core.Service
                 return new eqmDbo
                 {
                     EQMID = addeqm.EQMID,
-                    EQMName= addeqm.EQMName,
-                    EQMDescription= addeqm.EQMDescription,
-                    Adddate= DateTime.Now,
-                    Quantity= addeqm.Quantity,
-                    Category_ID= addeqm.Category_ID,
-                    EQMimage= addeqm.EQMimage,
+                    EQMName = addeqm.EQMName,
+                    EQMDescription = addeqm.EQMDescription,
+                    Adddate = DateTime.Now,
+                    Quantity = addeqm.Quantity,
+                    Category_ID = addeqm.Category_ID,
+                    EQMimage = addeqm.EQMimage,
                 };
             }
             catch (Exception ex)
@@ -150,7 +150,7 @@ namespace inventorybackend.src.Core.Service
 
                 var eqm = new Entities.eqmDbo
                 {
-                    EQMID= UpdateEquipment.EQMID,
+                    EQMID = UpdateEquipment.EQMID,
                     EQMName = UpdateEquipment.EQMName,
                     EQMDescription = UpdateEquipment.EQMDescription,
                     EQMimage = UpdateEquipment.EQMimage,
@@ -168,13 +168,13 @@ namespace inventorybackend.src.Core.Service
                 return new UpdateEquipmentDTO
                 {
                     EQMID = UpdateEquipment.EQMID,
-                    EQMimage= UpdateEquipment.EQMimage,
+                    EQMimage = UpdateEquipment.EQMimage,
                     EQMDescription = UpdateEquipment.EQMDescription,
                     EQMName = UpdateEquipment.EQMName,
-                    Category_ID= UpdateEquipment.Category_ID,
+                    Category_ID = UpdateEquipment.Category_ID,
                     Quantity = UpdateEquipment.Quantity,
                     Adddate = DateTime.Now,
-                    
+
                 };
             }
             catch (Exception ex)
@@ -191,18 +191,44 @@ namespace inventorybackend.src.Core.Service
             var EQM = new eqmDbo
             {
                 EQMName = EQMDto.EQMName,
-                EQMDescription= EQMDto.EQMDescription,
-                EQMimage = EQMDto.EQMimage,
-                Adddate= DateTime.Now,
+                EQMDescription = EQMDto.EQMDescription,
+                EQMimage = imagePath,
+                Adddate = DateTime.Now,
                 Category_ID = EQMDto.Category_ID,
                 Quantity = EQMDto.Quantity,
-                
+
             };
 
             // บันทึกสินค้าในฐานข้อมูล
             await _equipmentRepo.AddEquipmentAsync(EQM);
 
             return EQMDto;
+        }
+
+
+        public async Task UpdateEQMwithimageAsync(EquipmentwithimageDTO EQMDto, string? imagePath)
+        {
+            // ดึงข้อมูลสินค้าเดิมจากฐานข้อมูล
+            var existingEQM = await _dataContext.EQM.FindAsync(EQMDto.EQMID);
+
+            if (existingEQM == null)    
+                throw new Exception("Product not found.");
+
+            // อัปเดตข้อมูลสินค้า
+            existingEQM.EQMName = EQMDto.EQMName;
+            existingEQM.EQMDescription = EQMDto.EQMDescription;
+            existingEQM.Adddate = EQMDto.Adddate;
+            existingEQM.Quantity = EQMDto.Quantity;
+            existingEQM.Category_ID = EQMDto.Category_ID;
+
+            // อัปเดตรูปภาพเฉพาะเมื่อมีการส่งมา
+            if (!string.IsNullOrEmpty(imagePath))
+            {
+                existingEQM.EQMimage = imagePath;
+            }
+
+            await _dataContext.SaveChangesAsync();
+
         }
     }
 }
