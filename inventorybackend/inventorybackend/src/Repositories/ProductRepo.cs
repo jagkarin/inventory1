@@ -184,6 +184,7 @@ namespace inventorybackend.src.Repositories
                 existingProduct.Quantity = product.Quantity;
                 existingProduct.CategoriesID = product.CategoriesID;
                 existingProduct.Productimage = product.Productimage;
+                existingProduct.ProductsID = product.ProductsID;
 
                 _dbContext.Product.Update(existingProduct);
                 await _dbContext.SaveChangesAsync();
