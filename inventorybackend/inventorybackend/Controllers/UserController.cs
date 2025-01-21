@@ -13,7 +13,7 @@ namespace inventorybackend.Controllers
         private readonly IUserService _UserService;
         private readonly ILogger<UserController> _logger;
         private readonly IUserRepo _userRepo;
-        private readonly string _imagePath = @"E:\GIt\inven\inventoryfrontend\src\asset";
+        private readonly string _imagePath = @"E:\GIt\inven\inventoryfrontend\public\asset";
         public readonly DataContext _dbContext;
 
         public UserController(IUserService userService, ILogger<UserController> logger , IUserRepo userRepo, DataContext _dataContext)

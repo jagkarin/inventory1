@@ -11,5 +11,6 @@ namespace inventorybackend.src.Core.Interface
         Task<UpdateUserProfliebyUser> UpdateUserprofileAsync(UpdateUserProfliebyUser UserProflie);
 
         Task<UserDbo> AddUserAsync(inputuser inputuser);
+
     }
 }

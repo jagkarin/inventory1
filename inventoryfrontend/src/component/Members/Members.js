@@ -79,11 +79,14 @@ const Member = () => {
               <strong>{user.username}</strong><br />
               ตำแหน่ง (roleID): {user.roleID}<br />
               อีเมล: {user.email}<br />
-              {/* สถานะการทำงาน */}
-              <span>{user.isActive ? 'เปิดใช้งาน' : 'ปิดใช้งาน'}</span>
-              <Button variant="link" onClick={() => toggleStatus(user.userID)}>
-                {user.isActive ? 'เปลี่ยนเป็นปิดใช้งาน' : 'เปลี่ยนเป็นเปิดใช้งาน'}
-              </Button><br />
+              {/* ปุ่มเลื่อนเปิด/ปิดการใช้งาน */}
+              <Form.Check
+                type="switch"
+                id={`custom-switch-${user.userID}`}
+                label={user.isActive ? 'เปิดใช้งาน' : 'ปิดใช้งาน'}
+                checked={user.isActive}
+                onChange={() => toggleStatus(user.userID)}
+              /><br />
               {/* ปุ่มแก้ไขข้อมูล */}
               <Button variant="warning" onClick={() => editUser(user.userID)}>
                 แก้ไข

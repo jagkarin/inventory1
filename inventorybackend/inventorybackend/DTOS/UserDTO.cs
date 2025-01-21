@@ -4,7 +4,7 @@ namespace inventorybackend.DTOS
 {
     public class UserDTO
     {
-        
+
         public int UserID { get; set; }
 
         public string? Username { get; set; }
@@ -14,21 +14,21 @@ namespace inventorybackend.DTOS
         public int? RoleID { get; set; }
 
         public string? Email { get; set; }
-       
+
         public string? Phonenumber { get; set; }
 
         public string? Firstname { get; set; }
-        
+
         public string? Lastname { get; set; }
-        
+
         public DateTime? Dateofbirth { get; set; }
-        
+
         public DateTime? CreatedAt { get; set; }
-        
+
         public DateTime? UpdatedAt { get; set; }
 
         public string? Profilepicture { get; set; }
-        
+
         public string? Address { get; set; }
     }
 
@@ -107,6 +107,9 @@ namespace inventorybackend.DTOS
         public string? Password { set; get; }
         public int RoleId { get; set; }
         public DateTime? CreatedAt { get; set; }
+        public string? Firstname { get; set; }
+        public string? Lastname { get; set; }
+
     }
 
     public class UpdateUserProfliebyUser
@@ -119,7 +122,7 @@ namespace inventorybackend.DTOS
 
         public string? Email { get; set; }
 
-        public string? Phonenumber { get; set; } 
+        public string? Phonenumber { get; set; }
 
         public DateTime? Dateofbirth { get; set; }
 
@@ -127,4 +130,5 @@ namespace inventorybackend.DTOS
 
         public string? Address { get; set; }
     }
+
 }

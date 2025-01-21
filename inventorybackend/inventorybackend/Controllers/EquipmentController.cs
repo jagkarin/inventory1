@@ -12,7 +12,7 @@ namespace inventorybackend.Controllers
     {
         private readonly IEquipmentService _EquipmentService;
         private readonly ILogger<EquipmentController> _logger;
-        private readonly string _imagePath = @"E:\GIt\inven\inventoryfrontend\src\asset";
+        private readonly string _imagePath = @"E:\GIt\inven\inventoryfrontend\public\asset";
 
         public EquipmentController(IEquipmentService equipmentService, ILogger<EquipmentController> logger)
         {

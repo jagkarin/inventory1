@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 
+// ฟังก์ชันการดึง path ของรูปภาพจาก public
+const getImagePath = (filename) => `/asset/${filename}`;
+
 const UpdateProductForm = () => {
   const [productData, setProductData] = useState({
+    productsID: "", // เพิ่ม productsID ให้เริ่มต้น
     productsName: "",
     description: "",
     quantity: "",
@@ -11,11 +15,10 @@ const UpdateProductForm = () => {
     { id: 1, name: "Electronic" },
     { id: 2, name: "Computer" },
     { id: 3, name: "OPD" },
-  ]);
+  ]); // รายการ Category ที่กำหนดเอง
   const [selectedFile, setSelectedFile] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [apiData, setApiData] = useState([]);
-  const [productId, setProductId] = useState(null); // เพิ่มการเก็บ productId
 
   // ดึงข้อมูลสินค้าจาก API
   useEffect(() => {
@@ -25,7 +28,7 @@ const UpdateProductForm = () => {
       .then((response) => response.json())
       .then((data) => {
         if (data.responseCode === "200" && Array.isArray(data.data)) {
-          setApiData(data.data); 
+          setApiData(data.data); // ใช้ข้อมูลใน data ของ API
         } else {
           console.error("Invalid API data:", data);
         }
@@ -50,12 +53,12 @@ const UpdateProductForm = () => {
   const handleEdit = (product) => {
     setIsEditing(true);
     setProductData({
+      productsID: product.productsID,  // เพิ่มการตั้งค่า productsID
       productsName: product.productsName,
       description: product.description,
       quantity: product.quantity,
       categoriesID: product.categoriesID, // ใช้ categoriesID จาก API
     });
-    setProductId(product.productsID); // เก็บ productId ที่เลือกไว้ใน state
   };
 
   // ส่งข้อมูลไปยัง API
@@ -68,32 +71,31 @@ const UpdateProductForm = () => {
     formData.append("quantity", productData.quantity);
     formData.append("categoriesID", productData.categoriesID);
     formData.append("adddate", new Date().toISOString());
-    formData.append('productImage', '');
-
     if (selectedFile) {
       formData.append("productImage", selectedFile);
     }
 
-    if (productId !== null) {
-      // ใช้ productId ใน URL เพื่ออัปเดตสินค้าที่เลือก
-      fetch(`https://localhost:7294/api/Product/updateProduct/${productId}`, {
-        method: "PUT",
-        body: formData,
-      })
-        .then((response) => {
-          if (response.ok) {
-            alert("Product updated successfully!");
-          } else {
-            alert("Failed to update product.");
-          }
-        })
-        .catch((error) => {
-          console.error("Error updating product:", error);
-          alert("Error updating product. Please try again.");
-        });
-    } else {
-      alert("No product selected to update.");
+    if (!productData.productsID) {
+      console.error("No product ID found, cannot update.");
+      return;
     }
+
+    // ตรวจสอบว่า productsID ถูกส่งใน URL
+    fetch(`https://localhost:7294/api/Product/updateProduct/${productData.productsID}`, {
+      method: "PUT",
+      body: formData,
+    })
+      .then((response) => {
+        if (response.ok) {
+          alert("Product updated successfully!");
+        } else {
+          alert("Failed to update product.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error updating product:", error);
+        alert("Error updating product. Please try again.");
+      });
   };
 
   return (
@@ -171,6 +173,7 @@ const UpdateProductForm = () => {
             <th>Description</th>
             <th>Quantity</th>
             <th>Category</th>
+            <th>Product Image</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -181,6 +184,19 @@ const UpdateProductForm = () => {
               <td>{product.description}</td>
               <td>{product.quantity}</td>
               <td>{product.categoriesName}</td>
+              <td>
+                {product.productimage ? (
+                  <div className="product-image-container">
+                    <img
+                      className="product-image"
+                      src={getImagePath(product.productimage.split('/').pop())} // ใช้ split('/') แทน
+                      alt="Product"
+                    />
+                  </div>
+                ) : (
+                  "No image"
+                )}
+              </td>
               <td>
                 <button
                   className="btn btn-secondary"

@@ -29,6 +29,9 @@ namespace auth.Controllers
                 Username = dto.Username,
                 CreatedAt = dto.CreatedAt,
                 RoleID= dto.RoleId,
+                Firstname = dto.Firstname,
+                Lastname = dto.Lastname,
+
 
                 Password = BCrypt.Net.BCrypt.HashPassword(dto.Password)
             };
