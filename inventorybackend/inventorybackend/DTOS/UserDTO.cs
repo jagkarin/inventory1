@@ -30,7 +30,16 @@ namespace inventorybackend.DTOS
         public string? Profilepicture { get; set; }
 
         public string? Address { get; set; }
+
+        public bool IsActive { get; set; } = true;
+
     }
+
+    public class UpdateStatusDto
+    {
+        public bool IsActive { get; set; }
+    }
+
 
 
     public class UserwithroleDTO
@@ -63,6 +72,8 @@ namespace inventorybackend.DTOS
         public string? Address { get; set; }
         //join rold
         public string? RoleName { get; set; }
+
+        public bool IsActive { get; set; } = true;
     }
 
     public class Userprofile

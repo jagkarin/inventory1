@@ -36,6 +36,9 @@ builder.Services.AddScoped<IEquipmentRepo, EquipmentRepo>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepo, UserRepo>();
 
+builder.Services.AddScoped<IWithdrawRepo, WithdrawRepo>();
+builder.Services.AddScoped<IWithdrawService, WithdrawService>();
+
 //JWT
 builder.Services.AddScoped<JwtService>();
 builder.Services.AddEndpointsApiExplorer();

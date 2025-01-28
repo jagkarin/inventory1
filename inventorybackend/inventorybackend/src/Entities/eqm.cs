@@ -12,8 +12,8 @@ namespace inventorybackend.src.Entities
         [Column("EQM_ID", TypeName = "int")]
         public int EQMID { get; set; }
 
-        [Column("EQM_Name", TypeName = "varchar(45)")]
-        public string? EQMName { get; set; }
+        [Column("EQM_Name", TypeName = "varchar(100)")]
+        public string? EQM_Name { get; set; }
 
         [Column("Description", TypeName = "text")]
         public string? EQMDescription { get; set; }

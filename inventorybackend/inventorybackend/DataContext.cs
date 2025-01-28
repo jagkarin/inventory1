@@ -9,6 +9,8 @@ namespace inventorybackend
         {
         }
 
+        public DbSet<WithdrawDbo> Withdraw { get; set; }
+
         public DbSet<eqmDbo> EQM { get; set; }
         public DbSet<ProductDbo> Product { get; set; }
         public DbSet<CategoryDbo> Category { get; set; }
@@ -17,8 +19,10 @@ namespace inventorybackend
         public DbSet<UserDbo> User { get; set; }
         public DbSet<WarehouseDbo> Warehouse { get; set; }
         public DbSet<RoldDbo> Role { get; set; }
+       
+
 
         // ใช้ OnModelCreating เพื่อกำหนดคอนฟิกต่าง ๆ
-        
+
     }
 }

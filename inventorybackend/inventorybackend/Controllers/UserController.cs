@@ -148,5 +148,35 @@ namespace inventorybackend.Controllers
         }
 
 
+        [HttpPatch("{userId}/status")]
+        public IActionResult UpdateUserStatus(int userId, [FromBody] UpdateStatusDto request)
+        {
+            if (request == null || !ModelState.IsValid)
+            {
+                return BadRequest("Invalid request data.");
+            }
+
+            var user = _dbContext.User.FirstOrDefault(u => u.UserID == userId);
+            if (user == null)
+            {
+                return NotFound($"User with ID {userId} not found.");
+            }
+
+            user.IsActive = request.IsActive;
+
+            try
+            {
+                _dbContext.SaveChanges();
+                return Ok(new { message = "User status updated successfully." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+
+
+
     }
 }

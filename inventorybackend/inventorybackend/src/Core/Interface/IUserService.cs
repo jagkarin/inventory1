@@ -12,5 +12,7 @@ namespace inventorybackend.src.Core.Interface
 
         Task<UserDbo> AddUserAsync(inputuser inputuser);
 
+        Task<bool> UpdateUserStatusAsync(int userId, bool isActive);
+
     }
 }
