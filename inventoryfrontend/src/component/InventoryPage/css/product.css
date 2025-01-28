@@ -15,12 +15,18 @@ h1 {
 }
 
 /* Form Container */
-.container {
+.container_product {
     max-width: 900px;
     margin: 20px auto;
     padding: 20px;
+<<<<<<< HEAD
   
     
+=======
+    background-color: #ce0000;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+>>>>>>> refs/remotes/origin/ploy
 }
 
 .form-title {
@@ -66,14 +72,7 @@ textarea {
     margin-top: 10px; /* เพิ่มระยะห่างจากด้านบน */
 }
 
-
-
-
-
-
-
 /* Product List */
-
 .product-item {
     display: flex;
     flex-direction: column;
@@ -92,8 +91,6 @@ textarea {
 .product-description {
     height: 40px; /* จำกัดความสูงให้เท่ากัน */
 }
-
-
 
 /* การตกแต่งรายการสินค้า */
 .product-card {
@@ -161,7 +158,6 @@ textarea {
     color: #666;
 }
 
-
 .product-card .btn {
     font-size: 14px;
     padding: 5px 10px;
@@ -173,11 +169,13 @@ textarea {
     font-size: 16px;
     color: #888;
 }
+
 .product-card div {
     display: flex;           /* ใช้ flexbox ในการจัดการปุ่ม */
     gap: 10px;               /* เพิ่มช่องว่างระหว่างปุ่ม */
 }
 
+<<<<<<< HEAD
 
 .swal2-popup {
     font-family: 'Roboto', sans-serif; /* ใช้ฟอนต์ที่ดูมืออาชีพ */
@@ -259,3 +257,20 @@ textarea {
     text-align: center;
   }
   
+=======
+/* ปรับขนาดรูปภาพ */
+.product-image-container {
+  width: 80px; /* ลดความกว้างของ container */
+  height: 80px; /* ลดความสูงของ container */
+  overflow: hidden; /* ป้องกันไม่ให้ภาพล้นออกจาก container */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.product-image {
+  width: 100%; /* กำหนดให้ภาพมีความกว้าง 100% ของ container */
+  height: 100%; /* กำหนดให้ภาพมีความสูง 100% ของ container */
+  object-fit: cover; /* ปรับให้ภาพเต็มพื้นที่ container โดยไม่เสียอัตราส่วน */
+}
+>>>>>>> refs/remotes/origin/ploy

@@ -212,7 +212,7 @@ namespace inventorybackend.src.Core.Service
             var existingEQM = await _dataContext.EQM.FindAsync(EQMDto.EQMID);
 
             if (existingEQM == null)    
-                throw new Exception("Product not found.");
+                throw new Exception(" Equipment not found.");
 
             // อัปเดตข้อมูลสินค้า
             existingEQM.EQM_Name = EQMDto.EQM_Name;
@@ -226,6 +226,7 @@ namespace inventorybackend.src.Core.Service
             {
                 existingEQM.EQMimage = imagePath;
             }
+           
 
             await _dataContext.SaveChangesAsync();
 

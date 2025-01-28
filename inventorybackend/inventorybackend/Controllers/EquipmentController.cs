@@ -12,7 +12,11 @@ namespace inventorybackend.Controllers
     {
         private readonly IEquipmentService _EquipmentService;
         private readonly ILogger<EquipmentController> _logger;
+<<<<<<< HEAD
         private readonly string _imagePath = @"C:\Kewalin\inventory1\inventoryfrontend\public\asset";
+=======
+        private readonly string _imagePath = @"E:\GIt\inven\inventoryfrontend\public\asset";
+>>>>>>> refs/remotes/origin/ploy
 
         public EquipmentController(IEquipmentService equipmentService, ILogger<EquipmentController> logger)
         {

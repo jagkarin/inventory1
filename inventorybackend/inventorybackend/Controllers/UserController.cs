@@ -13,7 +13,11 @@ namespace inventorybackend.Controllers
         private readonly IUserService _UserService;
         private readonly ILogger<UserController> _logger;
         private readonly IUserRepo _userRepo;
+<<<<<<< HEAD
         private readonly string _imagePath = @"C:\Kewalin\inventory1\inventoryfrontend\public\asset";
+=======
+        private readonly string _imagePath = @"E:\GIt\inven\inventoryfrontend\public\asset";
+>>>>>>> refs/remotes/origin/ploy
         public readonly DataContext _dbContext;
 
         public UserController(IUserService userService, ILogger<UserController> logger , IUserRepo userRepo, DataContext _dataContext)
@@ -146,6 +150,36 @@ namespace inventorybackend.Controllers
                 return BadRequest(response);
             }
         }
+
+
+        [HttpPatch("{userId}/status")]
+        public IActionResult UpdateUserStatus(int userId, [FromBody] UpdateStatusDto request)
+        {
+            if (request == null || !ModelState.IsValid)
+            {
+                return BadRequest("Invalid request data.");
+            }
+
+            var user = _dbContext.User.FirstOrDefault(u => u.UserID == userId);
+            if (user == null)
+            {
+                return NotFound($"User with ID {userId} not found.");
+            }
+
+            user.IsActive = request.IsActive;
+
+            try
+            {
+                _dbContext.SaveChanges();
+                return Ok(new { message = "User status updated successfully." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+
 
 
     }
