@@ -13,7 +13,7 @@ namespace inventorybackend.src.Entities
         public int EQMID { get; set; }
 
         [Column("EQM_Name", TypeName = "varchar(45)")]
-        public string? EQMName { get; set; }
+        public string? EQM_Name { get; set; }
 
         [Column("Description", TypeName = "text")]
         public string? EQMDescription { get; set; }

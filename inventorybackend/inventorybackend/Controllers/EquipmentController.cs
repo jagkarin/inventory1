@@ -12,7 +12,7 @@ namespace inventorybackend.Controllers
     {
         private readonly IEquipmentService _EquipmentService;
         private readonly ILogger<EquipmentController> _logger;
-        private readonly string _imagePath = @"E:\GIt\inven\inventoryfrontend\src\asset";
+        private readonly string _imagePath = @"C:\Kewalin\inventory1\inventoryfrontend\public\asset";
 
         public EquipmentController(IEquipmentService equipmentService, ILogger<EquipmentController> logger)
         {
@@ -90,21 +90,21 @@ namespace inventorybackend.Controllers
         }
 
         [HttpPost("addimage")]
-        public async Task<IActionResult> AddEquipment([FromForm] EquipmentwithimageDTO EQMDto, IFormFile? productImage)
+        public async Task<IActionResult> AddEquipment([FromForm] EquipmentwithimageDTO EQMDto, IFormFile? EQMImage)
         {
             string? fullPath = null;
 
             // ตรวจสอบว่ามีการอัปโหลดรูปภาพหรือไม่
-            if (productImage != null && productImage.Length > 0)
+            if (EQMImage != null && EQMImage.Length > 0)
             {
                 // สร้างชื่อไฟล์ใหม่ด้วย GUID เพื่อป้องกันชื่อซ้ำกัน
-                var fileName = $"{Guid.NewGuid()}{Path.GetExtension(productImage.FileName)}";
+                var fileName = $"{Guid.NewGuid()}{Path.GetExtension(EQMImage.FileName)}";
                 fullPath = Path.Combine(_imagePath, fileName);
 
                 // บันทึกรูปภาพลง path
                 using (var stream = new FileStream(fullPath, FileMode.Create))
                 {
-                    await productImage.CopyToAsync(stream);
+                    await EQMImage.CopyToAsync(stream);
                 }
             }
 

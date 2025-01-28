@@ -27,7 +27,7 @@ namespace inventorybackend.src.Core.Service
                 var EqmuseReturn = EqmtuseData.Select(s => new EQMDTO
                 {
                     EQMID = s.EQMID,
-                    EQMName = s.EQMName,
+                    EQM_Name = s.EQM_Name,
                     EQMDescription = s.EQMDescription,
                     Adddate = s.Adddate,
                     Category_ID = s.Category_ID,
@@ -59,7 +59,7 @@ namespace inventorybackend.src.Core.Service
                 var eqmDto = new EQMDTO
                 {
                     EQMID = eqmusedto.EQMID,
-                    EQMName = eqmusedto.EQMName,
+                    EQM_Name = eqmusedto.EQM_Name,
                     EQMDescription = eqmusedto.EQMDescription,
                     Adddate = eqmusedto.Adddate,
                     Quantity = eqmusedto.Quantity,
@@ -102,7 +102,7 @@ namespace inventorybackend.src.Core.Service
             {
                 var eqm = new Entities.eqmDbo
                 {
-                    EQMName = InputEQMDTO.EQMName,
+                    EQM_Name = InputEQMDTO.EQM_Name,
                     EQMDescription = InputEQMDTO.EQMDescription,
                     Adddate = DateTime.Now,
                     Quantity = InputEQMDTO.Quantity,
@@ -115,7 +115,7 @@ namespace inventorybackend.src.Core.Service
                 return new eqmDbo
                 {
                     EQMID = addeqm.EQMID,
-                    EQMName = addeqm.EQMName,
+                    EQM_Name = addeqm.EQM_Name,
                     EQMDescription = addeqm.EQMDescription,
                     Adddate = DateTime.Now,
                     Quantity = addeqm.Quantity,
@@ -151,7 +151,7 @@ namespace inventorybackend.src.Core.Service
                 var eqm = new Entities.eqmDbo
                 {
                     EQMID = UpdateEquipment.EQMID,
-                    EQMName = UpdateEquipment.EQMName,
+                    EQM_Name = UpdateEquipment.EQM_Name,
                     EQMDescription = UpdateEquipment.EQMDescription,
                     EQMimage = UpdateEquipment.EQMimage,
                     Category_ID = UpdateEquipment.Category_ID,
@@ -170,7 +170,7 @@ namespace inventorybackend.src.Core.Service
                     EQMID = UpdateEquipment.EQMID,
                     EQMimage = UpdateEquipment.EQMimage,
                     EQMDescription = UpdateEquipment.EQMDescription,
-                    EQMName = UpdateEquipment.EQMName,
+                    EQM_Name = UpdateEquipment.EQM_Name,
                     Category_ID = UpdateEquipment.Category_ID,
                     Quantity = UpdateEquipment.Quantity,
                     Adddate = DateTime.Now,
@@ -185,12 +185,12 @@ namespace inventorybackend.src.Core.Service
         }
 
 
-        public async Task<EquipmentwithimageDTO> AddEquipmentAsync(EquipmentwithimageDTO EQMDto, string imagePath)
+        public async Task<EquipmentwithimageDTO> AddEquipmentAsync(EquipmentwithimageDTO EQMDto, string? imagePath)
         {
             // สร้าง Dbo จาก Dto ที่ส่งเข้ามา
             var EQM = new eqmDbo
             {
-                EQMName = EQMDto.EQMName,
+                EQM_Name = EQMDto.EQM_Name,
                 EQMDescription = EQMDto.EQMDescription,
                 EQMimage = imagePath,
                 Adddate = DateTime.Now,
@@ -215,7 +215,7 @@ namespace inventorybackend.src.Core.Service
                 throw new Exception("Product not found.");
 
             // อัปเดตข้อมูลสินค้า
-            existingEQM.EQMName = EQMDto.EQMName;
+            existingEQM.EQM_Name = EQMDto.EQM_Name;
             existingEQM.EQMDescription = EQMDto.EQMDescription;
             existingEQM.Adddate = EQMDto.Adddate;
             existingEQM.Quantity = EQMDto.Quantity;
