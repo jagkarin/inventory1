@@ -7,7 +7,7 @@ namespace inventorybackend.DTOS
     {
         public int EQMID { get; set; }
 
-        public string? EQMName { get; set; }
+        public string? EQM_Name { get; set; }
 
         public string? EQMDescription { get; set; }
 
@@ -23,7 +23,7 @@ namespace inventorybackend.DTOS
     public class InputEQMDTO
     {
 
-        public string? EQMName { get; set; }
+        public string? EQM_Name { get; set; }
 
         public string? EQMDescription { get; set; }
 
@@ -40,7 +40,7 @@ namespace inventorybackend.DTOS
     {
         public int EQMID { get; set; }
 
-        public string? EQMName { get; set; }
+        public string? EQM_Name { get; set; }
 
         public string? EQMDescription { get; set; }
 
@@ -59,7 +59,7 @@ namespace inventorybackend.DTOS
     {
         public int EQMID { get; set; }
 
-        public string? EQMName { get; set; }
+        public string? EQM_Name { get; set; }
 
         public string? EQMDescription { get; set; }
 
@@ -76,7 +76,7 @@ namespace inventorybackend.DTOS
     {
         public int EQMID { get; set; }
 
-        public string? EQMName { get; set; }
+        public string? EQM_Name { get; set; }
 
         public string? EQMDescription { get; set; }
 

@@ -42,7 +42,7 @@ namespace inventorybackend.src.Repositories
                                              on e.Category_ID equals c.Category_ID
                                              select new EqmwithCategory
                                              {
-                                                 EQMName = e.EQMName,
+                                                 EQM_Name = e.EQM_Name,
                                                  EQMID = e.EQMID,
                                                  EQMDescription = e.EQMDescription,
                                                  Adddate = e.Adddate,
@@ -106,7 +106,7 @@ namespace inventorybackend.src.Repositories
                 _logger.LogInformation("Found Equipment with ID : {EQMID}.", eqm.EQMID);
                 existingeqm.EQMID = eqm.EQMID;
                 existingeqm.EQMimage = eqm.EQMimage;
-                existingeqm.EQMName = eqm.EQMName;
+                existingeqm.EQM_Name = eqm.EQM_Name;
                 existingeqm.EQMDescription = eqm.EQMDescription;
                 existingeqm.Quantity = eqm.Quantity;
                 existingeqm.Category_ID = eqm.Category_ID;
@@ -119,7 +119,7 @@ namespace inventorybackend.src.Repositories
                 await _dbContext.SaveChangesAsync();
 
                 await transaction.CommitAsync();
-                _logger.LogInformation("Successfully updated Equipment with ID: {EQMID}", eqm.EQMName);
+                _logger.LogInformation("Successfully updated Equipment with ID: {EQMID}", eqm.EQM_Name);
 
                 return existingeqm;
             }
@@ -140,7 +140,7 @@ namespace inventorybackend.src.Repositories
             if (existingeqm != null)
             {
                 // อัปเดตเฉพาะฟิลด์ที่ต้องการ
-                existingeqm.EQMName = eqm.EQMName;
+                existingeqm.EQM_Name = eqm.EQM_Name;
                 existingeqm.EQMDescription = eqm.EQMDescription;
                 existingeqm.Quantity = eqm.Quantity;
                 existingeqm.Category_ID = eqm.Category_ID;

@@ -48,5 +48,8 @@ namespace inventorybackend.src.Entities
         [Column("Address", TypeName = "varchar(255)")]
         public string? Address { get; set; }
 
+        [Column("IsActive", TypeName = "int")]
+        public bool IsActive { get; set; } = true;
+
     }
 }

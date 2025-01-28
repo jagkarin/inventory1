@@ -108,6 +108,8 @@ namespace inventorybackend.src.Core.Service
             }
         }
 
+
+
         public async Task<UpdateUserProfliebyUser> UpdateUserprofileAsync(UpdateUserProfliebyUser UserProflie)
         {
             try
@@ -153,6 +155,22 @@ namespace inventorybackend.src.Core.Service
                 throw new Exception("Error occurred while updating User", ex);
             }
         }
+
+        public async Task<bool> UpdateUserStatusAsync(int userId, bool isActive)
+        {
+            var user = await _dataContext.User.FindAsync(userId);
+            if (user == null)
+            {
+                return false;
+            }
+
+            user.IsActive = isActive;
+            user.UpdatedAt = DateTime.UtcNow; // อัปเดตเวลาล่าสุด
+            await _dataContext.SaveChangesAsync();
+
+            return true;
+        }
+
 
     }
 }

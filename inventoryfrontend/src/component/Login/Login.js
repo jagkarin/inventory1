@@ -40,9 +40,9 @@ const Login = () => {
 
                         // นำผู้ใช้ไปยังหน้าที่เกี่ยวข้องตาม roleId
                         if (roleId === "1") {
-                            navigate("/dashboard");
+                            navigate("/DashBoard1");
                         } else if (roleId === "3") {
-                            navigate("/Inventory");
+                            navigate("/Members");
                         } else {
                             setErrorMessage("ไม่ทราบสิทธิ์การเข้าถึง (Unknown roleId)");
                         }

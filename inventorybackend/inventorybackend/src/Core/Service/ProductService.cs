@@ -181,6 +181,7 @@ namespace inventorybackend.src.Core.Service
                 throw new Exception("Product not found.");
 
             // อัปเดตข้อมูลสินค้า
+            existingProduct.ProductsID = productDto.ProductsID;
             existingProduct.ProductsName = productDto.ProductsName;
             existingProduct.Description = productDto.Description;
             existingProduct.Adddate = productDto.Adddate;
