@@ -12,12 +12,7 @@ namespace inventorybackend.Controllers
     {
         private readonly IProductService _ProductService;
         private readonly ILogger<ProductController> _logger;
-        //change to path yourself
-<<<<<<< HEAD
         private readonly string _imagePath = @"C:\Kewalin\inventory1\inventoryfrontend\public\asset";
-=======
-        private readonly string _imagePath = @"E:\GIt\inven\inventoryfrontend\public\asset";
->>>>>>> refs/remotes/origin/ploy
 
         public ProductController(IProductService productService, ILogger<ProductController> logger)
         {

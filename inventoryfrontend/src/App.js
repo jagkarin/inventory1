@@ -12,7 +12,7 @@ import Register from './component/Login/Register';
 import ForgotPassword from './component/Login/ForgotPassword';
 import Profile from './component/Login/Profile';
 import Dashboard from './component/Dashboard/DashBoard1';
-import Product from './component/InventoryPage/product1'; // import หน้า product1 ที่สร้างมา
+import EquipmentForm from './component/Equipment/Equipment';
 
 const Layout = ({ children }) => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -53,9 +53,9 @@ const Layout = ({ children }) => {
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link text-white" to="/product1">
+            <Link className="nav-link text-white" to="/equipment">
               <FontAwesomeIcon icon={faBox} className="me-2" />
-              Product1
+              Equipment
             </Link>
           </li>
         </ul>
@@ -93,8 +93,8 @@ function App() {
         <Route path="/members" element={<Layout><MembersComponent /></Layout>} />
         <Route path="/requestpage" element={<Layout><RequestPage /></Layout>} />
         <Route path="/inventory" element={<Layout><Inventory /></Layout>} />
+        <Route path="/equipment" element={<Layout><EquipmentForm /></Layout>} />
         <Route path="/profile" element={<Layout><Profile /></Layout>} />
-        <Route path="/product1" element={<Layout><Product /></Layout>} /> {/* เพิ่มเส้นทางใหม่ */}
       </Routes>
     </Router>
   );
