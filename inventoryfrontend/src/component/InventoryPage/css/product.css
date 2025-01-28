@@ -19,9 +19,8 @@ h1 {
     max-width: 900px;
     margin: 20px auto;
     padding: 20px;
-    background-color: #dad9d9;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  
+    
 }
 
 .form-title {
@@ -118,7 +117,7 @@ textarea {
     cursor: pointer;
     font-size: 14px;
 }
-.btn-success {
+.btn-primary {
     background-color: #28a745;
     color: white;
 }
@@ -179,3 +178,84 @@ textarea {
     gap: 10px;               /* เพิ่มช่องว่างระหว่างปุ่ม */
 }
 
+
+.swal2-popup {
+    font-family: 'Roboto', sans-serif; /* ใช้ฟอนต์ที่ดูมืออาชีพ */
+    border-radius: 10px; /* มุมโค้งมน */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* ใส่เงาให้หน้าต่าง */
+  }
+  
+  .swal2-title {
+    color: #333; /* สีของหัวข้อ */
+    font-size: 1.5em; /* ขนาดฟอนต์ของหัวข้อ */
+    font-weight: bold; /* ทำให้หัวข้อหนาขึ้น */
+  }
+  
+  .swal2-input {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px; /* มุมโค้งมน */
+    font-size: 1em;
+    box-sizing: border-box;
+  }
+  
+  .swal2-input:focus {
+    border-color: #007bff; /* เปลี่ยนสีของกรอบเมื่อมีการโฟกัส */
+    outline: none;
+  }
+  
+  .swal2-confirm {
+    background-color: #28a745; /* เปลี่ยนสีปุ่ม OK ให้ดูมืออาชีพ */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1em;
+    border: none;
+    transition: background-color 0.3s;
+  }
+  
+  .swal2-confirm:hover {
+    background-color: #218838; /* เปลี่ยนสีเมื่อเอาเมาส์ไปวาง */
+  }
+  
+  .swal2-cancel {
+    background-color: #dc3545; /* เปลี่ยนสีปุ่ม Cancel */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1em;
+    border: none;
+    transition: background-color 0.3s;
+  }
+  
+  .swal2-cancel:hover {
+    background-color: #c82333; /* เปลี่ยนสีเมื่อเอาเมาส์ไปวาง */
+  }
+  
+  .swal2-actions {
+    display: flex;
+    justify-content: flex-end; /* จัดตำแหน่งปุ่ม OK และ Cancel ให้ชิดขวา */
+    gap: 10px; /* ช่องว่างระหว่างปุ่ม */
+    padding-top: 10px;
+  }
+  
+  .add-product-btn {
+    background-color: #218838;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .add-product-btn:hover {
+    background-color: #1c6e30; /* สีเข้มขึ้นเมื่อ hover */
+  }
+  
+  .center-title {
+    text-align: center;
+  }
+  

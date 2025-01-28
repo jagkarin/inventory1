@@ -166,3 +166,20 @@ h2 {
     margin-bottom: 10px;
 }
 
+/* ProductList.css */
+.table-column img {
+    border-radius: 8px;
+    object-fit: cover;
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+    margin: 0 auto;
+}
+
+.no-products {
+    text-align: center;
+    font-size: 18px;
+    color: #888;
+    margin: 20px 0;
+}
+
