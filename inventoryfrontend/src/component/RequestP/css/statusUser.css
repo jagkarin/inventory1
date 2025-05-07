@@ -1,0 +1,326 @@
+/* General Container Styling */
+.stu-container {
+    padding: 20px;
+    background: linear-gradient(135deg, #e6f0ff 0%, #f5f7fa 100%);
+    min-height: 100vh;
+    font-family: 'Prompt', 'Arial', sans-serif;
+    margin: 0 auto;
+}
+
+/* Card/Table Container Styling */
+.stu-table-container {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 16px;
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    margin-bottom: 24px;
+    overflow: hidden;
+    padding: 1.5rem;
+}
+
+.stu-table-container:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.12);
+}
+
+/* Table Title Styling */
+.stu-table-title {
+    font-weight: 700;
+    color: transparent;
+    margin: 0;
+    text-align: center;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    padding: 1.5rem;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px 16px 0 0;
+    font-size: 2rem; /* ปรับจาก 1.6rem เป็น 2rem */
+}
+
+.stu-table-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, 
+        rgba(66, 153, 225, 0.3) 0%,
+        rgba(102, 126, 234, 0.7) 50%,
+        rgba(66, 153, 225, 0.3) 100%
+    );
+}
+
+.stu-table-title i {
+    font-size: 1.8rem; /* ปรับจาก 1.4rem เป็น 1.8rem */
+    margin-right: 0.5rem;
+}
+
+/* Table Styling */
+.stu-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1.1rem; /* ปรับจาก 14px (0.875rem) เป็น 1.1rem */
+    flex: 1;
+}
+
+.stu-table thead th {
+    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+    font-weight: 600;
+    padding: 1rem 1.5rem;
+    color: #4a5568;
+    border: none;
+    font-size: 1rem; /* ปรับจาก 0.875rem เป็น 1rem */
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.stu-table tbody tr {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    border-radius: 8px;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+}
+
+.stu-table tbody tr:hover {
+    transform: translateX(4px);
+    background-color: #f7fafc;
+}
+
+.stu-table tbody td {
+    padding: 1.25rem 1.5rem;
+    border-top: 1px solid #e2e8f0;
+    border-bottom: 1px solid #e2e8f0;
+    color: #2d3748;
+    font-size: 1rem; /* ปรับจาก default เป็น 1rem */
+}
+
+.stu-table tbody td:first-child {
+    border-left: 1px solid #e2e8f0;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.stu-table tbody td:last-child {
+    border-right: 1px solid #e2e8f0;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+/* Table-specific styles */
+.stu-table-pending thead th {
+    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+    color: #4a5568;
+}
+
+.stu-table-approved thead th {
+    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+    color: #4a5568;
+}
+
+.stu-table-rejected thead th {
+    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+    color: #4a5568;
+}
+
+/* Status Styles */
+.stu-status-wait {
+    padding: 0.5em 1em;
+    font-weight: 500;
+    border-radius: 6px;
+    letter-spacing: 0.025em;
+    font-size: 1rem; /* ปรับจาก 0.875rem เป็น 1rem */
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #fbd38d 0%, #f6ad55 100%);
+    color: #744210;
+    box-shadow: 0 2px 4px rgba(246, 173, 85, 0.2);
+    display: flex;
+    align-items: center;
+}
+
+.stu-status-accept {
+    padding: 0.5em 1em;
+    font-weight: 500;
+    border-radius: 6px;
+    letter-spacing: 0.025em;
+    font-size: 1rem; /* ปรับจาก 0.875rem เป็น 1rem */
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #9ae6b4 0%, #48bb78 100%);
+    color: #22543d;
+    box-shadow: 0 2px 4px rgba(72, 187, 120, 0.2);
+    display: flex;
+    align-items: center;
+}
+
+.stu-status-reject {
+    padding: 0.5em 1em;
+    font-weight: 500;
+    border-radius: 6px;
+    letter-spacing: 0.025em;
+    font-size: 1rem; /* ปรับจาก 0.875rem เป็น 1rem */
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #feb2b2 0%, #f56565 100%);
+    color: #7f1d1d;
+    box-shadow: 0 2px 4px rgba(245, 101, 101, 0.2);
+    display: flex;
+    align-items: center;
+}
+
+.stu-status-wait i,
+.stu-status-accept i,
+.stu-status-reject i {
+    font-size: 1.3rem; /* ปรับจาก 1.1rem เป็น 1.3rem */
+    margin-right: 0.25rem;
+}
+
+/* Loading and Error */
+.stu-loading {
+    text-align: center;
+    padding: 30px;
+    color: #4299e1;
+    font-size: 1.3rem; /* ปรับจาก 1.1rem เป็น 1.3rem */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stu-loading i {
+    font-size: 2.5rem;
+    color: #4299e1;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.stu-error {
+    text-align: center;
+    padding: 20px;
+    color: #f56565;
+    background: #fef2f2;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem; /* ปรับจาก 1.1rem เป็น 1.3rem */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.stu-error i {
+    font-size: 1.8rem; /* ปรับจาก 1.5rem เป็น 1.8rem */
+    margin-right: 8px;
+}
+
+/* Empty State */
+.stu-empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #718096;
+    font-size: 1.1rem; /* ปรับจาก 0.95rem เป็น 1.1rem */
+    font-style: italic;
+}
+
+.stu-empty-state i {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    color: #a0aec0;
+}
+
+.stu-empty-state p {
+    font-size: 1.3rem; /* ปรับจาก 1.1rem เป็น 1.3rem */
+    margin: 0;
+}
+
+/* Pagination Styling */
+.stu-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+
+.stu-pagination-btn {
+    padding: 0.625rem 1.25rem;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    text-transform: none;
+    letter-spacing: 0.025em;
+    border: none;
+    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+    color: white;
+    font-size: 1.1rem; /* ปรับจาก 0.95rem เป็น 1.1rem */
+}
+
+.stu-pagination-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(49, 130, 206, 0.2);
+}
+
+.stu-pagination-btn:disabled {
+    background: #e2e8f0;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.stu-pagination-btn i {
+    font-size: 1.2rem; /* ปรับจาก 1rem เป็น 1.2rem */
+}
+
+.stu-pagination-info {
+    color: #718096;
+    font-size: 1.1rem; /* ปรับจาก 0.95rem เป็น 1.1rem */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .stu-table-title {
+        padding: 1rem;
+        font-size: 1.6rem; /* ปรับจาก 1.3rem เป็น 1.6rem */
+    }
+    
+    .stu-table thead th,
+    .stu-table tbody td {
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem; /* ปรับจาก 0.8rem เป็น 0.95rem */
+    }
+    
+    .stu-table-container {
+        padding: 1rem;
+    }
+    
+    .stu-pagination-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.95rem; /* ปรับจาก 0.875rem เป็น 0.95rem */
+    }
+    
+    .stu-status-wait,
+    .stu-status-accept,
+    .stu-status-reject {
+        font-size: 0.9rem; /* ปรับจาก 0.75rem เป็น 0.9rem */
+        padding: 0.4em 0.8em;
+    }
+}
+
+@media (max-width: 480px) {
+    .stu-table thead th,
+    .stu-table tbody td {
+        padding: 0.5rem;
+        font-size: 0.85rem; /* ปรับจาก 0.75rem เป็น 0.85rem */
+    }
+
+    .stu-pagination-btn {
+        padding: 0.25rem 0.75rem;
+        font-size: 0.85rem; /* ปรับจาก 0.8rem เป็น 0.85rem */
+    }
+}

@@ -1,0 +1,386 @@
+/* General Container Styling */
+.AP-container-fluid {
+    padding: 20px;
+    background: linear-gradient(135deg, #e6f0ff 0%, #f5f7fa 100%);
+    min-height: 100vh;
+    font-family: 'Prompt', 'Arial', sans-serif;
+}
+
+/* Card Styling */
+.AP-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 16px;
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    margin-bottom: 24px;
+    overflow: hidden;
+}
+
+.AP-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.12);
+}
+
+/* Card Header Styling */
+.AP-card-header {
+    border: none;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e6f0ff 100%);
+    padding: 1.5rem;
+    border-radius: 16px 16px 0 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.AP-card-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, 
+        rgba(66, 153, 225, 0.3) 0%,
+        rgba(102, 126, 234, 0.7) 50%,
+        rgba(66, 153, 225, 0.3) 100%
+    );
+}
+
+.AP-card-title {
+    font-weight: 700;
+    color: transparent;
+    margin: 0;
+    text-align: center;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    font-size: 2rem; /* ปรับจากค่า default เป็น 2rem */
+}
+
+/* Table Styling */
+.AP-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1.1rem; /* ปรับจาก 14px (0.875rem) เป็น 1.1rem */
+    flex: 1;
+}
+
+.AP-table thead th {
+    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+    font-weight: 600;
+    padding: 1rem 1.5rem;
+    color: #4a5568;
+    border: none;
+    font-size: 1rem; /* ปรับจาก 0.875rem เป็น 1rem */
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.AP-table tbody tr {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    border-radius: 8px;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    background: #ffffff;
+}
+
+.AP-table tbody tr:hover {
+    transform: translateX(4px);
+    background-color: #f7fafc;
+}
+
+.AP-table tbody td {
+    padding: 1.25rem 1.5rem;
+    border-top: 1px solid #e2e8f0;
+    border-bottom: 1px solid #e2e8f0;
+    color: #2d3748;
+    font-size: 1rem; /* ปรับจาก default เป็น 1rem */
+}
+
+.AP-table tbody td:first-child {
+    border-left: 1px solid #e2e8f0;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.AP-table tbody td:last-child {
+    border-right: 1px solid #e2e8f0;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+/* Image Styling */
+.AP-product-image {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    border-radius: 8px;
+    border: 2px solid #e2e8f0;
+    transition: transform 0.3s ease;
+}
+
+.AP-product-image:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Status Badges */
+.AP-badge {
+    padding: 0.5em 1em;
+    font-weight: 500;
+    border-radius: 6px;
+    letter-spacing: 0.025em;
+    font-size: 1rem; /* ปรับจาก 0.875rem เป็น 1rem */
+    text-transform: uppercase;
+}
+
+.AP-bg-warning {
+    background: linear-gradient(135deg, #fbd38d 0%, #f6ad55 100%) !important;
+    color: #744210;
+    box-shadow: 0 2px 4px rgba(246, 173, 85, 0.2);
+}
+
+.AP-bg-success {
+    background: linear-gradient(135deg, #9ae6b4 0%, #48bb78 100%) !important;
+    color: #22543d;
+    box-shadow: 0 2px 4px rgba(72, 187, 120, 0.2);
+}
+
+.AP-bg-danger {
+    background: linear-gradient(135deg, #feb2b2 0%, #f56565 100%) !important;
+    color: #472d2d;
+    /* box-shadow: 0 2px 4px rgba(245, 101, 101, 0.2); */
+}
+
+/* Button Styling */
+.AP-btn {
+    padding: 0.625rem 1.25rem;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    text-transform: none;
+    letter-spacing: 0.025em;
+    border: none;
+    font-size: 1.1rem; /* ปรับจาก default เป็น 1.1rem */
+}
+
+.AP-btn-success {
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+    color: white;
+}
+
+.AP-btn-success:hover {
+    background: linear-gradient(135deg, #38a169 0%, #2d7d46 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(56, 161, 105, 0.2);
+}
+
+.AP-btn-danger {
+    background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+    color: white;
+}
+
+.AP-btn-danger:hover {
+    background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(229, 62, 62, 0.2);
+}
+
+.AP-btn-primary {
+    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+    color: white;
+}
+
+.AP-btn-primary:hover {
+    background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(49, 130, 206, 0.2);
+}
+
+/* Modal Styles */
+.AP-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.AP-modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.AP-modal-details p {
+    margin: 0.5rem 0;
+    font-size: 1.1rem; /* ปรับจาก default เป็น 1.1rem */
+}
+
+.AP-modal-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+
+.AP-btn-sm {
+    padding: 0.25rem 0.75rem;
+    font-size: 1rem; /* ปรับจาก 0.875rem เป็น 1rem */
+}
+
+.AP-btn-info {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.AP-btn-info:hover {
+    background-color: #138496;
+}
+
+/* Details Element Styling */
+.AP-details {
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+}
+
+.AP-details:hover {
+    transform: translateY(-2px);
+}
+
+.AP-summary {
+    cursor: pointer;
+    padding: 1rem;
+    border-radius: 6px;
+    background: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+    color: #2d3748;
+    font-weight: 600;
+    font-size: 1.1rem; /* ปรับจาก default เป็น 1.1rem */
+}
+
+.AP-summary:hover {
+    background: #f7fafc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Loading Spinner */
+.AP-spinner-border {
+    color: #4299e1;
+    width: 2.5rem;
+    height: 2.5rem;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Empty State */
+.AP-text-muted {
+    color: #718096 !important;
+    font-size: 1.1rem; /* ปรับจาก 0.95rem เป็น 1.1rem */
+    font-style: italic;
+}
+
+/* Pagination Styling */
+.AP-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+
+.AP-pagination-btn {
+    padding: 8px 12px;
+    font-size: 1.1rem; /* ปรับจาก 0.9rem เป็น 1.1rem */
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    background: #ffffff;
+    color: #2d3748;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.AP-pagination-btn:hover:not(:disabled) {
+    background: #edf2f7;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.AP-pagination-btn.active {
+    background: #4299e1;
+    color: #ffffff;
+    border-color: #4299e1;
+}
+
+.AP-pagination-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .AP-card-header {
+        padding: 1rem;
+    }
+    
+    .AP-table thead th,
+    .AP-table tbody td {
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem; /* ปรับจาก 0.8rem เป็น 0.95rem */
+    }
+    
+    .AP-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.95rem; /* ปรับจาก 0.875rem เป็น 0.95rem */
+    }
+    
+    .AP-badge {
+        font-size: 0.9rem; /* ปรับจาก 0.75rem เป็น 0.9rem */
+        padding: 0.4em 0.8em;
+    }
+
+    .AP-product-image {
+        width: 80px;
+        height: 80px;
+    }
+
+    .AP-pagination-btn {
+        padding: 6px 10px;
+        font-size: 0.95rem; /* ปรับจาก 0.85rem เป็น 0.95rem */
+    }
+}
+
+@media (max-width: 480px) {
+    .AP-table thead th,
+    .AP-table tbody td {
+        padding: 0.5rem;
+        font-size: 0.85rem; /* ปรับจาก 0.75rem เป็น 0.85rem */
+    }
+
+    .AP-product-image {
+        width: 60px;
+        height: 60px;
+    }
+
+    .AP-pagination-btn {
+        padding: 5px 8px;
+        font-size: 0.85rem; /* ปรับจาก 0.8rem เป็น 0.85rem */
+    }
+}

@@ -1,0 +1,243 @@
+/* คอนเทนเนอร์ของ Layout */
+.layout-container {
+  position: relative;
+  min-height: 100vh;
+  width: 100vw;
+  background: #ffffff;
+  font-family: 'Prompt', 'Arial', sans-serif;
+  padding-bottom: 80px; /* ระยะห่างสำหรับแถบนำทางด้านล่าง */
+  padding-top: 110px; /* ระยะห่างสำหรับแถบนำทางด้านบน */
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.layout-content {
+  width: 100%;
+  flex: 1;
+}
+
+/* แถบนำทางด้านบน */
+.MN-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 10px !important;
+  background: #F5F5F5;
+  border-bottom: 1px solid rgba(69, 94, 222, 0.2);
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+/* Logo Section */
+.logo-section {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+}
+
+.logo-image {
+  /* width: 90px; */
+  height: 90px;
+  object-fit: contain; /* ใช้ contain เพื่อให้โลโก้ไม่เสียสัดส่วน */
+  border: none; /* เอาขอบออก */
+  border-radius: 0; /* ไม่ใช้ขอบมน */
+}
+
+/* Profile Section */
+.profile-section {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  border-radius: 20px;
+}
+
+.rounded-circle {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  /* border: 2px solid #455ede; */
+  border-radius: 50%;
+}
+
+/* แถบนำทางด้านล่าง */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #F5F5F5;
+  border-top: #DCDCDC;
+  padding: 5px 15px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 1000;
+  /* box-shadow:#DCDCDC; */
+}
+
+.bottom-nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  padding: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #455ede;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.bottom-nav-btn i {
+  font-size: 2rem;
+}
+
+.bottom-nav-btn:hover {
+  color: #3a4fc7;
+  transform: translateY(-2px);
+}
+
+/* Home button */
+.home-btn {
+  position: relative;
+}
+
+.home-btn:hover {
+  transform: translateY(-2px);
+}
+
+.home-btn.active {
+  animation: pulse 1.5s infinite;
+}
+
+/* Profile button */
+.profile-btn {
+  position: relative;
+}
+
+.profile-btn:hover {
+  transform: translateY(-2px);
+}
+
+.profile-btn.active {
+  animation: pulse 1.5s infinite;
+}
+
+/* Notification button */
+.notification-btn {
+  position: relative;
+}
+
+.notification-btn.active {
+  animation: pulse 1.5s infinite;
+}
+
+.notification-btn .notification-badge {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 20px;
+  height: 20px;
+  background: #e51c23;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(229, 28, 35, 0.4);
+}
+
+.notification-btn:hover .notification-badge {
+  transform: scale(1.1);
+}
+
+/* แอนิเมชัน */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(69, 94, 222, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 20px rgba(69, 94, 222, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(69, 94, 222, 0);
+  }
+}
+
+/* การปรับแต่งสำหรับหน้าจอขนาดต่างๆ */
+@media (max-width: 768px) {
+  .bottom-nav {
+    padding: 8px 15px;
+  }
+
+  .bottom-nav-btn {
+    padding: 12px;
+  }
+
+  .bottom-nav-btn i {
+    font-size: 1.6rem;
+  }
+
+  .notification-btn .notification-badge {
+    width: 18px;
+    height: 18px;
+    font-size: 0.65rem;
+    top: 4px;
+    right: 4px;
+  }
+}
+
+@media (max-width: 480px) {
+  .bottom-nav-btn {
+    padding: 10px;
+  }
+
+  .bottom-nav-btn i {
+    font-size: 1.4rem;
+  }
+
+  .notification-btn .notification-badge {
+    width: 16px;
+    height: 16px;
+    font-size: 0.6rem;
+    top: 3px;
+    right: 3px;
+  }
+}
+
+/* การปรับแต่ง SweetAlert */
+.alert-popup {
+  background: #ffffff;
+  max-width: 90% !important;
+  margin: 0 auto;
+}
+
+.alert-title {
+  color: #212121 !important; /* เปลี่ยนสี title เป็น #212121 */
+}
+
+.alert-text {
+  color: #323e5b;
+}
+
+.alert-confirm-btn {
+  background: #a0a5a3!important; /* เปลี่ยนสีปุ่มตกลงเป็น #48bb78 */
+  color: #ffffff !important;
+}
+
+.alert-confirm-btn:hover {
+  /* background: #3c9c63 !important; สีเขียวเข้มขึ้นเมื่อ hover */
+  /* box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3); ปรับ shadow ให้เข้ากับสีเขียว */
+  transform: translateY(-2px);
+}
+
+.alert-icon {
+  border: 2px solid #e2e8f0 !important; /* ปรับขอบไอคอนให้เป็นสีเทาอ่อน */
+  color: #212121 !important; /* ปรับสีไอคอนให้เข้ากับ #212121 */
+}

@@ -1,0 +1,335 @@
+/* กำหนดพื้นหลังของ body */
+body {
+    background: linear-gradient(135deg, #e6f0fa 0%, #f3e8ff 100%);
+    font-family: 'Roboto', 'Arial', sans-serif;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* ป้องกันการเลื่อนแนวนอน */
+}
+
+/* Container หลัก */
+.member-container {
+    margin: 0 auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    max-width: 1400px;
+    width: 90vw; /* ปรับตามความกว้างของหน้าจอ */
+}
+
+/* หัวข้อ h1 */
+h1 {
+    color: #2d3748;
+    text-align: center;
+    font-weight: 700;
+    font-size: clamp(1.5rem, 5vw, 2.5rem); /* ขนาดตัวอักษรยืดหยุ่น */
+    margin: 2rem 0;
+    background: linear-gradient(135deg, #424242, #2d3748);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 2px 5px rgba(66, 153, 225, 0.2);
+}
+
+/* Table */
+.table {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    margin-bottom: 2rem;
+    width: 100%;
+}
+
+.table th {
+    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+    /* color: white; */
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 1rem;
+    border: none;
+    font-size: clamp(0.8rem, 2vw, 1rem);
+}
+
+.table td {
+    text-align: center;
+    padding: 1rem;
+    color: #2d3748;
+    border-top: 1px solid #e2e8f0;
+    transition: background 0.3s ease;
+    font-size: clamp(0.8rem, 2vw, 1rem);
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background: #f8fafc;
+}
+
+.table-hover tbody tr:hover {
+    background: #edf2f7;
+}
+
+/* ปุ่มต่างๆ */
+.btn-primary,
+.btn-secondary,
+.btn-success,
+.btn-warning,
+.btn-danger {
+    padding: clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 3vw, 1.5rem); /* ขนาดปุ่มยืดหยุ่น */
+    border-radius: 8px;
+    font-weight: 600;
+    color: white;
+    border: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    font-size: clamp(0.8rem, 2vw, 1rem);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #3182ce 0%, #4299e1 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(66, 153, 225, 0.4);
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+}
+
+.btn-secondary:hover {
+    background: linear-gradient(135deg, #5a6268 0%, #6c757d 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(108, 117, 125, 0.4);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(46, 204, 113, 0.4);
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #f6ad55 0%, #f4a261 100%);
+}
+
+.btn-warning:hover {
+    background: linear-gradient(135deg, #f4a261 0%, #f6ad55 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(246, 173, 85, 0.4);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #e53e3e 0%, #f56565 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(245, 101, 101, 0.4);
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Input และ Select */
+input.form-control,
+select.form-select {
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    padding: clamp(0.5rem, 2vw, 0.75rem);
+    background: white;
+    color: #2d3748;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    font-size: clamp(0.8rem, 2vw, 1rem);
+    width: 100%;
+}
+
+/* Password Toggle Styling */
+.password-toggle {
+    color: #6c757d;
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    transition: color 0.3s ease;
+    cursor: pointer;
+}
+
+.password-toggle:hover {
+    color: #4299e1;
+}
+
+/* Edit Section */
+.border.border-secondary {
+    border: 2px solid rgba(108, 117, 125, 0.2);
+    border-radius: 12px;
+    padding: clamp(1rem, 3vw, 1.5rem);
+    background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+
+/* Modal */
+.modal-content {
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+    width: 90vw;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+    color: white;
+    border: none;
+    padding: clamp(0.75rem, 2vw, 1rem);
+}
+
+.modal-body {
+    padding: clamp(1rem, 3vw, 2rem);
+    font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+}
+
+.modal-footer {
+    padding: clamp(0.75rem, 2vw, 1rem);
+    border-top: none;
+    background: #f8fafc;
+}
+
+/* Pagination */
+.pagination {
+    justify-content: center;
+    margin: 2rem 0;
+    flex-wrap: wrap; /* ป้องกันปุ่มล้นในหน้าจอเล็ก */
+}
+
+.page-item .page-link {
+    border-radius: 8px;
+    margin: 0.3rem;
+    padding: clamp(0.5rem, 2vw, 0.75rem) clamp(0.75rem, 2.5vw, 1rem);
+    color: #4299e1;
+    background: white;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+    font-size: clamp(0.8rem, 2vw, 1rem);
+}
+
+.page-item.active .page-link {
+    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+    color: white;
+    border: none;
+}
+
+/* Switch Styling */
+.form-check-input {
+    width: clamp(2rem, 5vw, 3rem);
+    height: clamp(1rem, 2.5vw, 1.5rem);
+    background-color: #6c757d;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.form-check-input:checked {
+    background-color: #2ecc71;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+    border-radius: 5px;
+}
+
+/* Media Queries สำหรับ Responsive */
+@media (max-width: 992px) {
+    .member-container {
+        padding: 1.5rem;
+    }
+
+    .table th,
+    .table td {
+        padding: 0.75rem;
+    }
+
+    .btn-primary,
+    .btn-secondary,
+    .btn-success,
+    .btn-warning,
+    .btn-danger {
+        margin: 0.25rem 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .member-container {
+        padding: 1rem;
+        width: 95vw;
+    }
+
+    .table {
+        display: block;
+        overflow-x: auto; /* ทำให้ตารางเลื่อนแนวนอนได้ในมือถือ */
+        white-space: nowrap;
+    }
+
+    .table th,
+    .table td {
+        padding: 0.5rem;
+    }
+
+    input.form-control,
+    select.form-select {
+        padding: 0.5rem;
+    }
+
+    .modal-content {
+        width: 85vw;
+    }
+}
+
+@media (max-width: 576px) {
+    h1 {
+        margin: 1rem 0;
+    }
+
+    .btn-primary,
+    .btn-secondary,
+    .btn-success,
+    .btn-warning,
+    .btn-danger {
+        width: 100%; /* ปุ่มเต็มความกว้างในมือถือ */
+        margin: 0.25rem 0;
+    }
+
+    .pagination {
+        margin: 1rem 0;
+    }
+
+    .page-item .page-link {
+        margin: 0.2rem;
+        padding: 0.5rem 0.75rem;
+    }
+
+    .border.border-secondary {
+        padding: 1rem;
+    }
+}
