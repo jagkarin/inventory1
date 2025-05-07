@@ -27,17 +27,18 @@ namespace inventorybackend.DTOS
 
         public DateTime? UpdatedAt { get; set; }
 
-        public string? Profilepicture { get; set; }
+        public string? ProfilePicture { get; set; }
 
         public string? Address { get; set; }
 
-        public bool IsActive { get; set; } = true;
+        public int IsActive { get; set; } 
 
     }
 
     public class UpdateStatusDto
     {
-        public bool IsActive { get; set; }
+        //public int UserID { get; set; }
+        public int IsActive { get; set; } // เปลี่ยนจาก bool เป็น int (0 = ปิด, 1 = เปิด)
     }
 
 
@@ -67,13 +68,13 @@ namespace inventorybackend.DTOS
 
         public DateTime? UpdatedAt { get; set; }
 
-        public string? Profilepicture { get; set; }
+        public string? ProfilePicture { get; set; }
 
         public string? Address { get; set; }
         //join rold
         public string? RoleName { get; set; }
 
-        public bool IsActive { get; set; } = true;
+        public int IsActive { get; set; } 
     }
 
     public class Userprofile
@@ -88,6 +89,15 @@ namespace inventorybackend.DTOS
 
         public string? RoleName { get; set; }
 
+        public string? Password { get; set; }
+
+        public string? Username { get; set; }
+
+        public string? ProfilePicture { get; set; }
+        public string? Email { get; set; }
+        public string? Phonenumber { get; set; }
+        public DateTime? Dateofbirth { get; set; }
+        public string? Address { get; set; }
     }
 
 
@@ -123,7 +133,7 @@ namespace inventorybackend.DTOS
 
     }
 
-    public class UpdateUserProfliebyUser
+    public class UpdateUserProfliebyadmin
     {
         public int UserID { get; set; }
 
@@ -135,7 +145,23 @@ namespace inventorybackend.DTOS
 
         public string? Phonenumber { get; set; }
 
-        public DateTime? Dateofbirth { get; set; }
+        public DateTime? UpdatedAt { get; set; }
+
+        public int RoleID { get; set; }
+    }
+
+    public class ImageUserDto
+    {
+        public int UserID { get; set; }
+        public string? Email { get; set; }
+
+        public string? Phonenumber { get; set; }
+
+        public string? Firstname { get; set; }
+
+        public string? Lastname { get; set; }
+
+        public string? Dateofbirth { get; set; }
 
         public DateTime? UpdatedAt { get; set; }
 

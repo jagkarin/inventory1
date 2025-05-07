@@ -2,6 +2,7 @@
 using inventorybackend.src.Core.Interface;
 using inventorybackend.src.Entities;
 using inventorybackend.src.Interface;
+using inventorybackend.src.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace inventorybackend.src.Core.Service
@@ -161,11 +162,13 @@ namespace inventorybackend.src.Core.Service
                 Description = productDto.Description,
                 Adddate = DateTime.Now,
                 CategoriesID = productDto.CategoriesID,
-                Productimage = imagePath, // กำหนดค่าเป็น null ได้
+                Productimage = imagePath != null ? $"/product/{Path.GetFileName(imagePath)}" : null, // ใช้ relative path
                 Quantity = productDto.Quantity,
             };
 
             await _productRepo.AddProductAsync(product);
+
+            productDto.Productimage = product.Productimage;
 
             return productDto;
         }
@@ -194,11 +197,8 @@ namespace inventorybackend.src.Core.Service
                 existingProduct.Productimage = imagePath;
             }
 
-            await _dataContext.SaveChangesAsync();
+            await _productRepo.UpdateProductwithimageAsync(existingProduct);
         }
-
-
-       
-    }
+    } 
 }
 

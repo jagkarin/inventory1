@@ -4,6 +4,8 @@ using inventorybackend.src.Entities;
 using inventorybackend.src.Interface;
 using inventorybackend.src.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
+using System;
 
 namespace inventorybackend.src.Core.Service
 {
@@ -18,6 +20,7 @@ namespace inventorybackend.src.Core.Service
             _userrepo = userrepo;
             _dataContext = dataContext;
             _logger = logger;
+ 
         }
 
         public async Task<List<UserwithroleDTO>> GetALLUserwithroleAsync()  
@@ -110,23 +113,22 @@ namespace inventorybackend.src.Core.Service
 
 
 
-        public async Task<UpdateUserProfliebyUser> UpdateUserprofileAsync(UpdateUserProfliebyUser UserProflie)
+        public async Task<UpdateUserProfliebyadmin> UpdateUserprofileAsync(UpdateUserProfliebyadmin UserProflie)
         {
             try
             {
                 // ?????????????????????????
-                _logger.LogInformation("Received request to update User with ID: {ProductsID} ", UserProflie.UserID);
+                _logger.LogInformation("Received request to update User with ID: {UserID} ", UserProflie.UserID);
 
                 var user = new Entities.UserDbo
                 {
                     UserID = UserProflie.UserID,
                     Firstname = UserProflie.Firstname,
                     Lastname = UserProflie.Lastname,
-                    Address = UserProflie.Address,
                     UpdatedAt = DateTime.Now,
                     Phonenumber = UserProflie.Phonenumber,
-                    Dateofbirth = UserProflie.Dateofbirth,
                     Email = UserProflie.Email,
+                    RoleID = UserProflie.RoleID,
                     
 
                 };
@@ -136,16 +138,15 @@ namespace inventorybackend.src.Core.Service
 
                 _logger.LogInformation("Successfully updated User with ID: {UserID}", UserProflie.UserID);
 
-                return new UpdateUserProfliebyUser
+                return new UpdateUserProfliebyadmin
                 {
                     UserID = UserProflie.UserID,
                     Firstname = UserProflie.Firstname,
                     Lastname = UserProflie.Lastname,
-                    Address = UserProflie.Address,
                     UpdatedAt = DateTime.Now,
                     Phonenumber = UserProflie.Phonenumber,
-                    Dateofbirth = UserProflie.Dateofbirth,
                     Email= UserProflie.Email,
+                    RoleID= UserProflie.RoleID,
 
                 };
             }
@@ -156,20 +157,58 @@ namespace inventorybackend.src.Core.Service
             }
         }
 
-        public async Task<bool> UpdateUserStatusAsync(int userId, bool isActive)
+        public async Task<bool> UpdateUserStatusAsync(int userId, int isActive)
         {
-            var user = await _dataContext.User.FindAsync(userId);
+            var user = await _userrepo.GetUserByIdAsync(userId);
             if (user == null)
             {
                 return false;
             }
 
-            user.IsActive = isActive;
-            user.UpdatedAt = DateTime.UtcNow; // อัปเดตเวลาล่าสุด
-            await _dataContext.SaveChangesAsync();
-
-            return true;
+            user.IsActive = isActive; // รับค่า int (0 หรือ 1)
+            return await _userrepo.UpdateUserAsync(user);
         }
+
+
+        public async Task<bool> DeleteUserAsync(int UserID)
+        {
+            var product = await _userrepo.GetUserByuserIDAsync(UserID); // ตรวจสอบว่ามีข้อมูลหรือไม่
+            if (product == null)
+            {
+                return false; // คืนค่า false ถ้าไม่พบข้อมูล
+            }
+
+            await _userrepo.DeleteUserAsync(UserID); // ลบข้อมูล
+            return true; // คืนค่า true ถ้าลบสำเร็จ
+        }
+
+
+        public async Task UpdateuserwithimageAsync(ImageUserDto userdto, string? imagePath)
+        {
+            var existingUser = await _dataContext.User.FindAsync(userdto.UserID);
+
+            if (existingUser == null)
+                throw new Exception("User not found.");
+
+            // อัปเดตข้อมูลจาก DTO
+            existingUser.UserID = userdto.UserID;
+            existingUser.Firstname = userdto.Firstname;
+            existingUser.Lastname = userdto.Lastname;
+            existingUser.UpdatedAt = DateTime.Now;
+            existingUser.Dateofbirth = DateTime.Parse(userdto.Dateofbirth); // แปลง string เป็น DateTime
+            existingUser.Address = userdto.Address;
+            existingUser.Email = userdto.Email;
+            existingUser.Phonenumber = userdto.Phonenumber;
+
+            // อัปเดต ProfilePicture ถ้ามี
+            if (!string.IsNullOrEmpty(imagePath))
+            {
+                existingUser.ProfilePicture = imagePath; // ใช้ Relative Path โดยตรง
+            }
+
+            await _userrepo.UpdateUserwithimageAsync(existingUser);
+        }
+
 
 
     }

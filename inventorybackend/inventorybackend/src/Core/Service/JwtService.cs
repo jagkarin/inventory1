@@ -20,7 +20,7 @@ namespace auth.Helpers
             }
         }
 
-        public string Generate(int userID, int roleID)
+        public string Generate(int userID, int roleID,string Firstname, string Lastname, string Username)
         {
             var symmetricSecurityKey = new SymmetricSecurityKey(secureKey);
             var credentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
@@ -28,7 +28,10 @@ namespace auth.Helpers
             var claims = new[]
             {
         new Claim("userId", userID.ToString()),
-        new Claim("roleId", roleID.ToString())
+        new Claim("roleId", roleID.ToString()),
+        new Claim("firstname", Firstname.ToString()),
+        new Claim("lastname", Lastname.ToString()),
+        new Claim("username", Username.ToString()),
     };
 
             var token = new JwtSecurityToken(

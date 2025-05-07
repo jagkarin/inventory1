@@ -43,13 +43,13 @@ namespace inventorybackend.src.Entities
         public DateTime? UpdatedAt { get; set; }
 
         [Column("Profile_picture", TypeName = "text")]
-        public string? Profilepicture { get; set; }
+        public string? ProfilePicture { get; set; }
 
         [Column("Address", TypeName = "varchar(255)")]
         public string? Address { get; set; }
 
         [Column("IsActive", TypeName = "int")]
-        public bool IsActive { get; set; } = true;
+        public int IsActive { get; set; } 
 
     }
 }

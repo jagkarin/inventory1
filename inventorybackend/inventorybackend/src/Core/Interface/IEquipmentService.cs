@@ -12,7 +12,7 @@ namespace inventorybackend.src.Core.Interface
         Task<bool> DeleteEQMAsync(int EQMID);
         Task<UpdateEquipmentDTO> UpdateEQMAsync(UpdateEquipmentDTO UpdateEquipment);
         Task<EquipmentwithimageDTO> AddEquipmentAsync(EquipmentwithimageDTO EQMDto, string imagePath);
-        Task UpdateEQMwithimageAsync(EquipmentwithimageDTO EQMDto, string imagePath);
+        Task UpdateEQMwithimageAsync(EquipmentwithimageDTO EQMDto, string? imagePath);
 
     }
 }

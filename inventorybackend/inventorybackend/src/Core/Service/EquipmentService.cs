@@ -192,15 +192,17 @@ namespace inventorybackend.src.Core.Service
             {
                 EQM_Name = EQMDto.EQM_Name,
                 EQMDescription = EQMDto.EQMDescription,
-                EQMimage = imagePath,
+                EQMimage = imagePath != null ? $"/asset/{Path.GetFileName(imagePath)}" : null, // ใช้ relative path
                 Adddate = DateTime.Now,
                 Category_ID = EQMDto.Category_ID,
                 Quantity = EQMDto.Quantity,
-
             };
 
             // บันทึกสินค้าในฐานข้อมูล
             await _equipmentRepo.AddEquipmentAsync(EQM);
+
+            // อัปเดต EQMDto ด้วย relative path
+            EQMDto.EQMimage = EQM.EQMimage; // ใช้ relative path ที่บันทึกใน Dbo
 
             return EQMDto;
         }
@@ -211,8 +213,8 @@ namespace inventorybackend.src.Core.Service
             // ดึงข้อมูลสินค้าเดิมจากฐานข้อมูล
             var existingEQM = await _dataContext.EQM.FindAsync(EQMDto.EQMID);
 
-            if (existingEQM == null)    
-                throw new Exception(" Equipment not found.");
+            if (existingEQM == null)
+                throw new Exception("Equipment not found.");
 
             // อัปเดตข้อมูลสินค้า
             existingEQM.EQM_Name = EQMDto.EQM_Name;
@@ -226,10 +228,11 @@ namespace inventorybackend.src.Core.Service
             {
                 existingEQM.EQMimage = imagePath;
             }
-           
 
-            await _dataContext.SaveChangesAsync();
-
+            // เรียก Repository เพื่อบันทึกการเปลี่ยนแปลง
+            await _equipmentRepo.UpdateeqmwithimageAsync(existingEQM);
         }
     }
+
 }
+

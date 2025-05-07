@@ -1,8 +1,11 @@
-﻿using inventorybackend.src.Core.Interface;
+﻿using inventorybackend.DTOS;
+using inventorybackend.src.Core.Interface;
 using inventorybackend.src.Entities;
 using inventorybackend.src.Interface;
+using inventorybackend.src.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Text.Json;
 
 namespace inventorybackend.src.Core.Service
 {
@@ -19,33 +22,90 @@ namespace inventorybackend.src.Core.Service
             _logger = logger;
         }
 
-        public async Task<WithdrawDbo> AddWithdrawAsync(int productId,int userId, string status, string amount)
+        public async Task<bool> CreateWithdrawAsync(List<WithdrawDto> withdrawDtos)
         {
-            try
+            if (withdrawDtos == null || !withdrawDtos.Any())
             {
-                // เพิ่มข้อมูลใน Repository
-                await _WithdrawRepo.AddProductIDAsync(productId);
-                await _WithdrawRepo.AddUserIDAsync(userId);
-
-                // สร้างข้อมูล Withdraw
-                var withdraw = new WithdrawDbo
-                {
-                    ProductID = productId,
-                    UserID = userId,
-                    Status = status,
-                    Amount = amount,
-                    CreatedAt = DateTime.Now
-                };
-
-                // เพิ่มข้อมูลลงใน DbContext
-                await _WithdrawRepo.AddWithdrawAsync(withdraw);  // Assuming this method exists
-
-                return withdraw;  // คืนค่าผลลัพธ์เป็น WithdrawDbo
+                return false;
             }
-            catch (Exception ex)
+
+            var withdrawList = withdrawDtos.Select(dto => new WithdrawDbo
             {
-                throw new ApplicationException("An error occurred while adding withdraw data.", ex);
-            }
+                WithdrawID = dto.WithdrawID, // ให้ API สร้างค่าเอง
+                UserID = dto.UserID,
+                ProductID = dto.ProductID,
+                ProductName = dto.ProductName,
+                Amount = dto.Amount,  // ป้องกันค่าที่เป็น 0
+                CreatedAt = DateTime.Now,
+                Status = dto.Status
+            }).ToList();
+
+            Console.WriteLine($"Mapped Withdraw Data: {JsonSerializer.Serialize(withdrawList)}");
+
+            return await _WithdrawRepo.AddWithdrawsAsync(withdrawList);
         }
+
+
+
+
+        public async Task<List<WithdrawUsername>> GetWithdraws0Async()
+        {
+            var withdraws = await _WithdrawRepo.GetAllWithdraws0Async();
+            return withdraws.Select(w => new WithdrawUsername
+            {
+                WithdrawID = w.WithdrawID,  
+                UserID = w.UserID,
+                ProductID = w.ProductID,
+                ProductName= w.ProductName,
+                Amount = w.Amount,          // ใช้ decimal
+                CreatedAt = w.CreatedAt,
+                Status = w.Status,
+                Firstname = w.Firstname,
+                Lastname = w.Lastname,
+                Product_image = w.Product_image,
+            }).ToList();
+        }
+
+        public async Task<List<WithdrawUsername>> GetWithdraws1Async()
+        {
+            var withdraws = await _WithdrawRepo.GetAllWithdraws1Async();
+            return withdraws.Select(w => new WithdrawUsername
+            {
+                WithdrawID = w.WithdrawID, 
+                UserID = w.UserID,
+                ProductID = w.ProductID,
+                ProductName = w.ProductName,
+                Amount = w.Amount,          // ใช้ decimal
+                CreatedAt = w.CreatedAt,
+                Status = w.Status,
+                Firstname= w.Firstname,
+                Lastname= w.Lastname,
+                Product_image= w.Product_image,
+            }).ToList();
+        }
+
+        public async Task<List<WithdrawUsername>> GetWithdraws2Async()
+        {
+            var withdraws = await _WithdrawRepo.GetAllWithdraws2Async();
+            return withdraws.Select(w => new WithdrawUsername
+            {
+                WithdrawID = w.WithdrawID,  
+                UserID = w.UserID,
+                ProductID = w.ProductID,
+                ProductName = w.ProductName,
+                Amount = w.Amount,          // ใช้ decimal
+                CreatedAt = w.CreatedAt,
+                Status = w.Status,
+                Firstname = w.Firstname,
+                Lastname= w.Lastname,
+                Product_image = w.Product_image,
+            }).ToList();
+        }
+
+        public async Task<bool> UpdateWithdrawStatusAsync(int withdrawID, int status)
+        {
+            return await _WithdrawRepo.UpdateWithdrawStatusAsync(withdrawID, status);
+        }
+
     }
 }
