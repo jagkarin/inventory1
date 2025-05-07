@@ -1,326 +1,431 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Card } from 'react-bootstrap';
-import { Bar } from 'react-chartjs-2';
+import { Container, Row, Col, Card, Button, Modal } from 'react-bootstrap';
 import { Doughnut } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  ArcElement, // เพิ่ม DoughnutElement
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import * as XLSX from 'xlsx';
+import "./css/DashBoard1.css";
+import 'font-awesome/css/font-awesome.min.css';
 
-// ลงทะเบียนส่วนประกอบของ Chart.js
-ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Title, Tooltip, Legend);
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 const Dashboard = () => {
   const [userCounts, setUserCounts] = useState({
     Admin: 0,
-    Manager: 0,
-    Supervisor: 0,
     Staff: 0,
-    Guest: 0,
   });
+
+  const [users, setUsers] = useState([]);
+  const [selectedRole, setSelectedRole] = useState(null);
+  const [showUserList, setShowUserList] = useState(false);
 
   const [products, setProducts] = useState([]);
-  const [equipments, setEquipments] = useState([]); // New state for equipment data
+  const [equipments, setEquipments] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // ดึงข้อมูลจำนวนผู้ใช้
   useEffect(() => {
-    fetch('https://localhost:7294/GetAllUserwithrole')
-      .then((response) => response.json())
-      .then((data) => {
-        if (Array.isArray(data.data)) {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const userResponse = await fetch('https://localhost:7294/api/User/GetAllUserwithrole');
+        const userData = await userResponse.json();
+        
+        if (Array.isArray(userData.data)) {
           const counts = {
             Admin: 0,
-            Manager: 0,
-            Supervisor: 0,
             Staff: 0,
-            Guest: 0,
           };
+          
+          setUsers(userData.data);
+          console.log("Users:", userData.data);
 
-          data.data.forEach((user) => {
+          userData.data.forEach((user) => {
             switch (user.roleID) {
-              case 1:
-                counts.Admin++;
-                break;
-              case 2:
-                counts.Manager++;
-                break;
-              case 3:
-                counts.Supervisor++;
-                break;
-              case 4:
-                counts.Staff++;
-                break;
-              case 5:
-                counts.Guest++;
-                break;
-              default:
-                break;
+              case 1: counts.Admin++; break;
+              case 2: counts.Staff++; break;
+              default: break;
             }
           });
-
+          
           setUserCounts(counts);
-        } else {
-          console.error('Invalid data format: Expected data to be an array', data);
         }
-      })
-      .catch((error) => console.error('Error fetching users:', error));
+        
+        const stockResponse = await fetch('https://localhost:7294/api/Stock/StockImage');
+        const stockData = await stockResponse.json();
+        
+        const fetchedItems = Array.isArray(stockData) ? stockData : (stockData?.data || []);
+        const productItems = fetchedItems.filter(item => item.itemType === 1);
+        const equipmentItems = fetchedItems.filter(item => item.itemType === 2);
+
+        setProducts(productItems);
+        setEquipments(equipmentItems);
+      } catch (error) {
+        console.error('เกิดข้อผิดพลาดในการดึงข้อมูล:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
-  // ดึงข้อมูลผลิตภัณฑ์
-  useEffect(() => {
-    fetch('https://localhost:7294/api/Product/GetAllProductCategory')
-      .then((response) => response.json())
-      .then((data) => {
-        if (data && data.data && Array.isArray(data.data)) {
-          setProducts(data.data); // ดึงข้อมูลจาก data.data
-        } else {
-          console.error('Invalid data format:', data);
-        }
-      })
-      .catch((error) => console.error('Error fetching products:', error));
-  }, []);
-
-  // ดึงข้อมูลอุปกรณ์
-  useEffect(() => {
-    fetch('https://localhost:7294/api/Equipment/GetAllEquipmentCategory')
-      .then((response) => response.json())
-      .then((data) => {
-        if (data && data.data && Array.isArray(data.data)) {
-          setEquipments(data.data); // ดึงข้อมูลจาก data.data ของอุปกรณ์
-        } else {
-          console.error('Invalid data format:', data);
-        }
-      })
-      .catch((error) => console.error('Error fetching equipments:', error));
-  }, []);
-
-  // สร้างข้อมูลสำหรับกราฟผลิตภัณฑ์
-  const categories = [...new Set(products.map((product) => product.categoriesName))]; // ดึงชื่อหมวดหมู่ที่ไม่ซ้ำ
-  const quantities = categories.map((category) => {
-    return products
-      .filter((product) => product.categoriesName === category)
-      .reduce((total, product) => total + product.quantity, 0);
-  });
-
-  // ข้อมูลสำหรับกราฟผลิตภัณฑ์
-  const productData = {
-    labels: categories,
-    datasets: [
-      {
-        label: 'Quantity of Products',
-        data: quantities,
-        backgroundColor: [
-          'rgba(75, 192, 192, 0.5)',
-          'rgba(255, 99, 132, 0.5)',
-          'rgba(54, 162, 235, 0.5)',
-          'rgba(255, 206, 86, 0.5)',
-          'rgba(153, 102, 255, 0.5)',
-        ],
-        borderColor: [
-          'rgba(75, 192, 192, 1)',
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(153, 102, 255, 1)',
-        ],
-        borderWidth: 1,
-      },
-    ],
+  const formatNumber = (num) => {
+    return new Intl.NumberFormat().format(num);
   };
 
-  // สร้างข้อมูลสำหรับกราฟอุปกรณ์
-  const equipmentCategories = [...new Set(equipments.map((equipment) => equipment.category_Name))]; // ดึงชื่อหมวดหมู่อุปกรณ์ที่ไม่ซ้ำ
-  const equipmentQuantities = equipmentCategories.map((category) => {
-    return equipments
-      .filter((equipment) => equipment.category_Name === category)
-      .reduce((total, equipment) => total + equipment.quantity, 0);
-  });
-
-  // ข้อมูลสำหรับกราฟอุปกรณ์
-  const equipmentData = {
-    labels: equipmentCategories,
-    datasets: [
-      {
-        label: 'Quantity of Equipments',
-        data: equipmentQuantities,
-        backgroundColor: [
-          'rgb(87, 16, 253)',
-          'rgba(255, 159, 64, 0.5)',
-          'rgba(153, 102, 255, 0.5)',
-          'rgba(75, 192, 192, 0.5)',
-          'rgba(255, 99, 132, 0.5)',
-        ],
-        borderColor: [
-          'rgb(87, 16, 253)',
-          'rgba(255, 159, 64, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(255, 99, 132, 1)',
-        ],
-        borderWidth: 1,
-      },
-    ],
+  const isLowStock = (quantity) => {
+    return quantity < 1;
   };
 
-  const options = {
+  const getUsersByRole = (role) => {
+    const roleID = {
+      Admin: 1,
+      Staff: 2,
+    }[role];
+
+    return users.filter(user => user.roleID === roleID);
+  };
+
+  const handleShowUserList = (role) => {
+    setSelectedRole(role);
+    setShowUserList(true);
+  };
+
+  const handleCloseUserList = () => {
+    setShowUserList(false);
+    setSelectedRole(null);
+  };
+
+  const sortedUserCounts = Object.entries(userCounts)
+    .sort(([, a], [, b]) => b - a)
+    .reduce((acc, [role, count]) => {
+      acc.labels.push(role === 'Staff' ? 'พนักงาน' : role);
+      acc.data.push(count);
+      return acc;
+    }, { labels: [], data: [] });
+
+  const userChartData = {
+    labels: sortedUserCounts.labels,
+    datasets: [{
+      data: sortedUserCounts.data,
+      backgroundColor: [
+        '#3498db', // Admin
+        '#e74c3c', // พนักงาน
+      ],
+      borderColor: '#FFFFFF',
+      borderWidth: 2,
+    }],
+  };
+
+  const sortedProducts = [...products].sort((a, b) => b.quantity - a.quantity);
+  const productNames = sortedProducts.map(product => product.itemName);
+  const productQuantities = sortedProducts.map(product => product.quantity);
+
+  const productChartData = {
+    labels: productNames,
+    datasets: [{
+      data: productQuantities,
+      backgroundColor: [
+        '#3498db',
+        '#e74c3c',
+        '#f1c40f',
+        '#2ecc71',
+        '#9b59b6',
+        '#00acc1',
+        '#8e44ad',
+      ],
+      borderColor: '#FFFFFF',
+      borderWidth: 2,
+    }],
+  };
+
+  const sortedEquipments = [...equipments].sort((a, b) => b.quantity - a.quantity);
+  const equipmentNames = sortedEquipments.map(equipment => equipment.itemName);
+  const equipmentQuantities = sortedEquipments.map(equipment => equipment.quantity);
+
+  const equipmentChartData = {
+    labels: equipmentNames,
+    datasets: [{
+      data: equipmentQuantities,
+      backgroundColor: [
+        '#3498db',
+        '#e74c3c',
+        '#f1c40f',
+        '#2ecc71',
+        '#9b59b6',
+        '#00acc1',
+        '#8e44ad',
+      ],
+      borderColor: '#FFFFFF',
+      borderWidth: 2,
+    }],
+  };
+
+  const chartOptions = {
     responsive: true,
-    maintainAspectRatio: false, // ปิดการล็อคอัตราส่วน
+    maintainAspectRatio: false,
     plugins: {
       legend: {
-        position: 'top',
-      },
-      title: {
-        display: true,
-        text: 'ตำแหน่ง',
-        font: {
-          size: 24,
-          weight: 'bold',
+        position: 'bottom',
+        labels: {
+          padding: 25,
+          boxWidth: 14,
+          font: {
+            size: 14,
+            family: 'Poppins',
+            weight: '500',
+          },
         },
       },
+      tooltip: {
+        backgroundColor: 'rgba(44, 62, 80, 0.9)',
+        titleFont: { size: 14, family: 'Poppins' },
+        bodyFont: { size: 12, family: 'Poppins' },
+        padding: 12,
+        cornerRadius: 8,
+        callbacks: {
+          label: (context) => {
+            const label = context.label || '';
+            const value = context.raw;
+            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+            const percentage = Math.round((value / total) * 100);
+            return `${label}: ${formatNumber(value)} (${percentage}%)`;
+          }
+        }
+      }
     },
+    cutout: '65%',
   };
 
+  const exportToExcel = (data, fileName) => {
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'ข้อมูล');
+    XLSX.writeFile(workbook, `${fileName}.xlsx`);
+  };
+
+  const handleExportUsers = () => {
+    const userData = Object.entries(userCounts).map(([role, count]) => ({
+      ประเภท: role === 'Staff' ? 'พนักงาน' : role,
+      จำนวน: count
+    }));
+    exportToExcel(userData, 'ผู้ใช้งาน');
+  };
+
+  const handleExportProducts = () => {
+    const productData = sortedProducts.map(product => ({
+      ชื่อ: product.itemName,
+      จำนวน: product.quantity,
+      สินค้าคงคลังต่ำ: product.quantity < 1 ? 'ใช่' : 'ไม่'
+    }));
+    exportToExcel(productData, 'สินค้า');
+  };
+
+  const handleExportEquipments = () => {
+    const equipmentData = sortedEquipments.map(equipment => ({
+      ชื่อ: equipment.itemName,
+      จำนวน: equipment.quantity,
+      สินค้าคงคลังต่ำ: equipment.quantity < 1 ? 'ใช่' : 'ไม่'
+    }));
+    exportToExcel(equipmentData, 'อุปกรณ์');
+  };
+
+  const renderTotalCount = (items, label) => {
+    let total = 0;
+    if (Array.isArray(items)) {
+      total = items.reduce((sum, item) => sum + item, 0);
+    } else if (typeof items === 'object') {
+      total = Object.values(items).reduce((sum, value) => sum + value, 0);
+    }
+    return (
+      <div className="db1-total-count">
+        <span className="db1-count-value">{formatNumber(total)}</span>
+        <span className="db1-count-label">{label}</span>
+      </div>
+    );
+  };
+
+  const renderLowStockAlert = (items) => {
+    if (!Array.isArray(items)) return null;
+    
+    const lowStockCount = items.filter(item => item < 1).length;
+    if (lowStockCount === 0) return null;
+    
+    return (
+      <div className="db1-low-stock-alert">
+        <i className="fas fa-exclamation-triangle me-2"></i>
+        <span>{lowStockCount} รายการมีจำนวนน้อยกว่า 1 ชิ้น</span>
+      </div>
+    );
+  };
+
+  if (loading) {
+    return (
+      <Container className="db1-dashboard-container">
+        <div className="db1-loading-spinner">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">กำลังโหลด...</span>
+          </div>
+          <p>กำลังโหลดข้อมูล...</p>
+        </div>
+      </Container>
+    );
+  }
+
   return (
-    <Container className="dashboard-container">
-    <h1 className="my-4">Expert Dashboard</h1>
-    <Row className="d-flex justify-content-center">
-        {/* กราฟจำนวนผู้ใช้ */}
-        <Col md={12} lg={6} className="d-flex align-items-center justify-content-center mb-4">
-          <Card className="w-100" style={{ height: '500px' }}>
+    <Container fluid className="db1-dashboard-container">
+      <div className="db1-dashboard-header">
+        <h1>แดชบอร์ด</h1>
+      </div>
+      
+      <Row className="db1-summary-cards">
+        <Col md={4} className="mb-4">
+          <Card className="db1-summary-card">
             <Card.Body>
-              <Bar
-                data={{
-                  labels: ['Admin', 'Manager', 'Supervisor', 'Staff', 'Guest'],
-                  datasets: [
-                    {
-                      label: 'Admin',
-                      data: [userCounts.Admin, 0, 0, 0, 0],
-                      backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                      borderColor: 'rgba(255, 99, 132, 1)',
-                      borderWidth: 3,
-                    },
-                    {
-                      label: 'Manager',
-                      data: [0, userCounts.Manager, 0, 0, 0],
-                      backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                      borderColor: 'rgba(54, 162, 235, 1)',
-                      borderWidth: 3,
-                    },
-                    {
-                      label: 'Supervisor',
-                      data: [0, 0, userCounts.Supervisor, 0, 0],
-                      backgroundColor: 'rgba(255, 206, 86, 0.5)',
-                      borderColor: 'rgba(255, 206, 86, 1)',
-                      borderWidth: 3,
-                    },
-                    {
-                      label: 'Staff',
-                      data: [0, 0, 0, userCounts.Staff, 0],
-                      backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                      borderColor: 'rgba(75, 192, 192, 1)',
-                      borderWidth: 3,
-                    },
-                    {
-                      label: 'Guest',
-                      data: [0, 0, 0, 0, userCounts.Guest],
-                      backgroundColor: 'rgba(153, 102, 255, 0.5)',
-                      borderColor: 'rgba(153, 102, 255, 1)',
-                      borderWidth: 3,
-                    },
-                  ],
-                }}
-                options={{
-                  ...options,
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  scales: {
-                    x: {
-                      ticks: {
-                        font: {
-                          size: 16,
-                        },
-                      },
-                    },
-                    y: {
-                      ticks: {
-                        font: {
-                          size: 16,
-                        },
-                      },
-                    },
-                  },
-                  elements: {
-                    bar: {
-                      barThickness: 100, // ปรับให้หนาขึ้น
-                      maxBarThickness: 120, // เพิ่มขนาดสูงสุดของแท่ง
-                    },
-                  },
-                  plugins: {
-                    ...options.plugins,
-                    tooltip: {
-                      callbacks: {
-                        label: function (tooltipItem) {
-                          return tooltipItem.dataset.label + ': ' + tooltipItem.raw;
-                        },
-                      },
-                    },
-                  },
-                }}
-              />
+              <div className="db1-summary-icon db1-user-icon">
+                <i className="fas fa-users"></i>
+              </div>
+              {renderTotalCount(userCounts, "คน")}
             </Card.Body>
           </Card>
         </Col>
-
-        {/* กราฟจำนวนหมวดหมู่สินค้า */}
-        <Col md={12} lg={6} className="d-flex align-items-center justify-content-center mb-4">
-          <Card className="w-100" style={{ height: '500px' }}>
+        
+        <Col md={4} className="mb-4">
+          <Card className="db1-summary-card">
             <Card.Body>
-              <Doughnut
-                data={productData}
-                options={{
-                  ...options,
-                  plugins: {
-                    ...options.plugins,
-                    title: {
-                      display: true,
-                      text: 'จำนวนหมวดหมู่สินค้า', // เพิ่มชื่อกราฟ
-                    },
-                  },
-                  cutout: '0%',
-                }}
-              />
+              <div className="db1-summary-icon db1-product-icon">
+                <i className="fas fa-box"></i>
+              </div>
+              {renderTotalCount(productQuantities, "ชิ้น")}
+              {renderLowStockAlert(productQuantities)}
             </Card.Body>
           </Card>
         </Col>
-
-        {/* กราฟจำนวนหมวดหมู่อุปกรณ์ */}
-        <Col md={12} lg={6} className="d-flex align-items-center justify-content-center mb-4">
-          <Card className="w-100" style={{ height: '500px' }}>
+        
+        <Col md={4} className="mb-4">
+          <Card className="db1-summary-card">
             <Card.Body>
-              <Doughnut
-                data={equipmentData}
-                options={{
-                  ...options,
-                  plugins: {
-                    ...options.plugins,
-                    title: {
-                      display: true,
-                      text: 'จำนวนหมวดหมู่อุปกรณ์', // เพิ่มชื่อกราฟ
-                    },
-                  },
-                  cutout: '0%',
-                }}
-              />
+              <div className="db1-summary-icon db1-equipment-icon">
+                <i className="fas fa-tools"></i>
+              </div>
+              {renderTotalCount(equipmentQuantities, "ชิ้น")}
+              {renderLowStockAlert(equipmentQuantities)}
             </Card.Body>
           </Card>
         </Col>
       </Row>
+      
+      <Row className="db1-chart-row">
+        <Col lg={4} md={6} className="db1-chart-col">
+          <Card className="db1-chart-card">
+            <Card.Header>
+              <h5>จำนวนผู้ใช้งานในระบบ</h5>
+              <Button onClick={handleExportUsers}>
+                <i className="fas fa-file-excel me-1"></i> ส่งออก
+              </Button>
+            </Card.Header>
+            <Card.Body>
+              <div className="db1-chart-container">
+                <Doughnut data={userChartData} options={chartOptions} />
+              </div>
+              <div className="db1-chart-details">
+                {sortedUserCounts.labels.map((role, index) => (
+                  <div
+                    key={role}
+                    className="db1-detail-item"
+                    onClick={() => handleShowUserList(role === 'พนักงาน' ? 'Staff' : role)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <span className="db1-detail-label">{role}</span>
+                    <span className="db1-detail-value">{formatNumber(sortedUserCounts.data[index])}</span>
+                  </div>
+                ))}
+              </div>
+            </Card.Body>
+          </Card>
+        </Col>
+        
+        <Col lg={4} md={6} className="db1-chart-col">
+          <Card className="db1-chart-card">
+            <Card.Header>
+              <h5>จำนวนสินค้าทั้งหมด</h5>
+              <Button onClick={handleExportProducts}>
+                <i className="fas fa-file-excel me-1"></i> ส่งออก
+              </Button>
+            </Card.Header>
+            <Card.Body>
+              <div className="db1-chart-container">
+                <Doughnut data={productChartData} options={chartOptions} />
+              </div>
+              <div className="db1-chart-details db1-chart-details-scrollable">
+                {productNames.map((name, index) => (
+                  <div key={`${name}-${index}`} className="db1-detail-item">
+                    <span className="db1-detail-label">{name}</span>
+                    <span className={`db1-detail-value ${isLowStock(productQuantities[index]) ? 'db1-low-stock' : ''}`}>
+                      {formatNumber(productQuantities[index])}
+                      {isLowStock(productQuantities[index]) && 
+                        <i className="fas fa-exclamation-circle ms-2 db1-low-stock-icon"></i>
+                      }
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </Card.Body>
+          </Card>
+        </Col>
+        
+        <Col lg={4} md={6} className="db1-chart-col">
+          <Card className="db1-chart-card">
+            <Card.Header>
+              <h5>จำนวนอุปกรณ์ทั้งหมด</h5>
+              <Button onClick={handleExportEquipments}>
+                <i className="fas fa-file-excel me-1"></i> ส่งออก
+              </Button>
+            </Card.Header>
+            <Card.Body>
+              <div className="db1-chart-container">
+                <Doughnut data={equipmentChartData} options={chartOptions} />
+              </div>
+              <div className="db1-chart-details db1-chart-details-scrollable">
+                {equipmentNames.map((name, index) => (
+                  <div key={`${name}-${index}`} className="db1-detail-item">
+                    <span className="db1-detail-label">{name}</span>
+                    <span className={`db1-detail-value ${isLowStock(equipmentQuantities[index]) ? 'db1-low-stock' : ''}`}>
+                      {formatNumber(equipmentQuantities[index])}
+                      {isLowStock(equipmentQuantities[index]) && 
+                        <i className="fas fa-exclamation-circle ms-2 db1-low-stock-icon"></i>
+                      }
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+
+      <Modal show={showUserList} onHide={handleCloseUserList}>
+        <Modal.Header closeButton>
+          <Modal.Title>รายชื่อผู้ใช้ในบทบาท {selectedRole === 'Staff' ? 'พนักงาน' : selectedRole}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {selectedRole && getUsersByRole(selectedRole).length > 0 ? (
+            <div>
+              {getUsersByRole(selectedRole).map((user, index) => (
+                <div key={index} style={{ marginBottom: '8px' }}>
+                  {user.firstname} {user.lastname}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p>ไม่มีผู้ใช้ในบทบาทนี้</p>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseUserList}>
+            ปิด
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 };

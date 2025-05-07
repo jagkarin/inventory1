@@ -1,187 +1,371 @@
-/* General Style */
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f7fa;
-    margin: 0;
-    padding: 0;
+/* General Style for Inventory Page */
+.inventory-page body {
+  font-family: 'Roboto', 'Arial', sans-serif;
+  background: linear-gradient(135deg, #eef2f9, #d3e0f0); /* โทนสีน้ำเงินอ่อน */
+  margin: 0;
+  padding: 0;
+  box-shadow: inset 0 0 20px rgba(69, 94, 222, 0.1); /* ใช้ #455ede ในเงา */
 }
 
-/* Header */
-h1 {
-    text-align: center;
-    margin: 20px 0;
-    color: #343a40;
-    font-weight: 700;
+/* Center Title for Inventory */
+.inventory-center-title {
+  text-align: center;
+  color: #2d3748; /* Fallback สำหรับเบราว์เซอร์ที่ไม่รองรับ */
+  background: linear-gradient(90deg, #2d3748 0%, #4a5568 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  display: block;
+  width: 100%;
+  margin: 0 auto;
 }
 
-/* Form Container */
-.container_product {
-    max-width: 900px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #ce0000;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.inventory-center-title:hover {
+  background: linear-gradient(90deg, #1a252f 0%, #2d3748 100%); /* ไล่สีเข้มขึ้นเมื่อ hover */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.15);
 }
 
-.form-title {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 15px;
-    color: #495057;
+/* SweetAlert2 Inputs (ทั้ง <select> และ <input>) */
+.inventory-swal2-select,
+.swal2-input {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
+  font-family: 'Roboto', 'Arial', sans-serif; /* เพิ่ม font ให้เหมือนกัน */
 }
 
-.form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
+/* สไตล์เมื่อ focus */
+.inventory-swal2-select:focus,
+.swal2-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
 }
 
-.input-group {
-    display: flex;
-    flex-direction: column;
+/* ปรับแต่งลูกศรของ dropdown ใน <select> */
+.inventory-swal2-select {
+  -webkit-appearance: none; /* ลบสไตล์เริ่มต้นของเบราว์เซอร์ */
+  -moz-appearance: none;
+  appearance: none;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="%23718792" d="M7 10l5 5 5-5z"/></svg>') no-repeat right 10px center; /* เพิ่มลูกศร dropdown */
+  background-color: #ffffff; /* พื้นหลังสีขาว */
+  background-size: 12px; /* ขนาดลูกศร */
 }
 
-.input-group label {
-    font-weight: 600;
-    margin-bottom: 5px;
+/* สไตล์สำหรับ <input> ที่สามารถพิมพ์ได้ (ถ้ามีการใช้ในอนาคต) */
+.inventory-editable-input {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
 }
 
-.input-group input,
-.input-group select,
-.input-group textarea {
-    border: 1px solid #ced4da;
-    border-radius: 5px;
-    padding: 10px;
-    font-size: 14px;
-    color: #495057;
+.inventory-editable-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
 }
 
-textarea {
-    resize: none;
+.inventory-datalist {
+  width: 100%;
 }
 
-.btn-group {
-    display: flex; /* ใช้ Flexbox เพื่อควบคุมตำแหน่ง */
-    justify-content: flex-end; /* จัดตำแหน่งปุ่มไปด้านขวา */
-    margin-top: 10px; /* เพิ่มระยะห่างจากด้านบน */
+/* Container for Inventory */
+.inventory-container {
+  margin: 20px auto;
+  padding: 25px;
+  margin-top: 40px;
+  background: linear-gradient(135deg, #ffffff, #f0f4f8);
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(69, 94, 222, 0.1);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
-/* Product List */
-.product-item {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start; /* จัดชิดซ้าย */
-    border: 1px solid #ddd; /* กรอบรอบสินค้า */
-    padding: 10px; /* ระยะห่างภายใน */
-    height: 100%; /* ทำให้ความสูงเท่ากัน */
-}
-.product-name, .product-category, .product-description {
-    white-space: nowrap; /* ป้องกันข้อความขึ้นบรรทัดใหม่ */
-    overflow: hidden; /* ซ่อนข้อความเกินขอบ */
-    text-overflow: ellipsis; /* เพิ่ม ... หากข้อความยาวเกิน */
-    width: 100%; /* กำหนดความกว้าง */
+.inventory-container:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(69, 94, 222, 0.15);
 }
 
-.product-description {
-    height: 40px; /* จำกัดความสูงให้เท่ากัน */
+/* Form Controls for Inventory */
+.inventory-form-control,
+.inventory-form-select {
+  border: 2px solid #747474;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 16px;
+  background: #ffffff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/* การตกแต่งรายการสินค้า */
-.product-card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 15px;
-    margin: 10px 0;
-    background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+.inventory-form-control:focus,
+.inventory-form-select:focus {
+  border-color: #3b50ce;
+  box-shadow: 0 0 0 4px rgba(69, 94, 222, 0.3);
+  outline: none;
 }
 
-.product-card p {
-    margin: 5px 0;
+/* Dropdown Icon for Inventory */
+.inventory-dropdown-icon {
+  transition: color 0.3s ease, transform 0.3s ease;
 }
 
-.btn {
-    padding: 10px 25px;
-    margin: 5px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-}
-.btn-success {
-    background-color: #28a745;
-    color: white;
+.inventory-dropdown-icon:hover {
+  color: #6b81f0;
+  transform: scale(1.1);
 }
 
-.btn-success:hover {
-    background-color: #218838;
+/* Buttons for Inventory */
+.inventory-btn-primary {
+  background: #00A859;
+  border: none;
+  padding: 12px 25px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: background 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
+  color: #ffffff;
 }
 
-.pagination-container {
-    display: flex;
-    justify-content: flex-end; /* จัดปุ่มไปทางขวามือ */
-    margin-top: 20px; /* ระยะห่างด้านบน */
+.inventory-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(69, 94, 222, 0.4);
 }
 
-.btn-pagination {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px; /* ทำให้ปุ่มมีความโค้งมน */
-    padding: 10px 20px; /* ขยายขนาดปุ่ม */
-    margin: 0 5px; /* ระยะห่างระหว่างปุ่ม */
-    font-size: 14px; /* ปรับขนาดตัวอักษร */
-    cursor: pointer; /* เปลี่ยนเมาส์เป็นรูปมือเมื่อโฮเวอร์ */
-    transition: background-color 0.3s, box-shadow 0.3s; /* เพิ่มเอฟเฟกต์การเปลี่ยนสีและเงา */
+.inventory-btn-primary:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(69, 94, 222, 0.3);
 }
 
-.btn-pagination:hover {
-    background-color: #0056b3; /* สีเข้มขึ้นเมื่อโฮเวอร์ */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* เพิ่มเงา */
+/* Horizontal Line for Inventory */
+.inventory-hr {
+  border-color: #d6e0ff;
+  border-width: 2px;
+  margin: 20px 0;
+  opacity: 0.7;
 }
 
-.btn-pagination:disabled {
-    background-color: #cccccc; /* สีเทาเมื่อปุ่มถูกปิดใช้งาน */
-    cursor: not-allowed; /* เปลี่ยนเมาส์เป็นห้ามคลิก */
+/* Table for Inventory */
+.inventory-table {
+  width: 100%;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(69, 94, 222, 0.15);
+  background: #ffffff;
 }
 
-/* ข้อความเมื่อไม่พบสินค้า */
-.no-products {
-    text-align: center;
-    font-size: 16px;
-    color: #666;
+.inventory-table-primary {
+  background: #4299e1;
 }
 
-.product-card .btn {
-    font-size: 14px;
-    padding: 5px 10px;
-    margin-right: 10px;      /* เพิ่มระยะห่างระหว่างปุ่ม */
+.inventory-table th {
+  color: white;
+  text-align: center;
+  padding: 15px;
+  font-size: 16px;
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
-.no-products {
-    text-align: center;
-    font-size: 16px;
-    color: #888;
+.inventory-table td {
+  padding: 12px;
+  text-align: center;
+  font-size: 14px;
+  vertical-align: middle;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
-.product-card div {
-    display: flex;           /* ใช้ flexbox ในการจัดการปุ่ม */
-    gap: 10px;               /* เพิ่มช่องว่างระหว่างปุ่ม */
+.inventory-table tbody tr:nth-child(even) {
+  background-color: #f8f9fc;
 }
 
-/* ปรับขนาดรูปภาพ */
-.product-image-container {
-  width: 80px; /* ลดความกว้างของ container */
-  height: 80px; /* ลดความสูงของ container */
-  overflow: hidden; /* ป้องกันไม่ให้ภาพล้นออกจาก container */
+.inventory-table tbody tr:hover {
+  background-color: #eef2ff;
+  color: #1a252f;
+  transition: 0.4s;
+}
+
+.inventory-table-bordered {
+  border: 2px solid #d6e0ff;
+}
+
+/* Image in Table for Inventory */
+.inventory-img-fluid.inventory-img-thumbnail {
+  border-radius: 8px;
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  overflow: hidden;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  margin: 0 auto;
 }
 
-.product-image {
-  width: 100%; /* กำหนดให้ภาพมีความกว้าง 100% ของ container */
-  height: 100%; /* กำหนดให้ภาพมีความสูง 100% ของ container */
-  object-fit: cover; /* ปรับให้ภาพเต็มพื้นที่ container โดยไม่เสียอัตราส่วน */
+.inventory-img-fluid.inventory-img-thumbnail:hover {
+  border-color: #3b50ce;
+  box-shadow: 0 4px 15px rgba(69, 94, 222, 0.3);
+}
+
+/* Low Stock Warning for Inventory */
+.inventory-low-stock {
+  color: #ff6b6b;
+  font-weight: bold;
+  text-shadow: 0 1px 2px rgba(255, 107, 107, 0.3);
+}
+
+/* Text Muted for Inventory */
+.inventory-text-muted {
+  color: #718792;
+  opacity: 0.8;
+}
+
+/* Pagination Buttons for Inventory */
+.inventory-btn-outline-primary {
+  border: 2px solid #455ede;
+  color: #455ede;
+  padding: 12px 25px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: background 0.4s ease, color 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.inventory-btn-outline-primary:hover {
+  background: #455ede;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(69, 94, 222, 0.4);
+}
+
+.inventory-btn-outline-primary:disabled {
+  border-color: #b0bec5;
+  color: #b0bec5;
+  cursor: not-allowed;
+  background: transparent;
+}
+
+.inventory-btn-outline-primary:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(69, 94, 222, 0.3);
+}
+
+/* Action Buttons for Inventory */
+.inventory-btn-warning,
+.inventory-btn-danger {
+  padding: 8px 15px;
+  font-size: 14px;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 6px;
+  transition: background 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.inventory-btn-warning {
+  background: #FCB900;
+  border: none;
+}
+
+.inventory-btn-warning:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(107, 129, 240, 0.4);
+}
+
+.inventory-btn-danger {
+  background: linear-gradient(45deg, #ff6b6b, #ef5350);
+  border: none;
+}
+
+.inventory-btn-danger:hover {
+  background: linear-gradient(45deg, #ef5350, #ff6b6b);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+}
+
+/* No Products Message for Inventory */
+.inventory-no-products {
+  text-align: center;
+  font-size: 18px;
+  color: #718792;
+  padding: 20px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: color 0.3s ease;
+}
+
+.inventory-no-products:hover {
+  color: #455ede;
+  text-shadow: 0 2px 4px rgba(69, 94, 222, 0.2);
+}
+
+/* Shadows for Inventory */
+.inventory-shadow-xl {
+  box-shadow: 0 12px 40px rgba(69, 94, 222, 0.15);
+}
+
+.inventory-shadow-lg {
+  box-shadow: 0 8px 25px rgba(69, 94, 222, 0.15);
+}
+
+.inventory-shadow-sm {
+  box-shadow: 0 4px 15px rgba(69, 94, 222, 0.05);
+}
+
+/* Text Shadow for Inventory */
+.inventory-text-shadow {
+  text-shadow: 0 2px 4px rgba(69, 94, 222, 0.2);
+}
+
+/* Responsive Design for Inventory */
+@media (max-width: 768px) {
+  .inventory-container {
+    padding: 15px;
+  }
+
+  .inventory-center-title {
+    font-size: 1.5rem;
+  }
+
+  .inventory-flex-end {
+    padding-right: 10px;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .inventory-table th,
+  .inventory-table td {
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .inventory-btn-secondary {
+    background: linear-gradient(45deg, #6b81f0, #8a9eff);
+    border: none;
+    padding: 12px 25px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: background 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
+  }
+
+  .inventory-btn-secondary:hover {
+    background: linear-gradient(45deg, #8a9eff, #6b81f0);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(107, 129, 240, 0.4);
+  }
+
+  .inventory-btn-secondary:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(107, 129, 240, 0.3);
+  }
 }

@@ -1,4 +1,5 @@
-﻿using inventorybackend.src.Entities;
+﻿using inventorybackend.DTOS;
+using inventorybackend.src.Entities;
 using inventorybackend.src.Interface;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,40 +17,96 @@ namespace inventorybackend.src.Repositories
             _logger = logger;
         }
 
-        public async Task AddProductIDAsync(int productId)
+        public async Task<bool> AddWithdrawsAsync(List<WithdrawDbo> withdrawList)
         {
-            var withdraw = new WithdrawDbo
-            {
-                ProductID = productId
-            };
-            _dbContext.Withdraw.Add(withdraw);
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.Withdraw.AddRangeAsync(withdrawList);
+            return await _dbContext.SaveChangesAsync() > 0;
         }
 
-        public async Task AddEqmIDAsync(int eqmId)
+
+        public async Task<List<WithdrawUsername>> GetAllWithdraws0Async()
         {
-            var withdraw = new WithdrawDbo
-            {
-                ProductID = eqmId
-            };
-            _dbContext.Withdraw.Add(withdraw);
-            await _dbContext.SaveChangesAsync();
+            var withdraw0 = await (from w in _dbContext.Withdraw
+                                   join u in _dbContext.User on w.UserID equals u.UserID
+                                   join p in _dbContext.Product on w.ProductID equals p.ProductsID
+                                   where w.Status == 0
+                                   select new WithdrawUsername
+                                   {
+                                       WithdrawID = w.WithdrawID,
+                                       ProductID = w.ProductID,
+                                       ProductName = p.ProductsName,
+                                       Product_image = p.Productimage,  // เพิ่มการดึงข้อมูลรูปภาพ
+                                       Status = w.Status,
+                                       Amount = w.Amount,
+                                       CreatedAt = w.CreatedAt,
+                                       UserID = w.UserID,
+                                       Firstname = u.Firstname,
+                                       Lastname = u.Lastname,
+                                   }).ToListAsync();
+
+            return withdraw0;
         }
 
-        public async Task AddUserIDAsync(int userId)
+
+        public async Task<List<WithdrawUsername>> GetAllWithdraws1Async()
         {
-            var withdraw = new WithdrawDbo
-            {
-                UserID = userId
-            };
-            _dbContext.Withdraw.Add(withdraw);
-            await _dbContext.SaveChangesAsync();
+            var withdraw1 = await (from w in _dbContext.Withdraw
+                                   join u in _dbContext.User on w.UserID equals u.UserID
+                                   join p in _dbContext.Product on w.ProductID equals p.ProductsID
+                                   where w.Status == 1
+                                   select new WithdrawUsername
+                                   {
+                                       WithdrawID = w.WithdrawID,
+                                       ProductID = w.ProductID,
+                                       ProductName = p.ProductsName,
+                                       Product_image = p.Productimage,  // เพิ่มการดึงข้อมูลรูปภาพ
+                                       Status = w.Status,
+                                       Amount = w.Amount,
+                                       CreatedAt = w.CreatedAt,
+                                       UserID = w.UserID,
+                                       Firstname = u.Firstname,
+                                       Lastname = u.Lastname,
+                                   }).ToListAsync();
+
+            return withdraw1;
         }
 
-        public async Task AddWithdrawAsync(WithdrawDbo withdraw)
+        public async Task<List<WithdrawUsername>> GetAllWithdraws2Async()
         {
-            await _dbContext.Withdraw.AddAsync(withdraw);
-            await _dbContext.SaveChangesAsync();
+            var withdraw2 = await (from w in _dbContext.Withdraw
+                                   join u in _dbContext.User on w.UserID equals u.UserID
+                                   join p in _dbContext.Product on w.ProductID equals p.ProductsID
+                                   where w.Status == 2
+                                   select new WithdrawUsername
+                                   {
+                                       WithdrawID = w.WithdrawID,
+                                       ProductID = w.ProductID,
+                                       ProductName = p.ProductsName,
+                                       Product_image = p.Productimage,  // เพิ่มการดึงข้อมูลรูปภาพ
+                                       Status = w.Status,
+                                       Amount = w.Amount,
+                                       CreatedAt = w.CreatedAt,
+                                       UserID = w.UserID,
+                                       Firstname = u.Firstname,
+                                       Lastname = u.Lastname,
+                                   }).ToListAsync();
+
+            return withdraw2;
         }
+
+        public async Task<bool> UpdateWithdrawStatusAsync(int withdrawID, int status)
+        {
+            var withdraw = await _dbContext.Withdraw.FirstOrDefaultAsync(w => w.WithdrawID == withdrawID);
+            if (withdraw == null)
+            {
+                _logger.LogWarning($"Withdraw ID {withdrawID} not found.");
+                return false;
+            }
+
+            withdraw.Status = status;
+            return await _dbContext.SaveChangesAsync() > 0;
+        }
+
+
     }
 }

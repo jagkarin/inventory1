@@ -52,6 +52,7 @@ namespace inventorybackend.src.Repositories
                                                  UpdatedAt = u.UpdatedAt,
                                                  RoleID = u.RoleID,
                                                  RoleName = r.RoleName,
+                                                 IsActive = u.IsActive,
 
                                              }).ToListAsync();
 
@@ -71,6 +72,18 @@ namespace inventorybackend.src.Repositories
             return await _dbContext.User.FirstOrDefaultAsync(u => u.UserID == UserID);
         }
 
+        public async Task<UserDbo> GetUserByIdAsync(int userId)
+        {
+            return await _dbContext.User.FindAsync(userId);
+        }
+
+        public async Task<bool> UpdateUserAsync(UserDbo user)
+        {
+            _dbContext.User.Update(user);
+            var rowsAffected = await _dbContext.SaveChangesAsync();
+            return rowsAffected > 0;
+        }
+
 
         public async Task<Userprofile> GetUserByuserIDAsync(int userid)
         {
@@ -87,6 +100,14 @@ namespace inventorybackend.src.Repositories
                                       Lastname = u.Lastname,
                                       RoleName = r.RoleName,
                                       RoleID = u.RoleID,
+                                      Password = u.Password,
+                                      Username = u.Username,
+                                      ProfilePicture = u.ProfilePicture,
+                                      Email = u.Email,
+                                      Dateofbirth = u.Dateofbirth,
+                                      Phonenumber = u.Phonenumber,
+                                      Address = u.Address,
+
                                   }).FirstOrDefaultAsync(); // ดึงเฉพาะรายการเดียว
 
                 return user;
@@ -153,10 +174,9 @@ namespace inventorybackend.src.Repositories
                 existingUser.Phonenumber = User.Phonenumber;
                 existingUser.Firstname = User.Firstname;
                 existingUser.Lastname = User.Lastname;
-                existingUser.Dateofbirth = User.Dateofbirth;
                 existingUser.UpdatedAt = DateTime.Now;
-                existingUser.Address = User.Address;
                 existingUser.UserID = User.UserID;
+                existingUser.RoleID = User.RoleID;
               
 
 
@@ -175,6 +195,44 @@ namespace inventorybackend.src.Repositories
                 await transaction.RollbackAsync();
                 _logger.LogError(ex, "Error occurred while updating User with ID : {UserID}. Inner exception: {InnerException}", User.UserID, ex.InnerException?.Message);
                 throw new Exception($"Error occurred while updating User with ID {User.UserID}", ex);
+            }
+        }
+
+
+        public async Task<bool> DeleteUserAsync(int UserID)
+        {
+            var user = await _dbContext.User.FindAsync(UserID);
+            if (user != null)
+            {
+                _dbContext.User.Remove(user);
+                await _dbContext.SaveChangesAsync();
+                return true; // คืนค่า true ถ้าลบสำเร็จ
+            }
+            return false; // คืนค่า false ถ้าไม่เจอข้อมูล
+        }
+
+        public async Task UpdateUserwithimageAsync(UserDbo User)
+        {
+            var existingUser = await _dbContext.User.FirstOrDefaultAsync(u => u.UserID == User.UserID);
+
+            if (existingUser != null)
+            {
+                // อัปเดตเฉพาะฟิลด์ที่ต้องการ
+                existingUser.Email = User.Email;
+                existingUser.Phonenumber = User.Phonenumber;
+                existingUser.Firstname = User.Firstname;
+                existingUser.Lastname = User.Lastname;
+                existingUser.Dateofbirth = User.Dateofbirth;
+                existingUser.UpdatedAt = DateTime.Now;
+                existingUser.ProfilePicture = User.ProfilePicture; // ใช้ Relative Path ที่ส่งมาจาก Service
+                existingUser.Address = User.Address;
+
+                _dbContext.User.Update(existingUser);
+                await _dbContext.SaveChangesAsync();
+            }
+            else
+            {
+                throw new Exception($"User with ID {User.UserID} not found.");
             }
         }
 
