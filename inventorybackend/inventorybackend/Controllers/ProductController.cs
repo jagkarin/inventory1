@@ -13,15 +13,17 @@ namespace inventorybackend.Controllers
         private readonly IProductService _ProductService;
         private readonly ILogger<ProductController> _logger;
         //change to path yourself
-        private readonly string _imagePath = @"E:\GIt\inven\inventoryfrontend\public\asset";
+        private readonly IWebHostEnvironment _env;
 
-        public ProductController(IProductService productService, ILogger<ProductController> logger)
+        public ProductController(IProductService productService, ILogger<ProductController> logger, IWebHostEnvironment env)
         {
             _ProductService = productService;
             _logger = logger;
-            if (!Directory.Exists(_imagePath))
+            _env = env;
+            // ตรวจสอบและสร้างโฟลเดอร์ asset ใน wwwroot
+            if (!Directory.Exists(Path.Combine(_env.WebRootPath, "product")))
             {
-                Directory.CreateDirectory(_imagePath); // ตรวจสอบและสร้างโฟลเดอร์หากยังไม่มี
+                Directory.CreateDirectory(Path.Combine(_env.WebRootPath, "product"));
             }
         }
 
@@ -93,16 +95,17 @@ namespace inventorybackend.Controllers
         [HttpPost("addimage")]
         public async Task<IActionResult> AddProduct([FromForm] ProductwithimageDTO productDto, IFormFile? productImage)
         {
-            string? fullPath = null;
+            string? relativePath = null;
 
             // ตรวจสอบว่ามีการอัปโหลดรูปภาพหรือไม่
             if (productImage != null && productImage.Length > 0)
             {
-                // สร้างชื่อไฟล์ใหม่ด้วย GUID เพื่อป้องกันชื่อซ้ำกัน
                 var fileName = $"{Guid.NewGuid()}{Path.GetExtension(productImage.FileName)}";
-                fullPath = Path.Combine(_imagePath, fileName);
+                var fullPath = Path.Combine(_env.WebRootPath, "product", fileName);
+                relativePath = $"/product/{fileName}"; // ต้องมี / หน้า path
 
-                // บันทึกรูปภาพลง path
+                Directory.CreateDirectory(Path.Combine(_env.WebRootPath, "product"));
+
                 using (var stream = new FileStream(fullPath, FileMode.Create))
                 {
                     await productImage.CopyToAsync(stream);
@@ -110,9 +113,9 @@ namespace inventorybackend.Controllers
             }
 
             // บันทึกข้อมูลสินค้า โดยส่ง path ของรูปภาพ (ถ้ามี) หรือ null ไปยัง Service
-            productDto.Productimage = fullPath;
+            productDto.Productimage = relativePath;
 
-            var result = await _ProductService.AddProductAsync(productDto, fullPath);
+            var result = await _ProductService.AddProductAsync(productDto, relativePath);
 
             return Ok(result);
         }
@@ -150,15 +153,16 @@ namespace inventorybackend.Controllers
         [HttpPut("updateProduct/{productId}")]
         public async Task<IActionResult> UpdateProduct(int productId, [FromForm] ProductwithimageDTO productDto, IFormFile? productImage)
         {
-            string? fullPath = null;
+            string? relativePath = null;
 
             if (productImage != null)
             {
-                // สร้างชื่อไฟล์ใหม่ด้วย GUID เพื่อป้องกันชื่อซ้ำกัน
                 var fileName = $"{Guid.NewGuid()}{Path.GetExtension(productImage.FileName)}";
-                fullPath = Path.Combine(_imagePath, fileName);
+                var fullPath = Path.Combine(_env.WebRootPath, "product", fileName);
+                relativePath = $"/product/{fileName}"; // ต้องมี / หน้า path
 
-                // บันทึกรูปภาพลง path
+                Directory.CreateDirectory(Path.Combine(_env.WebRootPath, "product"));
+
                 using (var stream = new FileStream(fullPath, FileMode.Create))
                 {
                     await productImage.CopyToAsync(stream);
@@ -167,18 +171,17 @@ namespace inventorybackend.Controllers
 
             try
             {
-                // อัปเดต ProductID เพื่อให้ตรงกับข้อมูลใน DTO
+                // อัปเดต EQMID ใน DTO เพื่อให้ตรงกับ parameter
                 productDto.ProductsID = productId;
 
                 // เรียกใช้ Service เพื่ออัปเดตข้อมูลสินค้าและรูปภาพ
-                // ตรวจสอบว่ามีไฟล์รูปภาพหรือไม่
-                await _ProductService.UpdateProductwithimageAsync(productDto, fullPath);
+                await _ProductService.UpdateProductwithimageAsync(productDto, relativePath);
 
                 return Ok(new { message = "Product updated successfully." });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error updating product with ID: {ProductId}", productId);
+                _logger.LogError(ex, "Error updating Product with ID: {productId}", productId);
                 return StatusCode(500, new { error = ex.Message });
             }
         }

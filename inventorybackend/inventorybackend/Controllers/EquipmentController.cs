@@ -12,15 +12,17 @@ namespace inventorybackend.Controllers
     {
         private readonly IEquipmentService _EquipmentService;
         private readonly ILogger<EquipmentController> _logger;
-        private readonly string _imagePath = @"E:\GIt\inven\inventoryfrontend\public\asset";
+        private readonly IWebHostEnvironment _env;
 
-        public EquipmentController(IEquipmentService equipmentService, ILogger<EquipmentController> logger)
+        public EquipmentController(IEquipmentService equipmentService, ILogger<EquipmentController> logger, IWebHostEnvironment env)
         {
             _EquipmentService = equipmentService;
             _logger = logger;
-            if (!Directory.Exists(_imagePath))
+            _env = env;
+            // ตรวจสอบและสร้างโฟลเดอร์ asset ใน wwwroot
+            if (!Directory.Exists(Path.Combine(_env.WebRootPath, "asset")))
             {
-                Directory.CreateDirectory(_imagePath); // ตรวจสอบและสร้างโฟลเดอร์หากยังไม่มี
+                Directory.CreateDirectory(Path.Combine(_env.WebRootPath, "asset"));
             }
         }
 
@@ -90,29 +92,26 @@ namespace inventorybackend.Controllers
         }
 
         [HttpPost("addimage")]
-        public async Task<IActionResult> AddEquipment([FromForm] EquipmentwithimageDTO EQMDto, IFormFile? productImage)
+        public async Task<IActionResult> AddEquipment([FromForm] EquipmentwithimageDTO EQMDto, IFormFile? EQMImage)
         {
-            string? fullPath = null;
+            string? relativePath = null;
 
-            // ตรวจสอบว่ามีการอัปโหลดรูปภาพหรือไม่
-            if (productImage != null && productImage.Length > 0)
+            if (EQMImage != null && EQMImage.Length > 0)
             {
-                // สร้างชื่อไฟล์ใหม่ด้วย GUID เพื่อป้องกันชื่อซ้ำกัน
-                var fileName = $"{Guid.NewGuid()}{Path.GetExtension(productImage.FileName)}";
-                fullPath = Path.Combine(_imagePath, fileName);
+                var fileName = $"{Guid.NewGuid()}{Path.GetExtension(EQMImage.FileName)}";
+                var fullPath = Path.Combine(_env.WebRootPath, "asset", fileName);
+                relativePath = $"/asset/{fileName}"; // ต้องมี / หน้า path
 
-                // บันทึกรูปภาพลง path
+                Directory.CreateDirectory(Path.Combine(_env.WebRootPath, "asset"));
+
                 using (var stream = new FileStream(fullPath, FileMode.Create))
                 {
-                    await productImage.CopyToAsync(stream);
+                    await EQMImage.CopyToAsync(stream);
                 }
             }
 
-            // บันทึกข้อมูลอุปกรณ์ พร้อม path ของรูปในฐานข้อมูล (ถ้ามี)
-            EQMDto.EQMimage = fullPath;
-
-            // เรียกใช้งาน Service เพื่อเพิ่มข้อมูล
-            var result = await _EquipmentService.AddEquipmentAsync(EQMDto, fullPath);
+            EQMDto.EQMimage = relativePath;
+            var result = await _EquipmentService.AddEquipmentAsync(EQMDto, relativePath);
 
             return Ok(result);
         }
@@ -151,15 +150,16 @@ namespace inventorybackend.Controllers
         [HttpPut("updateEquipment/{EQMID}")]
         public async Task<IActionResult> UpdateEQM(int EQMID, [FromForm] EquipmentwithimageDTO EQMDto, IFormFile? EQMImage)
         {
-            string? fullPath = null;
+            string? relativePath = null;
 
             if (EQMImage != null)
             {
-                // สร้างชื่อไฟล์ใหม่ด้วย GUID เพื่อป้องกันชื่อซ้ำกัน
                 var fileName = $"{Guid.NewGuid()}{Path.GetExtension(EQMImage.FileName)}";
-                fullPath = Path.Combine(_imagePath, fileName);
+                var fullPath = Path.Combine(_env.WebRootPath, "asset", fileName);
+                relativePath = $"/asset/{fileName}"; // ต้องมี / หน้า path
 
-                // บันทึกรูปภาพลง path
+                Directory.CreateDirectory(Path.Combine(_env.WebRootPath, "asset"));
+
                 using (var stream = new FileStream(fullPath, FileMode.Create))
                 {
                     await EQMImage.CopyToAsync(stream);
@@ -168,12 +168,11 @@ namespace inventorybackend.Controllers
 
             try
             {
-                // อัปเดต ProductID เพื่อให้ตรงกับข้อมูลใน DTO
+                // อัปเดต EQMID ใน DTO เพื่อให้ตรงกับ parameter
                 EQMDto.EQMID = EQMID;
 
                 // เรียกใช้ Service เพื่ออัปเดตข้อมูลสินค้าและรูปภาพ
-                // ตรวจสอบว่ามีไฟล์รูปภาพหรือไม่
-                await _EquipmentService.UpdateEQMwithimageAsync(EQMDto, fullPath);
+                await _EquipmentService.UpdateEQMwithimageAsync(EQMDto, relativePath);
 
                 return Ok(new { message = "Equipment updated successfully." });
             }

@@ -56,16 +56,17 @@ namespace auth.Controllers
             }
 
             // Generate JWT
-            var token = _jwtService.Generate(user.UserID, user.RoleID); // ส่ง userID และ roleID
+            var token = _jwtService.Generate(user.UserID, user.RoleID, user.Firstname, user.Lastname, user.Username); // ส่ง userID และ roleID
             return Ok(new { Token = token });
         }
 
-        [HttpGet("user")]
+        [HttpGet("user/{UserID}")]
         public IActionResult User()
         {
             try
             {
                 var jwt = Request.Cookies["jwt"];
+                Console.WriteLine($"JWT Cookie: {jwt}");
                 if (string.IsNullOrEmpty(jwt))
                 {
                     return Unauthorized("JWT cookie not found.");
@@ -76,7 +77,7 @@ namespace auth.Controllers
                     return Unauthorized("Invalid or expired token.");
                 }
                 int UserID = int.Parse(token.Issuer);
-                var user = _repository.GetById(UserID);
+                var user = _repository.GetUserByuserIDAsync(UserID);
                 return Ok(user);
             }
             catch (Exception)
